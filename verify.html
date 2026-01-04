@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify - Aman Behera</title>
+    <link rel="stylesheet" href="css/style.css">    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
+                <button id="theme-toggle" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle theme">
+                    <span id="theme-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="index.html#home">Home</a>
+                    <a href="work.html">Work</a>
+                    <a href="blogs.html">Blogs</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="verify.html">Verify</a>
+                    <a href="rss.html">RSS</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Verify Section -->
+    <section class="verify-page">
+        <div class="container">
+            <h1 class="page-title" data-hex="0x20" data-subtitle="Cryptographic verification.">Verify</h1>
+            
+            <div class="verify-content">
+                <p class="verify-intro">All critical content on this site is signed with my PGP key to ensure authenticity and integrity. You can verify signatures using the public key below.</p>
+                
+                <div class="pgp-section">
+                    <h2>PGP Public Key</h2>
+                    <p class="key-info">Key ID: <code id="key-id">0x099671C1</code></p>
+                    <p class="key-info">Fingerprint: <code id="key-fingerprint">1C2D 5D96 0BED 7BED F339 FA39 4BF6 875D 0996 71C1</code></p>
+                    
+                    <pre class="pgp-key" id="pgp-public-key">-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+=3c2Y
+-----END PGP PUBLIC KEY BLOCK-----</pre>
+                    
+                    <button onclick="copyKey()" class="copy-btn">Copy Public Key</button>
+                </div>
+
+                <div class="verify-instructions">
+                    <h2>How to Verify</h2>
+                    <ol class="verify-steps">
+                        <li>
+                            <strong>Import the public key:</strong>
+                            <pre>gpg --import aman-behera-public.asc</pre>
+                        </li>
+                        <li>
+                            <strong>Verify a signed message:</strong>
+                            <pre>gpg --verify signed-message.txt</pre>
+                        </li>
+                        <li>
+                            <strong>Check the fingerprint matches:</strong>
+                            <pre>gpg --fingerprint aman_b@ch.iitr.ac.in</pre>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="signed-pages">
+                    <h2>Signed Pages</h2>
+                    <ul class="signed-list">
+                        <li><a href="contact.html#signature">Contact Page</a></li>
+                        <li><a href="index.html#about-signature">About Section</a></li>
+                    </ul>
+                </div>
+
+                <div class="trust-note">
+                    <p><strong>Why sign content?</strong></p>
+                    <p>Cryptographic signatures provide proof of authenticity and integrity. If you see content claiming to be from me, you can verify it was actually written by me and hasn't been tampered with.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <p>© 2026 Aman Behera</p>
+            <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
+            <div class="footer-colophon">
+                <span class="colophon-item" id="footer-timestamp">Calculating...</span>
+                <span class="colophon-separator">·</span>
+                <span class="colophon-item" id="footer-metrics">Calculating...</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Command Palette -->
+    <div id="command-palette" class="command-palette" style="display: none;">
+        <div class="command-palette-content">
+            <input type="text" id="command-input" placeholder="user@aman-infra:~$ _" autocomplete="off">
+            <div id="command-output"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function copyKey() {
+            const keyText = document.getElementById('pgp-public-key').textContent.trim();
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.textContent;
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(keyText).then(() => {
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => btn.textContent = originalText, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(keyText, btn, originalText);
+                });
+            } else {
+                fallbackCopy(keyText, btn, originalText);
+            }
+        }
+        
+        function fallbackCopy(text, btn, originalText) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                btn.textContent = 'Copy failed';
+                setTimeout(() => btn.textContent = originalText, 2000);
+            }
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>

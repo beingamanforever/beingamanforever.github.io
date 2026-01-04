@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work - Aman Behera</title>
-    <link rel="stylesheet" href="css/style.css">    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>RSS · aman behera</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">
 </head>
 <body>
     <!-- Navigation -->
@@ -35,17 +34,41 @@
         </div>
     </nav>
 
-    <!-- Work Section -->
-    <section class="work-page">
-        <div class="container">
-            <h1 class="page-title">All Projects</h1>
-            <p class="page-subtitle">A collection of things that I am proud of.</p>
-            <div id="all-projects-container"></div>
+    <main class="container rss-page">
+        <h1 class="page-title">RSS <span class="hex-code" data-hex="0x1F4E1"></span></h1>
+        
+        <div class="rss-info">
+            <p>Copy the feed URL into your RSS reader.</p>
+            <p class="feed-url"><a href="feed.xml">https://beingamanforever.io/feed.xml</a></p>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+        <div class="feed-preview">
+            <h2>Verification</h2>
+            <p>The feed follows RSS 2.0 specification. View the <a href="feed.xml">raw XML</a>. Signed feeds available on request.</p>
+            <div class="key-info" style="margin-top: 1.5rem;">
+                <p>Key ID: <code>0x099671C1</code></p>
+                <p>Fingerprint: <code style="font-size: 0.85rem;">1C2D 5D96 0BED 7BED F339 FA39 4BF6 875D 0996 71C1</code></p>
+            </div>
+        </div>
+
+        <div class="verify-instructions">
+            <details class="signed-details">
+                <summary>Verify</summary>
+                <ol class="verify-steps">
+                    <li>
+                        <strong>Import the public key:</strong>
+                        <pre>curl https://beingamanforever.io/verify.html | gpg --import</pre>
+                    </li>
+                    <li>
+                        <strong>Verify a signed file:</strong>
+                        <pre>gpg --verify file.asc</pre>
+                    </li>
+                </ol>
+            </details>
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
@@ -66,24 +89,5 @@
     </div>
 
     <script src="js/main.js"></script>
-    <script>
-        // Render all projects using same card layout as home page
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('all-projects-container');
-            container.innerHTML = projects.map(project => `
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title">${project.title}</h3>
-                        <span class="project-stars">★ ${project.stars}</span>
-                    </div>
-                    <p class="project-description">${project.description}</p>
-                    <div class="project-tags">
-                        ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
-                    </div>
-                    ${project.github ? `<a href="${project.github}" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>` : ''}
-                </div>
-            `).join('');
-        });
-    </script>
 </body>
 </html>

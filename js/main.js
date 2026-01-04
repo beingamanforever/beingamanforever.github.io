@@ -43,13 +43,18 @@ function openCommandPalette() {
     // Show available commands on open
     output.innerHTML = `<div style="opacity: 0.7; margin-bottom: 0.5rem;">Available commands:</div>
         <div style="display: grid; grid-template-columns: 120px 1fr; gap: 0.5rem; font-size: 0.85rem;">
-            <span>github</span><span style="opacity: 0.6;">→ Open GitHub profile</span>
-            <span>resume</span><span style="opacity: 0.6;">→ View resume PDF</span>
-            <span>dashboard</span><span style="opacity: 0.6;">→ Analytics dashboard</span>
+            <span>home</span><span style="opacity: 0.6;">→ Home page</span>
             <span>work</span><span style="opacity: 0.6;">→ All projects page</span>
             <span>blogs</span><span style="opacity: 0.6;">→ Blog posts</span>
             <span>contact</span><span style="opacity: 0.6;">→ Contact page</span>
+            <span>verify</span><span style="opacity: 0.6;">→ PGP verification</span>
+            <span>rss</span><span style="opacity: 0.6;">→ RSS feed</span>
+            <span>github</span><span style="opacity: 0.6;">→ Open GitHub profile</span>
+            <span>resume</span><span style="opacity: 0.6;">→ View resume PDF</span>
+            <span>dashboard</span><span style="opacity: 0.6;">→ Analytics dashboard</span>
             <span>ping</span><span style="opacity: 0.6;">→ Test latency</span>
+            <span>clear</span><span style="opacity: 0.6;">→ Clear terminal</span>
+            <span>help</span><span style="opacity: 0.6;">→ Show this help</span>
         </div>`;
     
     input.focus();
@@ -64,13 +69,16 @@ function closeCommandPalette() {
 function executeCommand(cmd) {
     const output = document.getElementById('command-output');
     const commands = {
+        'home': () => window.location.href = 'index.html',
+        'work': () => window.location.href = 'work.html',
+        'blogs': () => window.location.href = 'blogs.html',
+        'contact': () => window.location.href = 'contact.html',
+        'verify': () => window.location.href = 'verify.html',
+        'rss': () => window.location.href = 'rss.html',
         'github': () => window.open('https://github.com/beingamanforever', '_blank'),
         'resume': () => window.open('assets/resume/resume.pdf', '_blank'),
         'dashboard': () => window.location.href = 'dashboard.html',
         'ping': () => { output.textContent = 'pong (14ms)'; setTimeout(closeCommandPalette, 1000); },
-        'work': () => window.location.href = 'work.html',
-        'blogs': () => window.location.href = 'blogs.html',
-        'contact': () => window.location.href = 'contact.html',
         'clear': () => openCommandPalette(), // Reopen to show help
         'help': () => openCommandPalette()
     };
@@ -78,7 +86,7 @@ function executeCommand(cmd) {
     if (commands[cmd]) {
         commands[cmd]();
     } else {
-        output.innerHTML = `<span style="color: #ff3b30;">command not found: ${cmd}</span><br><span style="opacity: 0.6; font-size: 0.85rem;">Type any command or press ESC</span>`;
+        output.innerHTML = `<span style="color: #ff3b30;">command not found: ${cmd}</span><br><span style="opacity: 0.6; font-size: 0.85rem;">Type 'help' to see available commands</span>`;
     }
 }
 
@@ -406,6 +414,40 @@ document.addEventListener('keydown', (e) => {
 
     const indicator = document.getElementById('kbd-indicator');
     
+    // Navigation shortcuts (g + another key)
+    if (e.key === 'g' && !window.lastKeyWasG) {
+        window.lastKeyWasG = true;
+        setTimeout(() => { window.lastKeyWasG = false; }, 1000);
+        return;
+    }
+    
+    if (window.lastKeyWasG) {
+        window.lastKeyWasG = false;
+        switch(e.key) {
+            case 'h':
+                window.location.href = 'index.html';
+                return;
+            case 'w':
+                window.location.href = 'work.html';
+                return;
+            case 'b':
+                window.location.href = 'blogs.html';
+                return;
+            case 'c':
+                window.location.href = 'contact.html';
+                return;
+            case 'v':
+                window.location.href = 'verify.html';
+                return;
+            case 'r':
+                window.location.href = 'rss.html';
+                return;
+            case 'g':
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+        }
+    }
+    
     switch(e.key) {
         case 'j':
             // Scroll down
@@ -421,6 +463,15 @@ document.addEventListener('keydown', (e) => {
             window.scrollBy({ top: -100, behavior: 'smooth' });
             if (indicator) {
                 indicator.textContent = '↑';
+                indicator.classList.add('show');
+                setTimeout(() => indicator.classList.remove('show'), 200);
+            }
+            break;
+        case 'G':
+            // Scroll to bottom
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            if (indicator) {
+                indicator.textContent = '⇣';
                 indicator.classList.add('show');
                 setTimeout(() => indicator.classList.remove('show'), 200);
             }
@@ -476,10 +527,40 @@ function createShortcutsModal() {
         <div id="modal-overlay" class="modal-overlay" onclick="closeShortcutsModal()"></div>
         <div id="shortcuts-modal" class="keyboard-shortcuts-modal">
             <div class="modal-header">
-                <h3 class="modal-title">Keyboard Shortcuts</h3>
+                <h3 class="modal-title">$ man shortcuts</h3>
                 <button class="modal-close" onclick="closeShortcutsModal()">&times;</button>
             </div>
             <ul class="shortcuts-list">
+                <li>
+                    <span class="shortcut-category">NAVIGATION</span>
+                </li>
+                <li>
+                    <span>Home</span>
+                    <span class="shortcut-key">g h</span>
+                </li>
+                <li>
+                    <span>Work</span>
+                    <span class="shortcut-key">g w</span>
+                </li>
+                <li>
+                    <span>Blogs</span>
+                    <span class="shortcut-key">g b</span>
+                </li>
+                <li>
+                    <span>Contact</span>
+                    <span class="shortcut-key">g c</span>
+                </li>
+                <li>
+                    <span>Verify</span>
+                    <span class="shortcut-key">g v</span>
+                </li>
+                <li>
+                    <span>RSS</span>
+                    <span class="shortcut-key">g r</span>
+                </li>
+                <li>
+                    <span class="shortcut-category">SCROLLING</span>
+                </li>
                 <li>
                     <span>Scroll down</span>
                     <span class="shortcut-key">j</span>
@@ -487,6 +568,17 @@ function createShortcutsModal() {
                 <li>
                     <span>Scroll up</span>
                     <span class="shortcut-key">k</span>
+                </li>
+                <li>
+                    <span>Top of page</span>
+                    <span class="shortcut-key">g g</span>
+                </li>
+                <li>
+                    <span>Bottom of page</span>
+                    <span class="shortcut-key">Shift+G</span>
+                </li>
+                <li>
+                    <span class="shortcut-category">ACTIONS</span>
                 </li>
                 <li>
                     <span>Focus search</span>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title>aman behera</title>
+    <link>https://beingamanforever.io/</link>
+    <description>Recent writings on systems programming and infrastructure</description>
+    <language>en</language>
+    <lastBuildDate>Sun, 05 Jan 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://beingamanforever.io/feed.xml" rel="self" type="application/rss+xml"/>
+    
+    <!-- Template for future posts
+    <item>
+      <title>Post Title</title>
+      <link>https://beingamanforever.io/blog/post-slug.html</link>
+      <pubDate>Sun, 05 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://beingamanforever.io/blog/post-slug.html</guid>
+      <description>Brief description or excerpt of the post</description>
+      <content:encoded><![CDATA[
+        <i>Consider reading this post on the webpage, it may have LaTeX and other features that are not supported by most RSS readers.</i><br>
+        <p>Full content here...</p>
+      ]]></content:encoded>
+    </item>
+    -->
+    
+  </channel>
+</rss>
