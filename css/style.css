@@ -399,12 +399,10 @@ body.dark-mode .nav-links a::after {
 
 /* Quote Box */
 .quote-box {
-    border-left: 4px solid var(--text-primary);
-    padding: 1.5rem 1.75rem;
-    background-color: var(--quote-bg);
+    border-left: 3px solid var(--text-primary);
+    padding: 1.5rem 0 1.5rem 1.5rem;
     max-width: 42rem;
     margin: 2.5rem 0;
-    border-radius: 0 0.3rem 0.3rem 0;
 }
 
 .quote-text {
@@ -412,6 +410,7 @@ body.dark-mode .nav-links a::after {
     font-style: italic;
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
+    line-height: 1.6;
 }
 
 .quote-author {
@@ -731,6 +730,11 @@ body.dark-mode .project-card {
     letter-spacing: -0.03em;
     line-height: 1.25;
     flex: 1;
+    transition: color 0.2s ease;
+}
+
+.project-card:hover .project-title {
+    color: var(--walter-green);
 }
 
 .project-stars {
@@ -765,13 +769,12 @@ body.dark-mode .project-card {
     font-size: 0.8rem;
     border-radius: 0.25rem;
     font-family: 'IBM Plex Sans', sans-serif;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 }
 
 .project-tag:hover {
-    border-color: var(--walter-green);
-    color: var(--walter-green);
-    transform: translateY(-1px);
+    border-color: var(--text-primary);
+    color: var(--text-primary);
 }
 
 .project-link {
@@ -1227,8 +1230,9 @@ body.dark-mode .project-card {
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     font-size: 0.75rem;
     color: var(--text-secondary);
-    font-family: 'IBM Plex Sans', sans-serif;
-    opacity: 0.6;
+    font-family: 'IBM Plex Sans', monospace;
+    opacity: 0.7;
+    letter-spacing: 0.02em;
 }
 
 body.dark-mode .footer-colophon {
@@ -1236,12 +1240,12 @@ body.dark-mode .footer-colophon {
 }
 
 .colophon-item {
-    margin: 0 0.4rem;
+    margin: 0 0.3rem;
 }
 
 .colophon-separator {
-    margin: 0 0.3rem;
-    opacity: 0.5;
+    margin: 0 0.4rem;
+    opacity: 0.6;
 }
 
 .file-meta {

@@ -356,10 +356,35 @@ function updateTimestamp() {
             hour12: false
         };
         const istTime = now.toLocaleTimeString('en-IN', options);
-        timestampElement.textContent = `Roorkee, IN — ${istTime} IST`;
+        timestampElement.textContent = `Loc: Roorkee (UTC+5:30) :: ${istTime} IST`;
+    }
+}
+
+// Calculate and display performance metrics
+function updateMetrics() {
+    const metricsElement = document.getElementById('footer-metrics');
+    if (metricsElement) {
+        // Calculate page size in KB
+        const pageSize = (document.documentElement.outerHTML.length / 1024).toFixed(2);
+        
+        // Get page load time using Performance API
+        if (performance && performance.timing) {
+            const loadTime = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
+            metricsElement.textContent = `Render: ${loadTime}ms :: Payload: ${pageSize}KB :: Status: OK`;
+        } else {
+            metricsElement.textContent = `Payload: ${pageSize}KB :: Status: OK`;
+        }
     }
 }
 
 // Update timestamp every minute
 setInterval(updateTimestamp, 60000);
-document.addEventListener('DOMContentLoaded', updateTimestamp);
+document.addEventListener('DOMContentLoaded', () => {
+    updateTimestamp();
+    // Wait for page load to calculate metrics
+    if (document.readyState === 'complete') {
+        updateMetrics();
+    } else {
+        window.addEventListener('load', updateMetrics);
+    }
+});
