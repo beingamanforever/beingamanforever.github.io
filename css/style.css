@@ -148,14 +148,14 @@ body.dark-mode::before {
 
 /* Ring buffer scrollbar */
 .ring-buffer-scrollbar {
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 2px;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.05);
-    z-index: 9999;
-    pointer-events: none;
+    position: fixed !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 2px !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
 }
 
 .ring-buffer-head {
@@ -164,9 +164,9 @@ body.dark-mode::before {
     left: 0;
     width: 100%;
     height: 20px;
-    background: #FF4500;
+    background: #00ff41 !important;
     transition: top 0.1s ease-out;
-    box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5) !important;
 }
 
 .ring-buffer-trail {
@@ -175,7 +175,7 @@ body.dark-mode::before {
     left: 0;
     width: 100%;
     height: 0;
-    background: linear-gradient(to bottom, rgba(255, 69, 0, 0.3), transparent);
+    background: linear-gradient(to bottom, rgba(0, 255, 65, 0.3), transparent) !important;
     opacity: 0;
     transition: opacity 0.5s ease-out;
 }
@@ -1217,14 +1217,19 @@ body.dark-mode .project-card {
 
 .env-list li a {
     display: block;
-    color: var(--text-primary);
-    text-decoration: none;
+    color: var(--text-primary) !important;
+    text-decoration: none !important;
     transition: color 0.2s ease;
     cursor: pointer;
 }
 
+.env-list li a:visited {
+    color: var(--text-primary) !important;
+}
+
 .env-list li a:hover {
-    color: var(--walter-green);
+    color: var(--walter-green) !important;
+    text-decoration: none !important;
 }
 
 .env-list .pipe {
@@ -1458,17 +1463,16 @@ body.dark-mode .footer-colophon {
     }
 }
 
-
 /* Ring buffer scrollbar */
 .ring-buffer-scrollbar {
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 2px;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.05);
-    z-index: 9999;
-    pointer-events: none;
+    position: fixed !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 2px !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
 }
 
 .ring-buffer-head {
@@ -1477,9 +1481,9 @@ body.dark-mode .footer-colophon {
     left: 0;
     width: 100%;
     height: 20px;
-    background: #FF4500;
+    background: #00ff41 !important;
     transition: top 0.1s ease-out;
-    box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5) !important;
 }
 
 .ring-buffer-trail {
@@ -1488,13 +1492,13 @@ body.dark-mode .footer-colophon {
     left: 0;
     width: 100%;
     height: 0;
-    background: linear-gradient(to bottom, rgba(255, 69, 0, 0.3), transparent);
+    background: linear-gradient(to bottom, rgba(0, 255, 65, 0.3), transparent) !important;
     opacity: 0;
     transition: opacity 0.5s ease-out;
 }
 
 body.dark-mode .ring-buffer-scrollbar {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Telemetry header */
