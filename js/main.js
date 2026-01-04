@@ -29,9 +29,10 @@ const quotes = [
     { text: "I am not in danger. I am the danger.", author: "Walter White" },
     { text: "Say my name.", author: "Walter White" },
     { text: "I have to return some videotapes.", author: "Patrick Bateman" },
-    { text: "I'm into murders and executions.", author: "Patrick Bateman" },
+    { text: "I simply am not there.", author: "Patrick Bateman" },
+    { text: "I'm the one who knocks.", author: "Walter White" },
     { text: "Chaos isn't a pit. Chaos is a ladder.", author: "Petyr Baelish" },
-    { text: "Science is the study of change.", author: "Walter White" },
+    { text: "I did it for me, I liked it, I was good at it, I was alive.", author: "Walter White" },
     { text: "There is an idea of a Patrick Bateman.", author: "Patrick Bateman" },
     { text: "Chemistry is the study of matter, but I prefer to see it as the study of change.", author: "Walter White" }
 ];
