@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify - Aman Behera</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,8 +29,8 @@
                     <a href="work.html">Work</a>
                     <a href="blogs.html">Blogs</a>
                     <a href="contact.html">Contact</a>
-                    <a href="verify.html">Verify</a>
-                    <a href="rss.html">RSS</a>
+                    <a href="verify.html" class="nav-secondary">Verify</a>
+                    <a href="rss.html" class="nav-secondary">RSS</a>
                 </div>
             </div>
         </div>
@@ -41,12 +42,18 @@
             <h1 class="page-title" data-hex="0x20" data-subtitle="Cryptographic verification.">Verify</h1>
             
             <div class="verify-content">
-                <p class="verify-intro">All critical content on this site is signed with my PGP key to ensure authenticity and integrity. You can verify signatures using the public key below.</p>
+                <p class="verify-intro"><strong>TL;DR:</strong> All critical content on this site is signed with my PGP key.</p>
+                <p class="verify-intro verify-intro-secondary">Import the public key below, then verify any <code>.asc</code> signature using <code>gpg --verify</code>.</p>
                 
                 <div class="pgp-section">
                     <h2>PGP Public Key</h2>
-                    <p class="key-info">Key ID: <code id="key-id">0x099671C1</code></p>
-                    <p class="key-info">Fingerprint: <code id="key-fingerprint">1C2D 5D96 0BED 7BED F339 FA39 4BF6 875D 0996 71C1</code></p>
+                    <div class="key-rows" aria-label="PGP key metadata">
+                        <div class="key-row"><span class="key-label">Algorithm</span><code id="key-algo">RSA</code></div>
+                        <div class="key-row"><span class="key-label">Key size</span><code id="key-size">3072</code></div>
+                        <div class="key-row"><span class="key-label">Created (UTC)</span><code id="key-created">2026-01-04</code></div>
+                        <div class="key-row"><span class="key-label">Key ID</span><code id="key-id">0x099671C1</code></div>
+                        <div class="key-row"><span class="key-label">Fingerprint</span><code id="key-fingerprint">1C2D 5D96 0BED 7BED F339 FA39 4BF6 875D 0996 71C1</code></div>
+                    </div>
                     
                     <pre class="pgp-key" id="pgp-public-key">-----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -90,7 +97,10 @@ FGtacJ5onof4ngEckMQSJdsPGwwSyfSpIigOCI8vOHwUAZklL+H8VmWObVFp
 =3c2Y
 -----END PGP PUBLIC KEY BLOCK-----</pre>
                     
-                    <button onclick="copyKey()" class="copy-btn">Copy Public Key</button>
+                    <div class="copy-actions">
+                        <button type="button" onclick="copyToClipboard(document.getElementById('key-fingerprint').textContent.trim(), this)" class="copy-btn">Copy Fingerprint</button>
+                        <button type="button" onclick="copyToClipboard(document.getElementById('pgp-public-key').textContent.trim(), this)" class="copy-btn">Copy Public Key</button>
+                    </div>
                 </div>
 
                 <div class="verify-instructions">
@@ -98,15 +108,24 @@ FGtacJ5onof4ngEckMQSJdsPGwwSyfSpIigOCI8vOHwUAZklL+H8VmWObVFp
                     <ol class="verify-steps">
                         <li>
                             <strong>Import the public key:</strong>
-                            <pre>gpg --import aman-behera-public.asc</pre>
+                            <div class="cmd-block">
+                                <pre>gpg --import aman-behera-public.asc</pre>
+                                <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard(this.parentElement.querySelector('pre').textContent.trim(), this)">Copy</button>
+                            </div>
                         </li>
                         <li>
-                            <strong>Verify a signed message:</strong>
-                            <pre>gpg --verify signed-message.txt</pre>
+                            <strong>Verify a signed file:</strong>
+                            <div class="cmd-block">
+                                <pre>gpg --verify signed-message.txt</pre>
+                                <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard(this.parentElement.querySelector('pre').textContent.trim(), this)">Copy</button>
+                            </div>
                         </li>
                         <li>
-                            <strong>Check the fingerprint matches:</strong>
-                            <pre>gpg --fingerprint aman_b@ch.iitr.ac.in</pre>
+                            <strong>Verify the fingerprint:</strong>
+                            <div class="cmd-block">
+                                <pre>gpg --fingerprint 0x099671C1</pre>
+                                <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard(this.parentElement.querySelector('pre').textContent.trim(), this)">Copy</button>
+                            </div>
                         </li>
                     </ol>
                 </div>
@@ -133,9 +152,9 @@ FGtacJ5onof4ngEckMQSJdsPGwwSyfSpIigOCI8vOHwUAZklL+H8VmWObVFp
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
             <div class="footer-colophon">
-                <span class="colophon-item" id="footer-timestamp">Calculating...</span>
-                <span class="colophon-separator">·</span>
-                <span class="colophon-item" id="footer-metrics">Calculating...</span>
+                <span class="colophon-item" id="footer-timestamp" style="visibility:hidden"></span>
+                <span class="colophon-separator" id="footer-sep-ts" style="visibility:hidden">·</span>
+                <span class="colophon-item" id="footer-metrics" style="visibility:hidden"></span>
             </div>
         </div>
     </footer>
@@ -149,43 +168,5 @@ FGtacJ5onof4ngEckMQSJdsPGwwSyfSpIigOCI8vOHwUAZklL+H8VmWObVFp
     </div>
 
     <script src="js/main.js"></script>
-    <script>
-        function copyKey() {
-            const keyText = document.getElementById('pgp-public-key').textContent.trim();
-            const btn = document.querySelector('.copy-btn');
-            const originalText = btn.textContent;
-            
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(keyText).then(() => {
-                    btn.textContent = 'Copied!';
-                    setTimeout(() => btn.textContent = originalText, 2000);
-                }).catch(err => {
-                    console.error('Failed to copy:', err);
-                    fallbackCopy(keyText, btn, originalText);
-                });
-            } else {
-                fallbackCopy(keyText, btn, originalText);
-            }
-        }
-        
-        function fallbackCopy(text, btn, originalText) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.opacity = '0';
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = originalText, 2000);
-            } catch (err) {
-                console.error('Fallback copy failed:', err);
-                btn.textContent = 'Copy failed';
-                setTimeout(() => btn.textContent = originalText, 2000);
-            }
-            document.body.removeChild(textarea);
-        }
-    </script>
 </body>
 </html>

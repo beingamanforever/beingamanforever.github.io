@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aman Behera - Digital Garden</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,9 +13,6 @@
     <script src="js/analytics.js" defer></script>
 </head>
 <body>
-    <!-- Telemetry Header -->
-    <div id="telemetry-header" class="telemetry-header">Calculating...</div>
-    
     <!-- Keyboard Navigation Indicator -->
     <div id="kbd-indicator" class="kbd-indicator"></div>
     
@@ -37,8 +35,8 @@
                     <a href="work.html">Work</a>
                     <a href="blogs.html">Blogs</a>
                     <a href="contact.html">Contact</a>
-                    <a href="verify.html">Verify</a>
-                    <a href="rss.html">RSS</a>
+                    <a href="verify.html" class="nav-secondary">Verify</a>
+                    <a href="rss.html" class="nav-secondary">RSS</a>
                 </div>
             </div>
         </div>
@@ -105,7 +103,7 @@
                         <span class="detail-label">Currently</span>
                         <span class="detail-item">Building a SIMD Accelerated Key-Value Store</span>
                         <span class="detail-item">Building a single binary, zero-copy, SIMD-accelerated ingestion engine for large CSV data.</span>
-                        <span class="detail-item">Reading around Dependency testing</span>
+                        <span class="detail-item">Reading on dependency testing</span>
                     </div>
 
                     <div class="detail-group-separator"></div>
@@ -169,10 +167,10 @@
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
             <div class="footer-colophon">
-                <span class="colophon-item" id="footer-timestamp">Calculating...</span>
-                <span class="colophon-separator">·</span>
-                <span class="colophon-item" id="footer-metrics">Calculating...</span>
-                <span class="colophon-separator">·</span>
+                <span class="colophon-item" id="footer-timestamp" style="visibility:hidden"></span>
+                <span class="colophon-separator" id="footer-sep-ts" style="visibility:hidden">·</span>
+                <span class="colophon-item" id="footer-metrics" style="visibility:hidden"></span>
+                <span class="colophon-separator" id="footer-sep-metrics" style="visibility:hidden">·</span>
                 <span class="colophon-item" style="opacity: 0.4; font-size: 0.8rem;">[⌘K] command palette</span>
             </div>
         </div>

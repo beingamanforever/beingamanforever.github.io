@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Aman Behera</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,8 +29,8 @@
                     <a href="work.html">Work</a>
                     <a href="blogs.html">Blogs</a>
                     <a href="contact.html">Contact</a>
-                    <a href="verify.html">Verify</a>
-                    <a href="rss.html">RSS</a>
+                    <a href="verify.html" class="nav-secondary">Verify</a>
+                    <a href="rss.html" class="nav-secondary">RSS</a>
                 </div>
             </div>
         </div>
@@ -40,16 +41,31 @@
         <div class="container">
             <div class="contact-content-page">
                 <h1 class="page-title">Get in Touch</h1>
-                <p class="page-subtitle">Got thoughts on a post? Want to work on something together? Just want to say hi? Drop me an email.</p>
+                <p class="page-subtitle">Email is best. I usually respond within 24–48 hours.</p>
                 
                 <ul class="env-list">
-                    <li><a href="https://github.com/beingamanforever" target="_blank">export GITHUB="@beingamanforever" <span class="pipe">|</span></a></li>
-                    <li><a href="mailto:aman_b@ch.iitr.ac.in">export WORK="aman_b@ch.iitr.ac.in" <span class="pipe">|</span></a></li>
-                    <li><a href="mailto:amanbehera1975@gmail.com">export PERSONAL="amanbehera1975@gmail.com" <span class="pipe">|</span></a></li>
+                    <li>
+                        <div class="cmd-block">
+                            <pre><a href="https://github.com/beingamanforever" target="_blank" class="env-cmd-link">export GITHUB="@beingamanforever"</a></pre>
+                            <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard('@beingamanforever', this)">Copy</button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cmd-block">
+                            <pre><a href="mailto:aman_b@ch.iitr.ac.in" class="env-cmd-link">export WORK="aman_b@ch.iitr.ac.in"</a></pre>
+                            <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard('aman_b@ch.iitr.ac.in', this)">Copy</button>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cmd-block">
+                            <pre><a href="mailto:amanbehera1975@gmail.com" class="env-cmd-link">export PERSONAL="amanbehera1975@gmail.com"</a></pre>
+                            <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard('amanbehera1975@gmail.com', this)">Copy</button>
+                        </div>
+                    </li>
                 </ul>
 
                 <div class="contact-note">
-                    <p>I typically respond within 24-48 hours. For urgent matters, reach out via email.</p>
+                    <p>If you're a recruiter, please include the role, team, location, and comp band up front.</p>
                 </div>
             </div>
         </div>
@@ -61,9 +77,9 @@
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
             <div class="footer-colophon">
-                <span class="colophon-item" id="footer-timestamp">Calculating...</span>
-                <span class="colophon-separator">·</span>
-                <span class="colophon-item" id="footer-metrics">Calculating...</span>
+                <span class="colophon-item" id="footer-timestamp" style="visibility:hidden"></span>
+                <span class="colophon-separator" id="footer-sep-ts" style="visibility:hidden">·</span>
+                <span class="colophon-item" id="footer-metrics" style="visibility:hidden"></span>
             </div>
         </div>
     </footer>
