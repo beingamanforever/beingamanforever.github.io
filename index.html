@@ -10,6 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Telemetry Header -->
+    <div id="telemetry-header" class="telemetry-header">Calculating...</div>
+    
+    <!-- Keyboard Navigation Indicator -->
+    <div id="kbd-indicator" class="kbd-indicator"></div>
+    
     <!-- Navigation -->
     <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
@@ -41,9 +47,9 @@
             <div class="hero-content">
                 <h1 class="hero-greeting">Hi!</h1>
                 <div class="hero-spacer"></div>
-                <p class="hero-intro">I'm Aman, a student at IIT Roorkee, focused on C++ infrastructure and systems programming.</p>
-                <p class="hero-description">I'm interested in performance critical software and understanding systems from memory to hardware.</p>
-                <p class="hero-description">This site documents my experiments, notes, and projects.</p>
+                <p class="hero-intro">I'm Aman, a student at IIT Roorkee. I work on C++ infrastructure and systems programming.</p>
+                <p class="hero-description">I focus on performance critical software and understanding systems from memory to hardware.</p>
+                <p class="hero-description">Notes, experiments, and things I care about.</p>
                 
                 <!-- Quote -->
                 <div class="quote-box" id="random-quote">
@@ -84,10 +90,10 @@
     <!-- About Section -->
     <section id="about" class="section section-white">
         <div class="container">
-            <h2 class="section-title">About</h2>
+            <h2 class="section-title" data-hex="0x08" data-subtitle="Systems and infrastructure.">About</h2>
             <div class="about-content">
-                <p class="about-paragraph">I'm interested in systems, performance-critical software, and the fundamentals of computation, with a focus on how software maps to real hardware.</p>
-                <p class="about-paragraph">I try to approach problems from first principles: understanding why something works, the constraints involved, and how it can be made simpler or faster.</p>
+                <p class="about-paragraph">I work on systems, performance-critical software, and the fundamentals of computation, with a focus on how software maps to real hardware.</p>
+                <p class="about-paragraph">I approach problems from first principles: understanding why something works, the constraints involved, and how it can be made simpler or faster.</p>
                 <p class="about-paragraph">Outside of coding, I read technical papers, do art, hit the gym and spend time outdoors.</p>
                 
                 <div class="about-details">
@@ -118,13 +124,31 @@
     <section id="work" class="section work-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Selected Work</h2>
-                <p class="section-subtitle">Things I've built.</p>
+                <h2 class="section-title" data-hex="0x10" data-subtitle="Things I've built.">Selected Work</h2>
             </div>
             <div id="projects-container"></div>
             <div class="view-all-container">
                 <a href="work.html" class="btn-view-all">
                     <span>View All Projects</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blogs Section -->
+    <section id="writing" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" data-hex="0x18" data-subtitle="Thoughts and notes.">Blogs</h2>
+            </div>
+            <div id="writing-container"></div>
+            <div class="view-all-container">
+                <a href="blogs.html" class="btn-view-all">
+                    <span>View All Posts</span>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
@@ -141,7 +165,7 @@
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should you come looking for me? I intend to be found</p>
             <div class="footer-colophon">
-                <span class="colophon-item" id="footer-timestamp">Loc: Roorkee (UTC+5:30)</span>
+                <span class="colophon-item" id="footer-timestamp">Calculating...</span>
                 <span class="colophon-separator">::</span>
                 <span class="colophon-item" id="footer-metrics">Calculating...</span>
             </div>

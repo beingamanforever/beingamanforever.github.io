@@ -188,6 +188,22 @@ function loadNotes() {
     `).join('');
 }
 
+// Copy to clipboard function
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Optional: show a subtle feedback
+        const feedback = document.createElement('span');
+        feedback.textContent = ' ✓ copied';
+        feedback.style.cssText = 'color: var(--walter-green); font-size: 0.75rem; margin-left: 0.5rem; opacity: 0; transition: opacity 0.3s;';
+        event.target.appendChild(feedback);
+        setTimeout(() => feedback.style.opacity = '1', 10);
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => feedback.remove(), 300);
+        }, 1500);
+    });
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     applyTheme(); // Apply saved theme preference
@@ -253,14 +269,26 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
+    const indicator = document.getElementById('kbd-indicator');
+    
     switch(e.key) {
         case 'j':
             // Scroll down
             window.scrollBy({ top: 100, behavior: 'smooth' });
+            if (indicator) {
+                indicator.textContent = '↓';
+                indicator.classList.add('show');
+                setTimeout(() => indicator.classList.remove('show'), 200);
+            }
             break;
         case 'k':
             // Scroll up
             window.scrollBy({ top: -100, behavior: 'smooth' });
+            if (indicator) {
+                indicator.textContent = '↑';
+                indicator.classList.add('show');
+                setTimeout(() => indicator.classList.remove('show'), 200);
+            }
             break;
         case '/':
             // Focus search if it exists
@@ -349,14 +377,27 @@ function updateTimestamp() {
     const timestampElement = document.getElementById('footer-timestamp');
     if (timestampElement) {
         const now = new Date();
-        const options = { 
-            timeZone: 'Asia/Kolkata',
-            hour: '2-digit', 
-            minute: '2-digit',
-            hour12: false
-        };
-        const istTime = now.toLocaleTimeString('en-IN', options);
-        timestampElement.textContent = `Loc: Roorkee (UTC+5:30) :: ${istTime} IST`;
+        
+        // Roorkee coordinates
+        const location = 'Loc: 30.668° N, 77.891° E';
+        
+        // Calculate state (Awake: 7 AM - 11 PM IST, Sleep Cycle: 11 PM - 7 AM)
+        const istHour = now.toLocaleString('en-US', { 
+            timeZone: 'Asia/Kolkata', 
+            hour: 'numeric', 
+            hour12: false 
+        });
+        const hour = parseInt(istHour);
+        const state = (hour >= 7 && hour < 23) ? 'Awake' : 'Sleep Cycle';
+        
+        // Calculate uptime from DOB: 19 May 2004
+        const dob = new Date('2004-05-19');
+        const diffMs = now - dob;
+        const years = Math.floor(diffMs / (365.25 * 24 * 60 * 60 * 1000));
+        const days = Math.floor((diffMs % (365.25 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+        const uptime = `Uptime: ${years}y ${days}d`;
+        
+        timestampElement.textContent = `${location} :: State: ${state} :: ${uptime}`;
     }
 }
 
@@ -387,4 +428,71 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         window.addEventListener('load', updateMetrics);
     }
+});
+
+// Intersection Observer for entrance animations
+document.addEventListener('DOMContentLoaded', () => {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, observerOptions);
+
+    // Observe all sections and cards
+    const sections = document.querySelectorAll('.section, .about-content, .project-card, .post-item');
+    sections.forEach(section => {
+        section.classList.add('fade-in-section');
+        observer.observe(section);
+    });
+});
+
+// Performance telemetry header
+window.addEventListener('load', () => {
+    const telemetryEl = document.getElementById('telemetry-header');
+    if (telemetryEl && performance && performance.timing) {
+        const perf = performance.timing;
+        const renderTime = perf.domContentLoadedEventEnd - perf.navigationStart;
+        const paintTime = perf.loadEventEnd - perf.loadEventStart;
+        telemetryEl.textContent = `Render: ${renderTime}ms | Paint: ${paintTime}ms`;
+    }
+});
+
+// Ring buffer scrollbar
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollbar = document.createElement('div');
+    scrollbar.className = 'ring-buffer-scrollbar';
+    
+    const head = document.createElement('div');
+    head.className = 'ring-buffer-head';
+    
+    const trail = document.createElement('div');
+    trail.className = 'ring-buffer-trail';
+    
+    scrollbar.appendChild(trail);
+    scrollbar.appendChild(head);
+    document.body.appendChild(scrollbar);
+    
+    let trailTimeout;
+    
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        const headPosition = (scrollPercent / 100) * (window.innerHeight - 20);
+        
+        head.style.top = `${headPosition}px`;
+        trail.style.height = `${headPosition}px`;
+        trail.style.opacity = '1';
+        
+        clearTimeout(trailTimeout);
+        trailTimeout = setTimeout(() => {
+            trail.style.opacity = '0';
+        }, 300);
+    });
 });
