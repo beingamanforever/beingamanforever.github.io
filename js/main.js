@@ -172,6 +172,7 @@ function loadProjects(limit = 4) {
 // Load writing
 function loadWriting() {
     const container = document.getElementById('writing-container');
+    if (!container) return; // Exit if container doesn't exist on this page
     container.innerHTML = writings.map(post => `
         <article class="post-item">
             <h3 class="post-title"><a href="#">${post.title}</a></h3>

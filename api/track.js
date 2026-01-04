@@ -30,21 +30,24 @@ export default async function handler(req, res) {
         const { page, referrer, userAgent, screenResolution, sessionId } = req.body;
 
         // Get IP and hash it for privacy
-        const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection.remoteAddress;
-        const ipHash = crypto.createHash('sha256').update(ip).digest('hex');
+        const ip = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection?.remoteAddress || 'unknown';
+        const cleanIp = ip.split(',')[0].trim();
+        const ipHash = crypto.createHash('sha256').update(cleanIp).digest('hex');
 
-        // Get location data from IP (using free ipapi.co)
+        // Get location data from IP (using free ip-api.com - 45 req/min)
         let locationData = {};
         try {
-            const geoResponse = await fetch(`https://ipapi.co/${ip.split(',')[0].trim()}/json/`);
+            const geoResponse = await fetch(`http://ip-api.com/json/${cleanIp}?fields=status,country,city,lat,lon`);
             if (geoResponse.ok) {
                 const geoData = await geoResponse.json();
-                locationData = {
-                    country: geoData.country_name,
-                    city: geoData.city,
-                    latitude: geoData.latitude,
-                    longitude: geoData.longitude
-                };
+                if (geoData.status === 'success') {
+                    locationData = {
+                        country: geoData.country,
+                        city: geoData.city,
+                        latitude: geoData.lat,
+                        longitude: geoData.lon
+                    };
+                }
             }
         } catch (geoError) {
             console.error('Geolocation error:', geoError);

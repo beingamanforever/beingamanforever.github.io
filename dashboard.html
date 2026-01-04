@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         .dashboard-container {
             max-width: 1200px;
@@ -80,10 +82,12 @@
             border-radius: 8px;
             border: 1px solid var(--border-color);
             margin: 40px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
+            overflow: hidden;
+        }
+        
+        #visitor-map {
+            width: 100%;
+            height: 100%;
         }
         
         .filter-bar {
@@ -229,9 +233,10 @@
             <button class="filter-btn" data-period="all">All Time</button>
         </div>
 
-        <!-- Map Placeholder -->
+        <!-- Visitor Map -->
+        <h2 style="margin-top: 40px;">Visitor Locations</h2>
         <div class="map-container">
-            <p>Visitor Map (integrate with Leaflet.js or Mapbox)</p>
+            <div id="visitor-map"></div>
         </div>
 
         <!-- Recent Visitors Table -->
@@ -360,6 +365,9 @@
                     </tr>
                 `).join('');
 
+                // Update map with visitor locations
+                updateMap(visitors);
+
             } catch (error) {
                 console.error('Failed to load analytics:', error);
                 document.getElementById('visitors-tbody').innerHTML = `
@@ -381,6 +389,63 @@
                 default:
                     return '2000-01-01T00:00:00Z';
             }
+        }
+
+        // Initialize map
+        let map;
+        let markerLayer;
+
+        function initMap() {
+            map = L.map('visitor-map').setView([20, 0], 2);
+            
+            // Add dark tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+
+            markerLayer = L.layerGroup().addTo(map);
+        }
+
+        function updateMap(visitors) {
+            if (!map) initMap();
+            
+            // Clear existing markers
+            markerLayer.clearLayers();
+            
+            // Group visitors by location
+            const locationCounts = {};
+            visitors.forEach(v => {
+                if (v.latitude && v.longitude) {
+                    const key = `${v.latitude},${v.longitude}`;
+                    locationCounts[key] = locationCounts[key] || { 
+                        lat: v.latitude, 
+                        lon: v.longitude, 
+                        city: v.city, 
+                        country: v.country, 
+                        count: 0 
+                    };
+                    locationCounts[key].count++;
+                }
+            });
+
+            // Add markers
+            Object.values(locationCounts).forEach(loc => {
+                const marker = L.circleMarker([loc.lat, loc.lon], {
+                    radius: Math.min(5 + Math.log(loc.count) * 3, 20),
+                    fillColor: '#6b8cff',
+                    color: '#ffffff',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.7
+                }).addTo(markerLayer);
+
+                marker.bindPopup(`
+                    <strong>${loc.city}, ${loc.country}</strong><br>
+                    ${loc.count} visit${loc.count > 1 ? 's' : ''}
+                `);
+            });
         }
 
         // Period filter buttons
