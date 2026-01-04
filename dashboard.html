@@ -132,36 +132,75 @@
         }
         
         .auth-container {
-            max-width: 400px;
-            margin: 200px auto;
-            padding: 40px;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 20%;
+        }
+        
+        .auth-container h2 {
+            display: none;
+        }
+        
+        .auth-container p {
+            color: #00ff00;
+            font-family: 'IBM Plex Sans', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-form {
+            width: 100%;
         }
         
         .auth-form input {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            border: none;
+            color: #00ff00;
             font-family: 'IBM Plex Sans', monospace;
-            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            caret-color: #00ff00;
+            display: inline;
+        }
+        
+        .auth-form input::placeholder {
+            color: rgba(0, 255, 0, 0.5);
         }
         
         .auth-form button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            background: var(--walter-green);
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            display: none;
+        }
+        
+        .cli-prompt {
+            color: #00ff00;
             font-family: 'IBM Plex Sans', monospace;
-            font-weight: 500;
+            font-size: 1rem;
+            display: inline;
+        }
+        
+        .cli-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+        
+        #auth-error {
+            color: #ff0000 !important;
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -191,14 +230,20 @@
 
     <!-- Authentication Container -->
     <div id="auth-container" class="auth-container" style="display: none;">
-        <h2>Analytics Dashboard</h2>
-        <p style="color: var(--text-muted); margin: 20px 0;">Sign in to view visitor analytics</p>
+        <p>Aman Behera Infrastructure Analytics v1.0.0</p>
+        <p>Initializing secure connection...</p>
+        <p style="margin-bottom: 2rem;">Authentication required.</p>
         <form class="auth-form" id="auth-form">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Sign In</button>
+            <div class="cli-line">
+                <span class="cli-prompt">user@aman-infra:~$</span>
+                <input type="email" id="email" placeholder="enter email" required autocomplete="off">
+            </div>
+            <div class="cli-line">
+                <span class="cli-prompt">password::</span>
+                <input type="password" id="password" placeholder="●●●●●●●●" required autocomplete="off">
+            </div>
         </form>
-        <p id="auth-error" style="color: #ff3b30; margin-top: 15px; display: none;"></p>
+        <p id="auth-error" style="display: none;"></p>
     </div>
 
     <!-- Dashboard Container -->
@@ -311,11 +356,30 @@
 
                 if (error) throw error;
                 
-                showDashboard();
-                loadAnalytics();
-            } catch (error) {
-                errorEl.textContent = error.message;
+                // Show success message
+                errorEl.textContent = '> ACCESS GRANTED';
+                errorEl.style.color = '#00ff00';
                 errorEl.style.display = 'block';
+                
+                setTimeout(() => {
+                    showDashboard();
+                    loadAnalytics();
+                }, 800);
+            } catch (error) {
+                errorEl.textContent = '> PERMISSION DENIED: ' + error.message;
+                errorEl.style.color = '#ff0000';
+                errorEl.style.display = 'block';
+                setTimeout(() => {
+                    errorEl.style.display = 'none';
+                }, 3000);
+            }
+        });
+        
+        // Auto-focus password field after email
+        document.getElementById('email').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('password').focus();
             }
         });
 

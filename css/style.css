@@ -67,7 +67,7 @@
     --bg-white: #ffffff;
     --text-primary: #0a0a0a;
     --text-secondary: #666666;
-    --walter-green: #6b8cff;
+    --walter-green: #4a6bd6;
     --border-color: #e0e0e0;
     --hover-bg: rgba(107, 140, 255, 0.03);
     --quote-bg: rgba(107, 140, 255, 0.02);
@@ -78,8 +78,9 @@
 body.dark-mode {
     --bg-primary: #1e1e1e;
     --bg-white: #2a2a2a;
-    --text-primary: #e8e8e8;
+    --text-primary: #c8c8c8;
     --text-secondary: #a0a0a0;
+    --walter-green: #6b8cff;
     --border-color: #3a3a3a;
     --quote-bg: rgba(13, 115, 119, 0.12);
     --nav-bg: rgba(30, 30, 30, 0.98);
@@ -472,30 +473,42 @@ body.dark-mode .nav-links a::after {
 
 /* Quote Box */
 .quote-box {
-    border-left: 3px solid var(--text-primary);
-    padding: 1.5rem 0 1.5rem 1.5rem;
+    padding: 0 0 0 2rem;
     max-width: 42rem;
-    margin: 2.5rem 0;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.quote-box::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0.5rem;
+    width: 2px;
+    background: var(--text-primary);
+    opacity: 0.6;
 }
 
 .quote-text {
-    font-size: 1.05rem;
+    font-size: 0.91rem;
     font-style: italic;
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .quote-author {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     color: var(--walter-green);
     font-family: 'IBM Plex Sans', sans-serif;
+    opacity: 0.65;
 }
 
 /* Buttons */
 .quick-links {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     flex-wrap: wrap;
     margin-top: 2rem;
 }
@@ -503,61 +516,60 @@ body.dark-mode .nav-links a::after {
 .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 0.3rem;
+    gap: 0.4rem;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 400;
     text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid;
-    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+    color: var(--text-primary);
     position: relative;
-    overflow: hidden;
+    padding-bottom: 2px;
+    padding-right: 1.5rem;
+    border-right: 1px solid rgba(120, 120, 120, 0.3);
 }
 
-.btn::before {
+.btn:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+.btn::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s ease;
+    height: 1px;
+    background: var(--walter-green);
+    transform: scaleX(0);
+    transition: transform 0.2s ease;
 }
 
-.btn:hover::before {
-    left: 100%;
+.btn:hover::after {
+    transform: scaleX(1);
 }
 
 .btn-primary {
-    border-color: var(--text-primary);
     color: var(--text-primary);
 }
 
 .btn-primary:hover {
-    background-color: var(--text-primary);
-    color: var(--bg-primary);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: var(--walter-green);
 }
 
 .btn-secondary {
-    border-color: var(--border-color);
     color: var(--text-secondary);
 }
 
 .btn-secondary:hover {
-    border-color: var(--text-primary);
-    color: var(--text-primary);
-    transform: translateY(-1px);
+    color: var(--walter-green);
 }
 
 .btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
 }
 
 /* Sections */
@@ -754,18 +766,18 @@ body.dark-mode .nav-links a::after {
 /* Projects */
 .project-card {
     border: 1px solid var(--border-color);
-    padding: 2rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1.75rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0;
     animation: fadeInUp 0.5s ease-out forwards;
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.4);
     position: relative;
 }
 
 body.dark-mode .project-card {
-    background-color: var(--bg-white);
+    background-color: rgba(42, 42, 42, 0.4);
 }
 
 .project-card::before {
@@ -808,12 +820,12 @@ body.dark-mode .project-card {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     gap: 1rem;
 }
 
 .project-title {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-primary);
     letter-spacing: -0.03em;
@@ -827,55 +839,85 @@ body.dark-mode .project-card {
 }
 
 .project-stars {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 500;
+    font-size: 0.8rem;
+    color: rgba(102, 102, 102, 0.9);
+    font-weight: 400;
     white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 .project-description {
     color: var(--text-secondary);
-    margin-bottom: 1.25rem;
-    line-height: 1.6;
-    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+    font-size: 0.9rem;
 }
 
 .project-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.65rem;
-    margin-bottom: 1.25rem;
+    gap: 12px;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 0.85rem;
+    color: rgba(136, 136, 136, 0.9);
 }
 
 .project-tag {
-    padding: 0.35rem 0.75rem;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    border-radius: 0.25rem;
-    font-family: 'IBM Plex Sans', sans-serif;
-    transition: all 0.15s ease;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    color: rgba(136, 136, 136, 0.9);
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: color 0.2s ease;
+    position: relative;
+    cursor: default;
 }
 
+.project-tag:not(:last-child)::after {
+    content: '·';
+    position: absolute;
+    right: -9px;
+    color: rgba(68, 68, 68, 0.6);
+}
+
+/* Monospaced log-style project block */
+.project-log {
+    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'JetBrains Mono', monospace;
+    background: transparent;
+    color: var(--text-primary);
+    border-radius: 4px;
+    padding: 0.6rem 0.75rem;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+    border-left: 2px solid rgba(107,140,255,0.12);
+}
+
+.project-log a { color: var(--walter-green); text-decoration: none; }
+
+.project-log .meta { color: rgba(160,160,170,0.9); font-family: inherit; }
+
 .project-tag:hover {
-    border-color: var(--text-primary);
     color: var(--text-primary);
 }
 
 .project-link {
-    color: var(--text-primary);
+    color: var(--text-secondary);
     text-decoration: none;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-family: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 0.85rem;
+    font-weight: 400;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 1px solid rgba(51, 51, 51, 0.4);
     transition: all 0.2s ease;
     padding-bottom: 2px;
 }
@@ -889,13 +931,17 @@ body.dark-mode .project-card {
 /* Writing */
 .post-item {
     border: 1px solid var(--border-color);
-    padding: 1.75rem;
-    border-radius: 0.5rem;
-    background-color: var(--bg-white);
-    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1.75rem;
     transition: all 0.2s ease;
     opacity: 0;
     animation: fadeInUp 0.5s ease-out forwards;
+}
+
+body.dark-mode .post-item {
+    background-color: rgba(42, 42, 42, 0.4);
 }
 
 .post-item:hover {
@@ -911,7 +957,7 @@ body.dark-mode .project-card {
 .post-date {
     font-size: 0.85rem;
     color: var(--text-secondary);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     font-family: 'IBM Plex Sans', sans-serif;
     display: flex;
     gap: 0.5rem;
@@ -943,7 +989,7 @@ body.dark-mode .project-card {
 .post-title {
     font-size: 1.4rem;
     font-weight: 600;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     line-height: 1.3;
     letter-spacing: -0.02em;
 }
@@ -966,8 +1012,9 @@ body.dark-mode .project-card {
 
 .post-excerpt {
     color: var(--text-secondary);
-    line-height: 1.65;
-    margin-top: 0.5rem;
+    line-height: 1.5;
+    margin-top: 0;
+    font-size: 0.9rem;
 }
 
 /* Blog Search - now in nav */
@@ -1204,14 +1251,15 @@ body.dark-mode .project-card {
 /* Env Export List */
 .env-list {
     margin: 2.5rem 0;
-    padding: 1.5rem;
+    padding: 1rem 1.25rem;
     list-style: none;
     font-family: 'IBM Plex Sans', monospace;
     font-size: 0.85rem;
     background-color: var(--bg-white);
     border: 1px solid var(--border-color);
     border-radius: 0.3rem;
-    line-height: 1.8;
+    line-height: 1.5;
+    max-width: 36rem;
 }
 
 .env-list li {
@@ -1275,7 +1323,7 @@ body.dark-mode .project-card {
 
 /* Footer */
 .footer {
-    padding: 3rem 0;
+    padding: 2rem 0;
     border-top: 1px solid var(--border-color);
     text-align: center;
     margin-top: 4rem;
@@ -1301,7 +1349,7 @@ body.dark-mode .project-card {
     font-size: 0.75rem;
     color: var(--text-secondary);
     font-family: 'IBM Plex Sans', monospace;
-    opacity: 0.7;
+    opacity: 0.5;
     letter-spacing: 0.02em;
 }
 
@@ -1538,4 +1586,53 @@ body.dark-mode .ring-buffer-scrollbar {
 
 .kbd-indicator.show {
     opacity: 0.6;
+}
+
+/* Command Palette */
+.command-palette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.command-palette-content {
+    width: 90%;
+    max-width: 600px;
+    background: #000000;
+    border: 1px solid var(--walter-green);
+    border-radius: 4px;
+    padding: 0;
+    box-shadow: 0 0 40px rgba(107, 140, 255, 0.3);
+}
+
+.command-palette #command-input {
+    width: 100%;
+    padding: 20px;
+    background: #000000;
+    border: none;
+    color: var(--walter-green);
+    font-family: 'IBM Plex Sans', monospace;
+    font-size: 1rem;
+    outline: none;
+    caret-color: var(--walter-green);
+}
+
+.command-palette #command-input::placeholder {
+    color: rgba(107, 140, 255, 0.5);
+}
+
+.command-palette #command-output {
+    padding: 0 20px 20px;
+    color: var(--walter-green);
+    font-family: 'IBM Plex Sans', monospace;
+    font-size: 0.9rem;
+    min-height: 20px;
 }

@@ -50,7 +50,7 @@
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
             <div class="footer-colophon">
                 <span class="colophon-item" id="footer-timestamp">Calculating...</span>
-                <span class="colophon-separator">::</span>
+                <span class="colophon-separator">·</span>
                 <span class="colophon-item" id="footer-metrics">Calculating...</span>
             </div>
         </div>
@@ -58,21 +58,20 @@
 
     <script src="js/main.js"></script>
     <script>
+        // Render all projects using same card layout as home page
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('all-projects-container');
             container.innerHTML = projects.map(project => `
                 <div class="project-card">
                     <div class="project-header">
                         <h3 class="project-title">${project.title}</h3>
-                        ${project.stars ? `<span class="project-stars">★ ${project.stars}</span>` : ''}
+                        <span class="project-stars">★ ${project.stars}</span>
                     </div>
                     <p class="project-description">${project.description}</p>
                     <div class="project-tags">
                         ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
                     </div>
-                    <a href="${project.github}" target="_blank" class="project-link">
-                        View on GitHub →
-                    </a>
+                    ${project.github ? `<a href="${project.github}" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>` : ''}
                 </div>
             `).join('');
         });

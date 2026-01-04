@@ -21,7 +21,7 @@
     <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="#top" class="nav-logo" aria-label="Home">Aman Behera</a>
+                <a href="#top" class="nav-logo" aria-label="Home" data-decode="Aman Behera">Aman Behera</a>
                 <button id="theme-toggle" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle theme">
                     <span id="theme-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -167,11 +167,21 @@
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
             <div class="footer-colophon">
                 <span class="colophon-item" id="footer-timestamp">Calculating...</span>
-                <span class="colophon-separator">::</span>
+                <span class="colophon-separator">·</span>
                 <span class="colophon-item" id="footer-metrics">Calculating...</span>
+                <span class="colophon-separator">·</span>
+                <span class="colophon-item" style="opacity: 0.4; font-size: 0.8rem;">[⌘K] command palette</span>
             </div>
         </div>
     </footer>
+
+    <!-- Command Palette -->
+    <div id="command-palette" class="command-palette" style="display: none;">
+        <div class="command-palette-content">
+            <input type="text" id="command-input" placeholder="user@aman-infra:~$ _" autocomplete="off">
+            <div id="command-output"></div>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>

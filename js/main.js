@@ -1,6 +1,87 @@
 // Dark mode functionality
 let darkMode = localStorage.getItem('darkMode') === 'true';
 
+// Text decoding animation
+function decodeText(element) {
+    const text = element.getAttribute('data-decode') || element.textContent;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*';
+    let iterations = 0;
+    const speed = 30; // ms per frame
+    const cycles = 3; // how many times to glitch each character
+    
+    const interval = setInterval(() => {
+        element.textContent = text
+            .split('')
+            .map((char, index) => {
+                if (char === ' ') return ' ';
+                if (index < iterations / cycles) {
+                    return text[index];
+                }
+                return chars[Math.floor(Math.random() * chars.length)];
+            })
+            .join('');
+        
+        iterations++;
+        
+        if (iterations >= text.length * cycles) {
+            clearInterval(interval);
+            element.textContent = text;
+        }
+    }, speed);
+}
+
+// Command palette functionality
+let commandPaletteOpen = false;
+
+function openCommandPalette() {
+    const palette = document.getElementById('command-palette');
+    const input = document.getElementById('command-input');
+    const output = document.getElementById('command-output');
+    palette.style.display = 'flex';
+    input.value = '';
+    
+    // Show available commands on open
+    output.innerHTML = `<div style="opacity: 0.7; margin-bottom: 0.5rem;">Available commands:</div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; gap: 0.5rem; font-size: 0.85rem;">
+            <span>github</span><span style="opacity: 0.6;">→ Open GitHub profile</span>
+            <span>resume</span><span style="opacity: 0.6;">→ View resume PDF</span>
+            <span>dashboard</span><span style="opacity: 0.6;">→ Analytics dashboard</span>
+            <span>work</span><span style="opacity: 0.6;">→ All projects page</span>
+            <span>blogs</span><span style="opacity: 0.6;">→ Blog posts</span>
+            <span>contact</span><span style="opacity: 0.6;">→ Contact page</span>
+            <span>ping</span><span style="opacity: 0.6;">→ Test latency</span>
+        </div>`;
+    
+    input.focus();
+    commandPaletteOpen = true;
+}
+
+function closeCommandPalette() {
+    document.getElementById('command-palette').style.display = 'none';
+    commandPaletteOpen = false;
+}
+
+function executeCommand(cmd) {
+    const output = document.getElementById('command-output');
+    const commands = {
+        'github': () => window.open('https://github.com/beingamanforever', '_blank'),
+        'resume': () => window.open('assets/resume/resume.pdf', '_blank'),
+        'dashboard': () => window.location.href = 'dashboard.html',
+        'ping': () => { output.textContent = 'pong (14ms)'; setTimeout(closeCommandPalette, 1000); },
+        'work': () => window.location.href = 'work.html',
+        'blogs': () => window.location.href = 'blogs.html',
+        'contact': () => window.location.href = 'contact.html',
+        'clear': () => openCommandPalette(), // Reopen to show help
+        'help': () => openCommandPalette()
+    };
+    
+    if (commands[cmd]) {
+        commands[cmd]();
+    } else {
+        output.innerHTML = `<span style="color: #ff3b30;">command not found: ${cmd}</span><br><span style="opacity: 0.6; font-size: 0.85rem;">Type any command or press ESC</span>`;
+    }
+}
+
 function toggleDarkMode() {
     darkMode = !darkMode;
     localStorage.setItem('darkMode', darkMode);
@@ -225,6 +306,46 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProjects();
     loadWriting();
     
+    // Text decoding animation for nav logo
+    const navLogo = document.querySelector('.nav-logo');
+    if (navLogo) {
+        setTimeout(() => decodeText(navLogo), 500);
+    }
+    
+    // Command palette keyboard shortcut
+    document.addEventListener('keydown', (e) => {
+        // CMD+K or CTRL+K
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+            e.preventDefault();
+            openCommandPalette();
+        }
+        // ESC to close
+        if (e.key === 'Escape' && commandPaletteOpen) {
+            closeCommandPalette();
+        }
+    });
+    
+    // Command palette input handler
+    const commandInput = document.getElementById('command-input');
+    if (commandInput) {
+        commandInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = e.target.value.trim().toLowerCase();
+                if (cmd) executeCommand(cmd);
+            }
+        });
+    }
+    
+    // Click outside to close palette
+    const commandPalette = document.getElementById('command-palette');
+    if (commandPalette) {
+        commandPalette.addEventListener('click', (e) => {
+            if (e.target === commandPalette) {
+                closeCommandPalette();
+            }
+        });
+    }
+    
     // Add scroll listener for scroll indicator
     const scrollIndicator = document.querySelector('.scroll-indicator');
     if (scrollIndicator) {
@@ -423,7 +544,7 @@ function updateMetrics() {
         // Get page load time using Performance API
         if (performance && performance.timing) {
             const loadTime = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
-            metricsElement.textContent = `Render: ${loadTime}ms :: Payload: ${pageSize}KB`;
+            metricsElement.textContent = `Render: ${loadTime}ms · Payload: ${pageSize}KB`;
         } else {
             metricsElement.textContent = `Payload: ${pageSize}KB`;
         }
