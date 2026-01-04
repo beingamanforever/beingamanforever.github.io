@@ -245,3 +245,121 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    // Ignore if user is typing in an input field
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        return;
+    }
+
+    switch(e.key) {
+        case 'j':
+            // Scroll down
+            window.scrollBy({ top: 100, behavior: 'smooth' });
+            break;
+        case 'k':
+            // Scroll up
+            window.scrollBy({ top: -100, behavior: 'smooth' });
+            break;
+        case '/':
+            // Focus search if it exists
+            e.preventDefault();
+            const searchInput = document.getElementById('blog-search-input');
+            if (searchInput) {
+                searchInput.focus();
+            }
+            break;
+        case '?':
+            // Show keyboard shortcuts modal
+            e.preventDefault();
+            toggleShortcutsModal();
+            break;
+        case 'Escape':
+            // Close modal if open
+            closeShortcutsModal();
+            break;
+    }
+});
+
+// Keyboard shortcuts modal
+function toggleShortcutsModal() {
+    let modal = document.getElementById('shortcuts-modal');
+    let overlay = document.getElementById('modal-overlay');
+    
+    if (!modal) {
+        // Create modal if it doesn't exist
+        createShortcutsModal();
+        modal = document.getElementById('shortcuts-modal');
+        overlay = document.getElementById('modal-overlay');
+    }
+    
+    modal.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+function closeShortcutsModal() {
+    const modal = document.getElementById('shortcuts-modal');
+    const overlay = document.getElementById('modal-overlay');
+    
+    if (modal) {
+        modal.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+}
+
+function createShortcutsModal() {
+    const modalHTML = `
+        <div id="modal-overlay" class="modal-overlay" onclick="closeShortcutsModal()"></div>
+        <div id="shortcuts-modal" class="keyboard-shortcuts-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Keyboard Shortcuts</h3>
+                <button class="modal-close" onclick="closeShortcutsModal()">&times;</button>
+            </div>
+            <ul class="shortcuts-list">
+                <li>
+                    <span>Scroll down</span>
+                    <span class="shortcut-key">j</span>
+                </li>
+                <li>
+                    <span>Scroll up</span>
+                    <span class="shortcut-key">k</span>
+                </li>
+                <li>
+                    <span>Focus search</span>
+                    <span class="shortcut-key">/</span>
+                </li>
+                <li>
+                    <span>Toggle shortcuts</span>
+                    <span class="shortcut-key">?</span>
+                </li>
+                <li>
+                    <span>Close modal</span>
+                    <span class="shortcut-key">Esc</span>
+                </li>
+            </ul>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+// Update timestamp in footer
+function updateTimestamp() {
+    const timestampElement = document.getElementById('footer-timestamp');
+    if (timestampElement) {
+        const now = new Date();
+        const options = { 
+            timeZone: 'Asia/Kolkata',
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: false
+        };
+        const istTime = now.toLocaleTimeString('en-IN', options);
+        timestampElement.textContent = `Roorkee, IN — ${istTime} IST`;
+    }
+}
+
+// Update timestamp every minute
+setInterval(updateTimestamp, 60000);
+document.addEventListener('DOMContentLoaded', updateTimestamp);

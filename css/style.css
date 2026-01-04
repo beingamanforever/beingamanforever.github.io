@@ -5,6 +5,44 @@
     box-sizing: border-box;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes blink {
+    0%, 49% {
+        opacity: 1;
+    }
+    50%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes growUnderline {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
 :root {
     --bg-primary: #ffffff;
     --bg-white: #ffffff;
@@ -27,6 +65,11 @@ body.dark-mode {
     --quote-bg: rgba(13, 115, 119, 0.12);
     --nav-bg: rgba(30, 30, 30, 0.98);
     --hover-bg: rgba(13, 115, 119, 0.08);
+    background: linear-gradient(135deg, #0A0A0A 0%, #121212 100%);
+}
+
+body.dark-mode::before {
+    opacity: 0.02;
 }
 
 body.dark-mode nav {
@@ -57,11 +100,23 @@ body {
     font-size: 17px;
     line-height: 1.65;
     color: var(--text-primary);
-    background-color: var(--bg-primary);
+    background: linear-gradient(135deg, #FEFEFE 0%, #F5F5F5 100%);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    animation: fadeIn 0.6s ease-in;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    animation: fadeIn 0.8s ease-out;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: -1;
 }
 
 @keyframes fadeIn {
@@ -134,6 +189,14 @@ nav.scrolled {
     text-decoration: none;
     transition: color 0.2s ease;
     letter-spacing: -0.02em;
+    position: relative;
+}
+
+.nav-logo::after {
+    content: '\2588';
+    margin-left: 4px;
+    animation: blink 1.2s step-end infinite;
+    font-size: 0.9em;
 }
 
 .nav-logo:hover {
@@ -161,16 +224,21 @@ nav.scrolled {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background-color: var(--text-primary);
-    transition: width 0.13s cubic-bezier(0.4, 0, 0.2, 1);
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #2A2A4A;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-in-out;
+}
+
+body.dark-mode .nav-links a::after {
+    background-color: var(--walter-green);
 }
 
 .nav-links a:hover::after {
-    width: 100%;
+    transform: scaleX(1);
 }
 
 .nav-links a:hover {
@@ -250,6 +318,30 @@ nav.scrolled {
 
 .hero-content {
     max-width: 42rem;
+}
+
+.hero-content > * {
+    animation: slideUpFade 0.6s ease-out backwards;
+}
+
+.hero-greeting {
+    animation-delay: 0.1s;
+}
+
+.hero-intro {
+    animation-delay: 0.2s;
+}
+
+.hero-description {
+    animation-delay: 0.3s;
+}
+
+.quote-box {
+    animation-delay: 0.4s;
+}
+
+.quick-links {
+    animation-delay: 0.5s;
 }
 
 .hero h1 {
@@ -1127,6 +1219,125 @@ body.dark-mode .project-card {
 .footer-tagline {
     font-style: italic;
     opacity: 0.7;
+}
+
+.footer-colophon {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-family: 'IBM Plex Sans', sans-serif;
+    opacity: 0.6;
+}
+
+body.dark-mode .footer-colophon {
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+.colophon-item {
+    margin: 0 0.4rem;
+}
+
+.colophon-separator {
+    margin: 0 0.3rem;
+    opacity: 0.5;
+}
+
+.file-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-left: 0.25rem;
+}
+
+/* Keyboard shortcuts modal */
+.keyboard-shortcuts-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    z-index: 10000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideUpFade 0.3s ease-out;
+    display: none;
+}
+
+.keyboard-shortcuts-modal.active {
+    display: block;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+}
+
+.modal-overlay.active {
+    display: block;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.shortcuts-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.shortcuts-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.shortcuts-list li:last-child {
+    border-bottom: none;
+}
+
+.shortcut-key {
+    font-family: 'IBM Plex Sans', monospace;
+    background: var(--hover-bg);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--border-color);
+    min-width: 2rem;
+    text-align: center;
 }
 
 /* Responsive */
