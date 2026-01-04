@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aman Behera - Digital Garden</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#top" class="nav-logo">Aman Behera</a>
+                <button id="theme-toggle" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle theme">
+                    <span id="theme-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="index.html#home">Home</a>
+                    <a href="work.html">Work</a>
+                    <a href="blogs.html">Blogs</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-greeting">Hi!</h1>
+                <div class="hero-spacer"></div>
+                <p class="hero-intro">I'm Aman. I like to build stuff and understand how things work.</p>
+                <p class="hero-description">
+                    Currently a Computer Science student at IIT Roorkee. Previously built things that broke, then fixed them.
+                </p>
+                <p class="hero-description">
+                    This website is the public section of my Digital Garden.
+                </p>
+                
+                <!-- Quote -->
+                <div class="quote-box" id="random-quote">
+                    <p class="quote-text"></p>
+                    <p class="quote-author"></p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="quick-links">
+                    <a href="https://github.com/beingamanforever" target="_blank" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                        </svg>
+                        GitHub
+                    </a>
+                    <a href="assets/resume/aman_behera_resume.pdf" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Resume
+                    </a>
+                    <a href="mailto:aman_b@ch.iitr.ac.in" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section section-white">
+        <div class="container">
+            <h2 class="section-title">About</h2>
+            <div class="about-content">
+                <p class="about-paragraph">
+                    I'm interested in the intersection of systems, algorithms, and the fundamental nature of computation. 
+                    Currently exploring <strong>compiler design</strong>, <strong>distributed systems</strong>, and <strong>quantum computing</strong>.
+                </p>
+                <p class="about-paragraph">
+                    I believe in understanding things from first principles. Why does this work? What are the 
+                    fundamental constraints? How can we make it better?
+                </p>
+                <p class="about-paragraph">
+                    When I'm not coding, you'll find me reading papers, hiking in the Himalayas, or thinking 
+                    about complexity theory at 2 AM.
+                </p>
+                
+                <div class="about-details">
+                    <div class="detail-group">
+                        <span class="detail-label">Currently</span>
+                        <span class="detail-item">Studying CS at IIT Roorkee</span>
+                        <span class="detail-item">Building distributed systems</span>
+                        <span class="detail-item">Reading SICP</span>
+                    </div>
+                    <div class="detail-group-separator"></div>
+                    <div class="detail-group">
+                        <span class="detail-label">Interests</span>
+                        <span class="detail-item">Compilers & Programming Languages</span>
+                        <span class="detail-item">Distributed Systems</span>
+                        <span class="detail-item">Quantum Computing</span>
+                        <span class="detail-item">Unix Philosophy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="section work-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Selected Work</h2>
+                <p class="section-subtitle">Things I've built, broken, and rebuilt.</p>
+            </div>
+            <div id="projects-container"></div>
+            <div class="view-all-container">
+                <a href="work.html" class="btn-view-all">
+                    <span>View All Projects</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Aman Behera. Built with care.</p>
+            <p class="footer-tagline">For those who came looking.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
