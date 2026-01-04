@@ -81,12 +81,20 @@
 .tag-item:hover {
     border-color: var(--text-primary);
     color: var(--text-primary);
+    transform: translateY(-1px);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tag-item:active {
+    transform: translateY(0);
 }
 
 .tag-item.active {
     background-color: var(--text-primary);
     color: var(--bg-white);
     border-color: var(--text-primary);
+    transform: scale(1.02);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Blog Posts Grid */
