@@ -1,0 +1,13 @@
+{
+  "name": "visitor-analytics-api",
+  "version": "1.0.0",
+  "description": "Serverless API for visitor tracking",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  }
+}

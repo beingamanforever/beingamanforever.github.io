@@ -26,15 +26,28 @@ function applyTheme() {
 
 // Random quote functionality
 const quotes = [
-    { text: "I am not in danger. I am the danger.", author: "Walter White" },
-    { text: "Say my name.", author: "Walter White" },
-    { text: "I have to return some videotapes.", author: "Patrick Bateman" },
-    { text: "I simply am not there.", author: "Patrick Bateman" },
-    { text: "I'm the one who knocks.", author: "Walter White" },
-    { text: "Chaos isn't a pit. Chaos is a ladder.", author: "Petyr Baelish" },
-    { text: "I did it for me, I liked it, I was good at it, I was alive.", author: "Walter White" },
-    { text: "There is an idea of a Patrick Bateman.", author: "Patrick Bateman" },
-    { text: "Chemistry is the study of matter, but I prefer to see it as the study of change.", author: "Walter White" }
+    { text: "I am not in danger. I am the danger.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "Say my name.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "No more half measures.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "You clearly don't know who you're talking to, so let me clue you in.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "Say my name....Heisenberg", author: "Walter White, Breaking Bad (2008)" },
+    { text: "I am awake.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "I'm the one who knocks.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "I did it for me, I liked it, I was good at it, I was alive.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "Chemistry is the study of matter, but I prefer to see it as the study of change.", author: "Walter White, Breaking Bad (2008)" },
+    { text: "I have to return some videotapes.", author: "Patrick Bateman, American Psycho (2000)" },
+    { text: "I simply am not there.", author: "Patrick Bateman, American Psycho (2000)" },
+    { text: "I have all the characteristics of a human being, but not a single clear, identifiable emotion.", author: "Patrick Bateman, American Psycho (2000)" },
+    { text: "This confession has meant nothing.", author: "Patrick Bateman, American Psycho (2000)" },
+    { text: "There is an idea of a Patrick Bateman.", author: "Patrick Bateman, American Psycho (2000)" },
+    { text: "The only thing standing between you and your goal is the story you keep telling yourself.", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "Successful people are 100% convinced that they are masters of their own destiny.", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "I refuse to settle for mediocrity.", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "Without action, the best intentions in the world are nothing more than that.", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "Winners use words that say 'must' and 'will.'", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "Act as if.", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "There is no nobility in poverty.", author: "Jordan Belfort, The Wolf of Wall Street (2013)" },
+    { text: "Chaos isn't a pit. Chaos is a ladder.", author: "Petyr Baelish" }
 ];
 
 function displayRandomQuote() {
@@ -378,26 +391,24 @@ function updateTimestamp() {
     if (timestampElement) {
         const now = new Date();
         
-        // Roorkee coordinates
-        const location = 'Loc: 30.668° N, 77.891° E';
-        
-        // Calculate state (Awake: 7 AM - 11 PM IST, Sleep Cycle: 11 PM - 7 AM)
-        const istHour = now.toLocaleString('en-US', { 
+        // Current time in IST
+        const timeStr = now.toLocaleString('en-US', { 
             timeZone: 'Asia/Kolkata', 
-            hour: 'numeric', 
+            hour: '2-digit',
+            minute: '2-digit',
             hour12: false 
         });
-        const hour = parseInt(istHour);
-        const state = (hour >= 7 && hour < 23) ? 'Awake' : 'Sleep Cycle';
         
-        // Calculate uptime from DOB: 19 May 2004
-        const dob = new Date('2004-05-19');
-        const diffMs = now - dob;
-        const years = Math.floor(diffMs / (365.25 * 24 * 60 * 60 * 1000));
-        const days = Math.floor((diffMs % (365.25 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
-        const uptime = `Uptime: ${years}y ${days}d`;
+        // Roorkee coordinates
+        const coords = '30.668° N, 77.891° E';
         
-        timestampElement.textContent = `${location} :: State: ${state} :: ${uptime}`;
+        // Create clickable time link to world clock
+        const timeLink = `<a href="https://www.timeanddate.com/worldclock/converter.html?iso=20260101T000000&p1=tz_ist&p2=0" target="_blank" class="footer-link" title="Compare with your timezone">${timeStr} IST</a>`;
+        
+        // Create clickable location link to Google Maps
+        const locationLink = `<a href="https://www.google.com/maps/search/?api=1&query=30.668,77.891" target="_blank" class="footer-link" title="View on Google Maps">Loc: ${coords}</a>`;
+        
+        timestampElement.innerHTML = `${timeLink} :: ${locationLink}`;
     }
 }
 
@@ -411,9 +422,9 @@ function updateMetrics() {
         // Get page load time using Performance API
         if (performance && performance.timing) {
             const loadTime = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
-            metricsElement.textContent = `Render: ${loadTime}ms :: Payload: ${pageSize}KB :: Status: OK`;
+            metricsElement.textContent = `Render: ${loadTime}ms :: Payload: ${pageSize}KB`;
         } else {
-            metricsElement.textContent = `Payload: ${pageSize}KB :: Status: OK`;
+            metricsElement.textContent = `Payload: ${pageSize}KB`;
         }
     }
 }
