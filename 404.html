@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work - Aman Behera</title>
+    <title>404 - Aman Behera</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="js/analytics.js" defer></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -39,14 +40,18 @@
         </div>
     </nav>
 
-    <!-- Work Section -->
-    <section class="work-page">
-        <div class="container">
-            <h1 class="page-title">All Projects</h1>
-            <p class="page-subtitle">A collection of things that I am proud of.</p>
-            <div id="all-projects-container"></div>
-        </div>
-    </section>
+    <main id="main-content">
+        <section class="work-page">
+            <div class="container">
+                <h1 class="page-title">404</h1>
+                <p class="page-subtitle">panic: page not found (core dumped)</p>
+                <div class="quick-links" style="margin-top: 18px;">
+                    <a href="index.html" class="btn btn-primary">Return Home</a>
+                    <a href="blogs.html" class="btn btn-secondary">Open Blogs</a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -70,24 +75,5 @@
     </div>
 
     <script src="js/main.js"></script>
-    <script>
-        // Render all projects using same card layout as home page
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('all-projects-container');
-            container.innerHTML = projects.map(project => `
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title">${project.title}</h3>
-                        <span class="project-stars">★ ${project.stars}</span>
-                    </div>
-                    <p class="project-description">${project.description}</p>
-                    <div class="project-tags">
-                        ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
-                    </div>
-                    ${project.github ? `<a href="${project.github}" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>` : ''}
-                </div>
-            `).join('');
-        });
-    </script>
 </body>
 </html>

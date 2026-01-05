@@ -17,16 +17,54 @@
         return sessionId;
     }
 
+    async function getGrantedGeolocation() {
+        if (!navigator.geolocation) return null;
+
+        // Do not trigger a permission prompt from analytics.
+        if (navigator.permissions && navigator.permissions.query) {
+            try {
+                const status = await navigator.permissions.query({ name: 'geolocation' });
+                if (status.state !== 'granted') return null;
+            } catch {
+                return null;
+            }
+        } else {
+            return null;
+        }
+
+        return new Promise((resolve) => {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const coords = pos && pos.coords;
+                    if (!coords) return resolve(null);
+                    resolve({
+                        latitude: coords.latitude,
+                        longitude: coords.longitude,
+                        accuracy: Number.isFinite(coords.accuracy) ? Math.round(coords.accuracy) : null
+                    });
+                },
+                () => resolve(null),
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 5 * 60 * 1000,
+                    timeout: 2500
+                }
+            );
+        });
+    }
+
     // Track page view
     async function trackPageView() {
         try {
+            const geo = await getGrantedGeolocation();
             const data = {
                 page: window.location.pathname,
                 referrer: document.referrer || 'direct',
                 userAgent: navigator.userAgent,
                 screenResolution: `${window.screen.width}x${window.screen.height}`,
                 sessionId: getSessionId(),
-                timestamp: new Date().toISOString()
+                timestamp: new Date().toISOString(),
+                geo
             };
 
             // Send data to API

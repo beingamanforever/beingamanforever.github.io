@@ -10,7 +10,8 @@
     "@supabase/supabase-js": "^2.39.0"
   },
   "scripts": {
-    "dev": "vercel dev",
+    "dev": "python3 -m http.server 3000",
+    "vercel:dev": "vercel dev",
     "deploy": "vercel --prod"
   }
 }

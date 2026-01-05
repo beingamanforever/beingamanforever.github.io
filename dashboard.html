@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics Dashboard - Aman Behera</title>
+    <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -401,7 +402,9 @@
                     <tr>
                         <td>${new Date(v.timestamp).toLocaleString()}</td>
                         <td>${v.page}</td>
-                        <td>${v.city || 'Unknown'}, ${v.country || 'Unknown'}</td>
+                        <td>${(v.city || v.country)
+                            ? `${v.city || 'Unknown'}, ${v.country || 'Unknown'}`
+                            : (v.latitude && v.longitude ? `${Number(v.latitude).toFixed(6)}, ${Number(v.longitude).toFixed(6)}` : 'Unknown')}${v.geo_source ? ` (${String(v.geo_source).toLowerCase()})` : ''}${(v.geo_accuracy_m !== null && v.geo_accuracy_m !== undefined) ? ` ±${v.geo_accuracy_m}m` : ''}</td>
                         <td>${v.device_type || 'Unknown'}</td>
                         <td>${v.browser || 'Unknown'}</td>
                     </tr>
@@ -456,27 +459,52 @@
             // Clear existing markers
             markerLayer.clearLayers();
             
+            const rootStyles = getComputedStyle(document.documentElement);
+            const gpsFill = rootStyles.getPropertyValue('--walter-green').trim() || '#6b8cff';
+            const ipFill = '#6b8cff';
+
             // Group visitors by location
             const locationCounts = {};
             visitors.forEach(v => {
                 if (v.latitude && v.longitude) {
-                    const key = `${v.latitude},${v.longitude}`;
-                    locationCounts[key] = locationCounts[key] || { 
-                        lat: v.latitude, 
-                        lon: v.longitude, 
-                        city: v.city, 
-                        country: v.country, 
-                        count: 0 
+                    const lat = Number(v.latitude);
+                    const lon = Number(v.longitude);
+                    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+                    const key = `${lat.toFixed(6)},${lon.toFixed(6)}`;
+                    locationCounts[key] = locationCounts[key] || {
+                        lat,
+                        lon,
+                        city: v.city,
+                        country: v.country,
+                        count: 0,
+                        sources: new Set(),
+                        bestAccuracyM: null
                     };
                     locationCounts[key].count++;
+                    if (v.geo_source) {
+                        locationCounts[key].sources.add(String(v.geo_source).toLowerCase());
+                    }
+                    if (v.geo_accuracy_m !== null && v.geo_accuracy_m !== undefined) {
+                        const acc = Number(v.geo_accuracy_m);
+                        if (Number.isFinite(acc)) {
+                            if (locationCounts[key].bestAccuracyM === null || acc < locationCounts[key].bestAccuracyM) {
+                                locationCounts[key].bestAccuracyM = acc;
+                            }
+                        }
+                    }
                 }
             });
 
             // Add markers
             Object.values(locationCounts).forEach(loc => {
+                const hasGps = loc.sources.has('gps');
+                const sourcesLabel = loc.sources.size ? Array.from(loc.sources).sort().join(', ') : 'unknown';
+                const accLine = loc.bestAccuracyM !== null ? `<br>Accuracy: ±${loc.bestAccuracyM}m` : '';
+
                 const marker = L.circleMarker([loc.lat, loc.lon], {
                     radius: Math.min(5 + Math.log(loc.count) * 3, 20),
-                    fillColor: '#6b8cff',
+                    fillColor: hasGps ? gpsFill : ipFill,
                     color: '#ffffff',
                     weight: 1,
                     opacity: 1,
@@ -484,7 +512,9 @@
                 }).addTo(markerLayer);
 
                 marker.bindPopup(`
-                    <strong>${loc.city}, ${loc.country}</strong><br>
+                    <strong>${loc.city || 'Unknown'}, ${loc.country || 'Unknown'}</strong><br>
+                    Coord: ${Number(loc.lat).toFixed(6)}, ${Number(loc.lon).toFixed(6)}<br>
+                    Source: ${sourcesLabel}${accLine}<br>
                     ${loc.count} visit${loc.count > 1 ? 's' : ''}
                 `);
             });

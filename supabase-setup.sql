@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS visitors (
     city VARCHAR(100),
     latitude DECIMAL(10, 8),
     longitude DECIMAL(11, 8),
+    geo_source VARCHAR(16), -- 'gps' | 'ip'
+    geo_accuracy_m INTEGER,
     device_type VARCHAR(50),
     browser VARCHAR(100),
     os VARCHAR(100),
@@ -19,6 +21,10 @@ CREATE TABLE IF NOT EXISTS visitors (
     session_id VARCHAR(255),
     ip_hash VARCHAR(64) -- Hashed for privacy
 );
+
+-- Backfill-safe migrations for existing tables
+ALTER TABLE visitors ADD COLUMN IF NOT EXISTS geo_source VARCHAR(16);
+ALTER TABLE visitors ADD COLUMN IF NOT EXISTS geo_accuracy_m INTEGER;
 
 -- Create index for faster queries
 CREATE INDEX IF NOT EXISTS idx_visitors_timestamp ON visitors(timestamp DESC);
