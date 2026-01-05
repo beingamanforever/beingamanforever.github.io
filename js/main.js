@@ -30,8 +30,38 @@ function decodeText(element) {
     }, speed);
 }
 
+function renderAllProjectsPage() {
+    const container = document.getElementById('all-projects-container');
+    if (!container) return;
+
+    container.innerHTML = projects.map(project => `
+        <div class="project-card">
+            <div class="project-header">
+                <h3 class="project-title">${project.title}</h3>
+                <span class="project-stars">★ ${project.stars || ''}</span>
+            </div>
+            <p class="project-description">${project.description}</p>
+            <div class="project-tags">
+                ${(project.tags || []).map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+            </div>
+            ${project.github ? `<a href="${project.github}" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>` : ''}
+        </div>
+    `).join('');
+}
+
 // Command palette functionality
 let commandPaletteOpen = false;
+
+function toggleCommandPalette() {
+    const palette = document.getElementById('command-palette');
+    if (!palette) return;
+
+    if (commandPaletteOpen) {
+        closeCommandPalette();
+    } else {
+        openCommandPalette();
+    }
+}
 
 function openCommandPalette() {
     const palette = document.getElementById('command-palette');
@@ -353,7 +383,39 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(); // Apply saved theme preference
     displayRandomQuote();
     loadProjects();
+    renderAllProjectsPage();
     loadWriting();
+
+    // Theme toggle (avoid inline onclick so CSP can be stricter)
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleDarkMode);
+    }
+
+    // Copy buttons (avoid inline onclick)
+    document.querySelectorAll('button[data-copy-text]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            copyToClipboard(btn.getAttribute('data-copy-text') || '', btn);
+        });
+    });
+
+    document.querySelectorAll('button[data-copy-target]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const selector = btn.getAttribute('data-copy-target');
+            if (!selector) return;
+            const target = document.querySelector(selector);
+            const text = target ? target.textContent.trim() : '';
+            copyToClipboard(text, btn);
+        });
+    });
+
+    document.querySelectorAll('button[data-copy-from="pre"]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const pre = btn.parentElement?.querySelector('pre');
+            const text = pre ? pre.textContent.trim() : '';
+            copyToClipboard(text, btn);
+        });
+    });
     
     // Text decoding animation for nav logo
     const navLogo = document.querySelector('.nav-logo');
@@ -394,6 +456,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Footer quote: open source reference link
+    const footerQuote = 'Should they come looking for me? I intend to be found';
+    const footerQuoteSourceUrl = 'https://aemondtargaryenswhore.tumblr.com/post/706368631822499840/should-they-come-looking-for-me-i-intend-to-be';
+
+    document.querySelectorAll('.footer-tagline').forEach((el) => {
+        if (el.textContent.trim() !== footerQuote) return;
+
+        el.classList.add('is-footer-toggle');
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+
+        const updateAria = () => {
+            el.setAttribute('aria-label', 'Open quote source');
+        };
+
+        const onActivate = (e) => {
+            e.preventDefault();
+            window.open(footerQuoteSourceUrl, '_blank', 'noopener');
+        };
+
+        updateAria();
+        el.addEventListener('click', onActivate);
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                onActivate(e);
+            }
+        });
+    });
     
     // Add scroll listener for scroll indicator
     const scrollIndicator = document.querySelector('.scroll-indicator');

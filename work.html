@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Work - Aman Behera</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
+    <meta property="og:title" content="Work — Aman Behera">
+    <meta property="og:description" content="Projects and experiments in systems, C++, and performance.">
+    <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
+    <meta property="og:url" content="https://beingamanforever.io/work.html">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
@@ -18,7 +25,7 @@
         <div class="nav-container">
             <div class="nav-left">
                 <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
-                <button id="theme-toggle" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle theme">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <span id="theme-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -69,25 +76,6 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
-    <script>
-        // Render all projects using same card layout as home page
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('all-projects-container');
-            container.innerHTML = projects.map(project => `
-                <div class="project-card">
-                    <div class="project-header">
-                        <h3 class="project-title">${project.title}</h3>
-                        <span class="project-stars">★ ${project.stars}</span>
-                    </div>
-                    <p class="project-description">${project.description}</p>
-                    <div class="project-tags">
-                        ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
-                    </div>
-                    ${project.github ? `<a href="${project.github}" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>` : ''}
-                </div>
-            `).join('');
-        });
-    </script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>

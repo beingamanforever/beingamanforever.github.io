@@ -1389,6 +1389,11 @@ body.dark-mode .pgp-key {
     color: var(--text-primary);
 }
 
+.verify-instructions > p {
+    margin: 0 0 1.25rem;
+    color: var(--text-secondary);
+}
+
 .verify-steps {
     list-style: none;
     counter-reset: step-counter;
@@ -1645,6 +1650,14 @@ body.dark-mode .cmd-block pre {
 .footer-tagline {
     font-style: italic;
     opacity: 0.7;
+}
+
+.footer-tagline.is-footer-toggle {
+    cursor: pointer;
+}
+
+.footer-tagline.is-footer-toggle:hover {
+    opacity: 0.9;
 }
 
 .footer-colophon {

@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSS · aman behera</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
+    <meta property="og:title" content="RSS — Aman Behera">
+    <meta property="og:description" content="RSS feed and verification details.">
+    <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
+    <meta property="og:url" content="https://beingamanforever.io/rss.html">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
@@ -18,7 +25,7 @@
         <div class="nav-container">
             <div class="nav-left">
                 <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
-                <button id="theme-toggle" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle theme">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <span id="theme-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -63,14 +70,14 @@
                     <strong>Import the public key:</strong>
                     <div class="cmd-block">
                         <pre>curl https://beingamanforever.io/verify.html | gpg --import</pre>
-                        <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard(this.parentElement.querySelector('pre').textContent.trim(), this)">Copy</button>
+                        <button type="button" class="copy-btn copy-btn--small cmd-copy" data-copy-from="pre">Copy</button>
                     </div>
                 </li>
                 <li>
                     <strong>Verify a signed file:</strong>
                     <div class="cmd-block">
                         <pre>gpg --verify file.asc</pre>
-                        <button type="button" class="copy-btn copy-btn--small cmd-copy" onclick="copyToClipboard(this.parentElement.querySelector('pre').textContent.trim(), this)">Copy</button>
+                        <button type="button" class="copy-btn copy-btn--small cmd-copy" data-copy-from="pre">Copy</button>
                     </div>
                 </li>
             </ol>

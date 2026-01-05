@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics Dashboard - Aman Behera</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https://*.basemaps.cartocdn.com; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
     <link rel="preload" href="css/style.css" as="style">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="assets/vendor/leaflet/1.9.4/leaflet.css" />
     <style>
         /* Dashboard layout and components */
         .dashboard-container {
@@ -186,7 +187,7 @@
         <div class="nav-container">
             <div class="nav-left">
                 <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
-                <button id="theme-toggle" class="theme-toggle" onclick="toggleDarkMode()" aria-label="Toggle theme">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <span id="theme-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -282,256 +283,15 @@
             </tbody>
         </table>
 
-        <button onclick="signOut()" style="margin: 40px 0; padding: 10px 20px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; color: var(--text-primary); font-family: 'IBM Plex Sans', monospace;">Sign Out</button>
+        <button id="sign-out-btn" style="margin: 40px 0; padding: 10px 20px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; color: var(--text-primary); font-family: 'IBM Plex Sans', monospace;">Sign Out</button>
     </div>
 
     <!-- Ring Buffer Scrollbar -->
     <div id="ring-buffer" class="ring-buffer"></div>
 
-    <script src="js/main.js"></script>
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-        // Configuration
-        const SUPABASE_URL = 'https://jmqhgcssvewlkswqymby.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcWhnY3NzdmV3bGtzd3F5bWJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1MzU2ODksImV4cCI6MjA4MzExMTY4OX0.SxzCZpvBYQN41eI4C5acE_jIGL2z59GepffGv9150dM';
-
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        let currentPeriod = '24h';
-
-        // Check authentication on load
-        async function checkAuth() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                showDashboard();
-                loadAnalytics();
-            } else {
-                showAuth();
-            }
-        }
-
-        function showAuth() {
-            document.getElementById('auth-container').style.display = 'block';
-            document.getElementById('dashboard-container').style.display = 'none';
-        }
-
-        function showDashboard() {
-            document.getElementById('auth-container').style.display = 'none';
-            document.getElementById('dashboard-container').style.display = 'block';
-        }
-
-        // Sign in
-        document.getElementById('auth-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorEl = document.getElementById('auth-error');
-
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-                if (error) throw error;
-                
-                // Show success message
-                errorEl.textContent = '> ACCESS GRANTED';
-                errorEl.style.color = '#00ff00';
-                errorEl.style.display = 'block';
-                
-                setTimeout(() => {
-                    showDashboard();
-                    loadAnalytics();
-                }, 800);
-            } catch (error) {
-                errorEl.textContent = '> PERMISSION DENIED: ' + error.message;
-                errorEl.style.color = '#ff0000';
-                errorEl.style.display = 'block';
-                setTimeout(() => {
-                    errorEl.style.display = 'none';
-                }, 3000);
-            }
-        });
-        
-        // Auto-focus password field after email
-        document.getElementById('email').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('password').focus();
-            }
-        });
-
-        // Sign out
-        window.signOut = async function() {
-            await supabase.auth.signOut();
-            showAuth();
-        };
-
-        // Load analytics data
-        async function loadAnalytics() {
-            try {
-                const cutoffTime = getCutoffTime(currentPeriod);
-                
-                // Fetch total stats
-                const { data: visitors, error } = await supabase
-                    .from('visitors')
-                    .select('*')
-                    .gte('timestamp', cutoffTime)
-                    .order('timestamp', { ascending: false });
-
-                if (error) throw error;
-
-                // Calculate stats
-                const totalVisits = visitors.length;
-                const uniqueSessions = new Set(visitors.map(v => v.session_id)).size;
-                const countries = new Set(visitors.map(v => v.country).filter(Boolean)).size;
-                
-                const today = new Date().toISOString().split('T')[0];
-                const todayVisits = visitors.filter(v => v.timestamp.startsWith(today)).length;
-
-                // Update UI
-                document.getElementById('total-visits').textContent = totalVisits;
-                document.getElementById('unique-sessions').textContent = uniqueSessions;
-                document.getElementById('countries').textContent = countries;
-                document.getElementById('today-visits').textContent = todayVisits;
-
-                // Populate table
-                const tbody = document.getElementById('visitors-tbody');
-                tbody.innerHTML = visitors.slice(0, 50).map(v => `
-                    <tr>
-                        <td>${new Date(v.timestamp).toLocaleString()}</td>
-                        <td>${v.page}</td>
-                        <td>${(v.city || v.country)
-                            ? `${v.city || 'Unknown'}, ${v.country || 'Unknown'}`
-                            : (v.latitude && v.longitude ? `${Number(v.latitude).toFixed(6)}, ${Number(v.longitude).toFixed(6)}` : 'Unknown')}${v.geo_source ? ` (${String(v.geo_source).toLowerCase()})` : ''}${(v.geo_accuracy_m !== null && v.geo_accuracy_m !== undefined) ? ` ±${v.geo_accuracy_m}m` : ''}</td>
-                        <td>${v.device_type || 'Unknown'}</td>
-                        <td>${v.browser || 'Unknown'}</td>
-                    </tr>
-                `).join('');
-
-                // Update map with visitor locations
-                updateMap(visitors);
-
-            } catch (error) {
-                console.error('Failed to load analytics:', error);
-                document.getElementById('visitors-tbody').innerHTML = `
-                    <tr><td colspan="5" class="error-message">Failed to load analytics data</td></tr>
-                `;
-            }
-        }
-
-        // Get cutoff time based on period
-        function getCutoffTime(period) {
-            const now = new Date();
-            switch(period) {
-                case '24h':
-                    return new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
-                case '7d':
-                    return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
-                case '30d':
-                    return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
-                default:
-                    return '2000-01-01T00:00:00Z';
-            }
-        }
-
-        // Initialize map
-        let map;
-        let markerLayer;
-
-        function initMap() {
-            map = L.map('visitor-map').setView([20, 0], 2);
-            
-            // Add dark tile layer
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 19
-            }).addTo(map);
-
-            markerLayer = L.layerGroup().addTo(map);
-        }
-
-        function updateMap(visitors) {
-            if (!map) initMap();
-            
-            // Clear existing markers
-            markerLayer.clearLayers();
-            
-            const rootStyles = getComputedStyle(document.documentElement);
-            const gpsFill = rootStyles.getPropertyValue('--walter-green').trim() || '#6b8cff';
-            const ipFill = '#6b8cff';
-
-            // Group visitors by location
-            const locationCounts = {};
-            visitors.forEach(v => {
-                if (v.latitude && v.longitude) {
-                    const lat = Number(v.latitude);
-                    const lon = Number(v.longitude);
-                    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
-
-                    const key = `${lat.toFixed(6)},${lon.toFixed(6)}`;
-                    locationCounts[key] = locationCounts[key] || {
-                        lat,
-                        lon,
-                        city: v.city,
-                        country: v.country,
-                        count: 0,
-                        sources: new Set(),
-                        bestAccuracyM: null
-                    };
-                    locationCounts[key].count++;
-                    if (v.geo_source) {
-                        locationCounts[key].sources.add(String(v.geo_source).toLowerCase());
-                    }
-                    if (v.geo_accuracy_m !== null && v.geo_accuracy_m !== undefined) {
-                        const acc = Number(v.geo_accuracy_m);
-                        if (Number.isFinite(acc)) {
-                            if (locationCounts[key].bestAccuracyM === null || acc < locationCounts[key].bestAccuracyM) {
-                                locationCounts[key].bestAccuracyM = acc;
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Add markers
-            Object.values(locationCounts).forEach(loc => {
-                const hasGps = loc.sources.has('gps');
-                const sourcesLabel = loc.sources.size ? Array.from(loc.sources).sort().join(', ') : 'unknown';
-                const accLine = loc.bestAccuracyM !== null ? `<br>Accuracy: ±${loc.bestAccuracyM}m` : '';
-
-                const marker = L.circleMarker([loc.lat, loc.lon], {
-                    radius: Math.min(5 + Math.log(loc.count) * 3, 20),
-                    fillColor: hasGps ? gpsFill : ipFill,
-                    color: '#ffffff',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.7
-                }).addTo(markerLayer);
-
-                marker.bindPopup(`
-                    <strong>${loc.city || 'Unknown'}, ${loc.country || 'Unknown'}</strong><br>
-                    Coord: ${Number(loc.lat).toFixed(6)}, ${Number(loc.lon).toFixed(6)}<br>
-                    Source: ${sourcesLabel}${accLine}<br>
-                    ${loc.count} visit${loc.count > 1 ? 's' : ''}
-                `);
-            });
-        }
-
-        // Period filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentPeriod = btn.dataset.period;
-                loadAnalytics();
-            });
-        });
-
-        // Initialize
-        checkAuth();
-    </script>
+    <script src="assets/vendor/leaflet/1.9.4/leaflet.js" defer></script>
+    <script src="assets/vendor/supabase/supabase.js" defer></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/dashboard.js" defer></script>
 </body>
 </html>
