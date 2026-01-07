@@ -85,19 +85,19 @@
     }
 
     // Track on page load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', trackPageView);
-    } else {
-        trackPageView();
+    function scheduleTrack() {
+        // Defer analytics so it doesn't slow first paint / interactivity.
+        if (typeof requestIdleCallback === 'function') {
+            requestIdleCallback(() => { trackPageView(); }, { timeout: 2500 });
+        } else {
+            setTimeout(() => { trackPageView(); }, 1500);
+        }
     }
 
-    // Track single-page navigation (if you add SPA routing later)
-    let lastPath = window.location.pathname;
-    setInterval(() => {
-        if (window.location.pathname !== lastPath) {
-            lastPath = window.location.pathname;
-            trackPageView();
-        }
-    }, 1000);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', scheduleTrack, { once: true });
+    } else {
+        scheduleTrack();
+    }
 
 })();
