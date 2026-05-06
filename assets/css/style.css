@@ -67,7 +67,7 @@
     --bg-white: #ffffff;
     --text-primary: #0a0a0a;
     --text-secondary: #666666;
-    --walter-green: #4a6bd6;
+    --walter-green: #58a6ff;
     --border-color: #e0e0e0;
     --hover-bg: rgba(107, 140, 255, 0.03);
     --quote-bg: rgba(107, 140, 255, 0.02);
@@ -82,7 +82,7 @@ body.dark-mode {
     --bg-white: #2a2a2a;
     --text-primary: #c8c8c8;
     --text-secondary: #a0a0a0;
-    --walter-green: #6b8cff;
+    --walter-green: #61afef;
     --border-color: #3a3a3a;
     --quote-bg: rgba(107, 140, 255, 0.06);
     --nav-bg: rgba(30, 30, 30, 0.98);
@@ -646,6 +646,13 @@ body.dark-mode .nav-links a::after {
     white-space: nowrap;
 }
 
+.section-title-kicker {
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
 .section-header {
     margin-bottom: 2.5rem;
 }
@@ -725,6 +732,101 @@ body.dark-mode .nav-links a::after {
     color: var(--text-secondary);
     font-style: italic;
     margin-bottom: 2rem;
+}
+
+/* Achievements */
+.achievements-section {
+    background-color: var(--bg-primary);
+}
+
+.achievement-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 2rem;
+    position: relative;
+    max-width: 760px;
+}
+
+.achievement-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.55rem;
+    top: 0.45rem;
+    bottom: 0.45rem;
+    width: 1px;
+    background: var(--text-secondary);
+    opacity: 0.55;
+}
+
+.achievement-item {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 1rem;
+    position: relative;
+    padding: 0 0 2.35rem;
+}
+
+.achievement-item:last-child {
+    padding-bottom: 0;
+}
+
+.achievement-item::before {
+    content: '';
+    position: absolute;
+    left: -1.83rem;
+    top: 0.35rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid var(--text-secondary);
+    border-radius: 50%;
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 4px var(--bg-primary);
+}
+
+body.dark-mode .achievement-item::before {
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 4px var(--bg-primary);
+}
+
+.achievement-year {
+    color: var(--walter-green);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    opacity: 0.82;
+}
+
+.achievement-copy h3 {
+    color: var(--text-primary);
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0 0 0.55rem;
+}
+
+.achievement-copy p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.achievement-copy p a {
+    color: var(--walter-green);
+    text-decoration: underline;
+    text-decoration-color: rgba(107, 140, 255, 0.4);
+    text-underline-offset: 4px;
+    transition: all 0.2s ease;
+}
+
+body.dark-mode .achievement-copy p a {
+    text-decoration-color: rgba(107, 140, 255, 0.4);
+}
+
+.achievement-copy p a:hover {
+    color: var(--text-primary);
+    text-decoration-color: var(--walter-green);
 }
 
 /* About Section */
@@ -1035,6 +1137,108 @@ body.dark-mode .post-item {
     line-height: 1.5;
     margin-top: 0;
     font-size: 0.9rem;
+}
+
+.blog-workflow {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 0;
+    margin-top: 1.75rem;
+}
+
+.blog-workflow h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin: 0 0 0.35rem;
+    color: var(--text-primary);
+}
+
+.blog-workflow p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 48rem;
+}
+
+.blog-workflow code {
+    font-family: var(--font-mono);
+    font-size: 0.86em;
+    color: var(--walter-green);
+}
+
+.workflow-link {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--walter-green);
+}
+
+.workflow-link:hover {
+    color: var(--walter-green);
+}
+
+/* GitHub */
+.github-section {
+    background-color: var(--bg-primary);
+}
+
+.github-heatmap {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 0 1.5rem;
+}
+
+.github-heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.github-label,
+.github-open {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+}
+
+.github-heatmap h3 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    margin: 0.25rem 0 0;
+}
+
+.github-open {
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.github-heatmap:hover .github-open {
+    color: var(--walter-green);
+}
+
+.github-heatmap img {
+    display: block;
+    width: 100%;
+    max-width: 760px;
+    height: auto;
+    min-height: 120px;
+    object-fit: contain;
+    object-position: left center;
+    filter: saturate(0.95);
 }
 
 /* Blog Search - now in nav */
@@ -1882,6 +2086,66 @@ body.dark-mode .shortcut-key {
     .section {
         padding: 2rem 0;
     }
+
+    .section-title {
+        display: block;
+    }
+
+    .section-title::after {
+        display: block;
+        margin-top: 0.55rem;
+        white-space: normal;
+    }
+
+    .section-title-kicker {
+        font-size: 1.35rem;
+        letter-spacing: 0.16em;
+    }
+
+    .achievement-timeline {
+        padding-left: 1.5rem;
+    }
+
+    .achievement-timeline::before {
+        left: 0.45rem;
+    }
+
+    .achievement-item {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+        padding-bottom: 2rem;
+    }
+
+    .achievement-item::before {
+        left: -1.43rem;
+    }
+
+    .achievement-year {
+        font-size: 0.78rem;
+    }
+
+    .achievement-copy h3 {
+        font-size: 1.16rem;
+    }
+
+    .achievement-copy p {
+        font-size: 0.95rem;
+    }
+
+    .blog-workflow,
+    .github-heatmap-header {
+        display: block;
+    }
+
+    .workflow-link,
+    .github-open {
+        display: inline-block;
+        margin-top: 0.9rem;
+    }
+
+    .github-heatmap img {
+        min-height: 92px;
+    }
     
     .project-card,
     .post-item {
@@ -1973,6 +2237,11 @@ body.dark-mode .shortcut-key {
     
     .section-title {
         font-size: 1.5rem;
+    }
+
+    .section-title-kicker {
+        font-size: 1.2rem;
+        letter-spacing: 0.14em;
     }
     
     .footer {
@@ -2222,4 +2491,135 @@ body.dark-mode .ring-buffer-scrollbar {
 
 .feed-preview a:hover {
     text-decoration: underline;
+}
+/* Blogs Page Specific Styles */
+
+.blogs-section {
+    padding: 8rem 0 3rem;
+    min-height: 100vh;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.blogs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.blogs-search {
+    margin-bottom: 2.5rem;
+}
+
+.search-input-main {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: var(--bg-white);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+
+.search-input-main:focus {
+    outline: none;
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 3px var(--hover-bg);
+}
+
+.search-input-main::placeholder {
+    color: var(--text-secondary);
+}
+
+.blogs-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+/* Tags Sidebar */
+.tags-sidebar {
+    position: sticky;
+    top: 6rem;
+}
+
+.tags-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.tags-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tag-item {
+    padding: 0.5rem 1rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.3rem;
+    background-color: var(--bg-white);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.tag-item:hover {
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tag-item:active {
+    transform: translateY(0);
+}
+
+.tag-item.active {
+    background-color: var(--text-primary);
+    color: var(--bg-white);
+    border-color: var(--text-primary);
+    transform: scale(1.02);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Blog Posts Grid */
+.blogs-content {
+    display: grid;
+    gap: 1.25rem;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .blogs-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .tags-sidebar {
+        position: static;
+    }
+
+    .tags-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 }
