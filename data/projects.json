@@ -1,25 +1,25 @@
 [
   {
-    "title": "SIMD-accelerated KV Store",
-    "description": "Building an in-memory key-value store with SIMD-accelerated lookups; targeting saturated DRAM bandwidth on commodity hardware.",
-    "tags": ["C++", "SIMD", "systems"],
-    "url": "https://github.com/beingamanforever",
+    "title": "Zero-copy CSV Ingestion Engine",
+    "description": "Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.",
+    "tags": ["C++", "SIMD", "parsing"],
+    "url": "https://github.com/beingamanforever/CSV-Parsing-Engine",
     "stars": "WIP",
     "featured": true
   },
   {
-    "title": "Zero-copy CSV Ingestion Engine",
-    "description": "Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.",
-    "tags": ["C++", "SIMD", "parsing"],
-    "url": "https://github.com/beingamanforever",
-    "stars": "WIP",
+    "title": "ZeroShred",
+    "description": "High-throughput file transfer hitting 780 MB/s via kernel-level zero-copy (sendfile), pipelined SHA-256 on dedicated threads, and hardware crypto acceleration.",
+    "tags": ["C", "systems", "networking"],
+    "url": "https://github.com/beingamanforever/zeroshred",
+    "stars": "780 MB/s",
     "featured": true
   },
   {
     "title": "GNU Octave — GSoC 2026",
-    "description": "Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure.",
+    "description": "Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.",
     "tags": ["Octave", "numerics", "GSoC"],
-    "url": "https://octave.org/",
+    "url": "https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever",
     "stars": "active",
     "featured": true
   },
@@ -37,6 +37,30 @@
     "tags": ["ML", "hackathon"],
     "url": "https://github.com/beingamanforever/hilabs",
     "stars": "Winner",
+    "featured": false
+  },
+  {
+    "title": "Binary protocol (C++)",
+    "description": "Minimal byte-level binary wire protocol with explicit layout, endian-safe serialization, XOR checksum, and offset-based encoding.",
+    "tags": ["C++", "protocols", "systems"],
+    "url": "https://github.com/beingamanforever/binary-protocol-cpp",
+    "stars": "lib",
+    "featured": false
+  },
+  {
+    "title": "LLM Text Detection",
+    "description": "BERT-based classifier distinguishing AI-generated text from human-authored text using semantic, statistical, and stylistic features.",
+    "tags": ["ML", "NLP", "BERT"],
+    "url": "https://github.com/beingamanforever/LLM-Text-Detection",
+    "stars": "BERT",
+    "featured": false
+  },
+  {
+    "title": "Monte Carlo Portfolio Optimization",
+    "description": "Monte Carlo simulation for portfolio optimization; computes asset weights for maximum expected return at minimal risk via Sharpe ratio.",
+    "tags": ["simulation", "finance", "Python"],
+    "url": "https://github.com/beingamanforever/Monte-Carlo-Simulation",
+    "stars": "explore",
     "featured": false
   },
   {
