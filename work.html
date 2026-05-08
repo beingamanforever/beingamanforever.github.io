@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work - Aman Behera</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
-    <meta name="referrer" content="no-referrer">
+    <title>Work — Aman Behera</title>
+    <meta name="description" content="Projects and experiments in systems, C++, and performance.">
     <meta property="og:title" content="Work — Aman Behera">
     <meta property="og:description" content="Projects and experiments in systems, C++, and performance.">
     <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
     <meta property="og:url" content="https://beingamanforever.io/work.html">
+    <link rel="canonical" href="https://beingamanforever.io/work.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="../assets/css/style.css" as="style">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#0a0a0a">
+    <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/css/style.css?v=f3c3387" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=f3c3387">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="assets/js/main.js?v=f3c3387" defer></script>
 </head>
-<body>
-    <!-- Navigation -->
+<body class="dark-mode">
     <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="../pages/index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
+                <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <span id="theme-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -46,42 +50,77 @@
                     <a href="index.html">Home</a>
                     <a href="work.html">Work</a>
                     <a href="blog.html">Blog</a>
+                    <a href="now.html">Now</a>
                     <a href="contact.html">Contact</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Work Section -->
+    <main id="main-content">
     <section class="work-page">
         <div class="container">
             <h1 class="page-title">All Projects</h1>
             <p class="page-subtitle">A collection of things that I am proud of.</p>
-            <div id="all-projects-container"></div>
+            <div id="all-projects-container">
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">SIMD-accelerated KV Store</a></h3>
+                        <span class="project-stars">WIP</span>
+                    </div>
+                    <p class="project-description">Building an in-memory key-value store with SIMD-accelerated lookups; targeting saturated DRAM bandwidth on commodity hardware.</p>
+                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">systems</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">Zero-copy CSV Ingestion Engine</a></h3>
+                        <span class="project-stars">WIP</span>
+                    </div>
+                    <p class="project-description">Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.</p>
+                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">parsing</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://octave.org/" class="project-title-link" target="_blank" rel="noopener noreferrer">GNU Octave — GSoC 2026</a></h3>
+                        <span class="project-stars">active</span>
+                    </div>
+                    <p class="project-description">Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure.</p>
+                    <div class="project-tags"><span class="project-tag">Octave</span><span class="project-tag">numerics</span><span class="project-tag">GSoC</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever/Drishti" class="project-title-link" target="_blank" rel="noopener noreferrer">Drishti — ISRO Geospatial VLM</a></h3>
+                        <span class="project-stars">Silver</span>
+                    </div>
+                    <p class="project-description">Vision-language model for geospatial reasoning; 1st runner-up at Inter-IIT Tech Meet 14.0 across 24 IITs.</p>
+                    <div class="project-tags"><span class="project-tag">VLM</span><span class="project-tag">geospatial</span><span class="project-tag">Inter-IIT</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever/hilabs" class="project-title-link" target="_blank" rel="noopener noreferrer">HiLabs AIQuest</a></h3>
+                        <span class="project-stars">Winner</span>
+                    </div>
+                    <p class="project-description">Winning entry for the HiLabs AIQuest hackathon held at IIT Roorkee.</p>
+                    <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">hackathon</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" class="project-title-link" target="_blank" rel="noopener noreferrer">AI Interview Learning Platform</a></h3>
+                        <span class="project-stars">Silver</span>
+                    </div>
+                    <p class="project-description">AI-driven interview chatbot built for Tech GC at IIT Roorkee.</p>
+                    <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">NLP</span><span class="project-tag">Tech GC</span></div>
+                </article>
+            </div>
         </div>
     </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
-            <div class="footer-colophon">
-                <span class="colophon-item" id="footer-timestamp" style="visibility:hidden"></span>
-                <span class="colophon-separator" id="footer-sep-ts" style="visibility:hidden">·</span>
-                <span class="colophon-item" id="footer-metrics" style="visibility:hidden"></span>
-            </div>
         </div>
     </footer>
-
-    <!-- Command Palette -->
-    <div id="command-palette" class="command-palette" style="display: none;">
-        <div class="command-palette-content">
-            <input type="text" id="command-input" placeholder="user@aman-infra:~$ _" autocomplete="off">
-            <div id="command-output"></div>
-        </div>
-    </div>
-
-    <script src="../assets/js/main.js" defer></script>
 </body>
 </html>

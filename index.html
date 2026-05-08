@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aman Behera - Digital Garden</title>
-    <!-- CSP temporarily relaxed for local dev; restore upgrade-insecure-requests for production -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https://ghchart.rshah.org; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://portfolio-psi-mauve-bbbl16b9ab.vercel.app">
-    <meta name="referrer" content="no-referrer">
+    <title>Aman Behera — Digital Garden</title>
+    <meta name="description" content="Notes on systems programming, performance, and infrastructure">
     <meta property="og:title" content="Aman Behera — Digital Garden">
-    <meta property="og:description" content="Notes & projects on systems, C++, and low-level performance.">
+    <meta property="og:description" content="Notes on systems programming, performance, and infrastructure">
     <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
     <meta property="og:url" content="https://beingamanforever.io/">
+    <link rel="canonical" href="https://beingamanforever.io/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="../assets/css/style.css?v=20260507" as="style">
-    <link rel="stylesheet" href="../assets/css/style.css?v=20260507">
-    <link rel="alternate" type="application/rss+xml" title="aman behera" href="/feed.xml">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#0a0a0a">
+    <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" as="style">
+    <link rel="preload" href="assets/css/style.css?v=f3c3387" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=f3c3387">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="preload" href="js/analytics.js" as="script">
-    <link rel="preload" href="js/main.js?v=20260507" as="script">
-    <script src="../assets/js/analytics.js" defer></script>
+    <script src="assets/js/main.js?v=f3c3387" defer></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Aman Behera",
+  "url": "https://beingamanforever.io/",
+  "email": "mailto:aman.behera.systems@gmail.com",
+  "sameAs": [
+    "https://github.com/beingamanforever",
+    "https://www.linkedin.com/in/aman-behera-/"
+  ],
+  "jobTitle": "Student / Systems engineer",
+  "affiliation": {
+    "@type": "EducationalOrganization",
+    "name": "Indian Institute of Technology Roorkee"
+  }
+}
+    </script>
 </head>
 <body class="dark-mode">
-    <!-- Keyboard Navigation Indicator -->
-    <div id="kbd-indicator" class="kbd-indicator"></div>
-    
-    <!-- Navigation -->
     <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-left">
-                <a href="../pages/index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
+                <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                     <span id="theme-icon">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -54,6 +68,7 @@
                     <a href="index.html">Home</a>
                     <a href="work.html">Work</a>
                     <a href="blog.html">Blog</a>
+                    <a href="now.html">Now</a>
                     <a href="contact.html">Contact</a>
                 </div>
             </div>
@@ -70,16 +85,16 @@
                 <p class="hero-intro">I'm Aman, a student at IIT Roorkee. I work on C++ infrastructure and systems programming.</p>
                 <p class="hero-description">I focus on performance critical software and understanding systems from memory to hardware.</p>
                 <p class="hero-description">Notes, experiments, and things I care about.</p>
-                
-                <!-- Quote -->
-                <div class="quote-box" id="random-quote">
-                    <p class="quote-text"></p>
-                    <p class="quote-author"></p>
-                </div>
+
+                <!-- Quote (rendered at build time) -->
+                <figure class="quote-box" id="random-quote">
+                    <blockquote class="quote-text">You can't trust code that you did not totally create yourself.</blockquote>
+                    <figcaption class="quote-author">— Ken Thompson</figcaption>
+                </figure>
 
                 <!-- Quick Links -->
                 <div class="quick-links">
-                    <a href="https://github.com/beingamanforever" target="_blank" class="btn btn-primary">
+                    <a href="https://github.com/beingamanforever" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                         </svg>
@@ -95,7 +110,7 @@
                         </svg>
                         Resume
                     </a>
-                    <a href="mailto:aman_b@ch.iitr.ac.in" class="btn btn-secondary">
+                    <a href="mailto:aman.behera.systems@gmail.com" class="btn btn-secondary">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                             <polyline points="22,6 12,13 2,6"></polyline>
@@ -115,7 +130,7 @@
                 <p class="about-paragraph">I work on systems, performance-critical software, and the fundamentals of computation, with a focus on how software maps to real hardware.</p>
                 <p class="about-paragraph">I approach problems from first principles: understanding why something works, the constraints involved, and how it can be made simpler or faster.</p>
                 <p class="about-paragraph">Outside of coding, I read technical papers, do art, hit the gym and spend time outdoors.</p>
-                
+
                 <div class="about-details">
                     <div class="detail-group">
                         <span class="detail-label">Currently</span>
@@ -151,7 +166,7 @@
                     <div class="achievement-year">2026 (Current)</div>
                     <div class="achievement-copy">
                         <h3>Google Summer of Code 2026</h3>
-                        <p>Selected for GSoC 2026 and contributing to <a href="https://octave.org/" target="_blank">GNU Octave</a>.</p>
+                        <p>Selected for GSoC 2026 and contributing to <a href="https://octave.org/" target="_blank" rel="noopener noreferrer">GNU Octave</a>.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
@@ -162,38 +177,38 @@
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 - dec</div>
+                    <div class="achievement-year">2025 — Dec</div>
                     <div class="achievement-copy">
                         <h3>Silver in Inter IIT Tech Meet 14.0</h3>
-                        <p>1st runner up in the <a href="https://github.com/beingamanforever/Drishti" target="_blank">ISRO Geospatial VLM problem statement</a> among 24 IITs.</p>
+                        <p>1st runner up in the <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">ISRO Geospatial VLM problem statement</a> among 24 IITs.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 - sept</div>
+                    <div class="achievement-year">2025 — Sept</div>
                     <div class="achievement-copy">
                         <h3>HiLabs Data Science PPO</h3>
                         <p>Received a pre-placement offer from HiLabs.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 - sept</div>
+                    <div class="achievement-year">2025 — Sept</div>
                     <div class="achievement-copy">
                         <h3>HiLabs AIQuest Winner</h3>
-                        <p>Won first prize in <a href="https://github.com/beingamanforever/hilabs" target="_blank">HiLabs AIQuest Hackathon</a> organized at IIT Roorkee.</p>
+                        <p>Won first prize in <a href="https://github.com/beingamanforever/hilabs" target="_blank" rel="noopener noreferrer">HiLabs AIQuest Hackathon</a> organized at IIT Roorkee.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 - may-july</div>
+                    <div class="achievement-year">2025 — May–Jul</div>
                     <div class="achievement-copy">
                         <h3>Info Edge Data Science Intern</h3>
-                        <p>Data science internship at <a href="https://www.infoedge.in/" target="_blank">Info Edge</a>.</p>
+                        <p>Data science internship at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2024 - dec</div>
+                    <div class="achievement-year">2024 — Dec</div>
                     <div class="achievement-copy">
                         <h3>Silver in Tech GC, IIT Roorkee</h3>
-                        <p>Silver medal in the ML problem statement for designing an <a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank">AI-interview chatbot</a>.</p>
+                        <p>Silver medal in the ML problem statement for designing an <a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank" rel="noopener noreferrer">AI-interview chatbot</a>.</p>
                     </div>
                 </li>
             </ol>
@@ -206,7 +221,32 @@
             <div class="section-header">
                 <h2 class="section-title" data-hex="0x10" data-subtitle="Things I've built.">Selected Work</h2>
             </div>
-            <div id="projects-container"></div>
+            <div id="projects-container">
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">SIMD-accelerated KV Store</a></h3>
+                        <span class="project-stars">WIP</span>
+                    </div>
+                    <p class="project-description">Building an in-memory key-value store with SIMD-accelerated lookups; targeting saturated DRAM bandwidth on commodity hardware.</p>
+                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">systems</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://github.com/beingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">Zero-copy CSV Ingestion Engine</a></h3>
+                        <span class="project-stars">WIP</span>
+                    </div>
+                    <p class="project-description">Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.</p>
+                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">parsing</span></div>
+                </article>
+                <article class="project-card">
+                    <div class="project-header">
+                        <h3 class="project-title"><a href="https://octave.org/" class="project-title-link" target="_blank" rel="noopener noreferrer">GNU Octave — GSoC 2026</a></h3>
+                        <span class="project-stars">active</span>
+                    </div>
+                    <p class="project-description">Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure.</p>
+                    <div class="project-tags"><span class="project-tag">Octave</span><span class="project-tag">numerics</span><span class="project-tag">GSoC</span></div>
+                </article>
+            </div>
             <div class="view-all-container">
                 <a href="work.html" class="btn-view-all">
                     <span>View All Projects</span>
@@ -225,23 +265,18 @@
             <div class="section-header">
                 <h2 class="section-title section-title-kicker" data-hex="0x18" data-subtitle="Thoughts and notes.">Recent Writing</h2>
             </div>
-            <div id="writing-container">
-  <div class="post" style="margin-bottom: 2rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary);">
-    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;"><a href="posts/2026-05-07-swar-parsing-internals.html" style="color: var(--text-primary); text-decoration: none;">SWAR Parsing Internals</a></h3>
-    <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">How SWAR enables high-performance parsing</p>
-    <div class="meta" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 1rem;">
-      <span>2026-05-07</span>
-      <span>• systems, performance</span>
-    </div>
-  </div>
-
-            </div>
-            <div class="blog-workflow">
-                <div>
-                    <h3>Adding a post should be boring</h3>
-                    <p>Duplicate the template, write the HTML article, then add one entry to the writing list in <code>js/main.js</code>. The blog index and home page will pick it up.</p>
-                </div>
-                <a href="BLOGGING.md" class="workflow-link">Blogging playbook &rarr;</a>
+            <div id="writing-container" class="post-list">
+                <article class="post-card">
+                    <h3 class="post-card-title"><a href="posts/2026-05-07-swar-parsing-internals.html">SWAR Parsing Internals</a></h3>
+                    <p class="post-card-desc">How SIMD-Within-A-Register turns ordinary 64-bit integers into 8-lane parallel byte processors.</p>
+                    <div class="post-card-meta">
+                        <time class="post-card-date" datetime="2026-05-07">2026-05-07</time>
+                        <span class="post-card-sep">·</span>
+                        <span class="post-card-tags">systems, performance</span>
+                        <span class="post-card-sep">·</span>
+                        <span class="post-card-readtime">4 min read</span>
+                    </div>
+                </article>
             </div>
             <div class="view-all-container">
                 <a href="blog.html" class="btn-view-all">
@@ -269,35 +304,17 @@
                     </div>
                     <span class="github-open">GitHub →</span>
                 </div>
-                <img src="https://ghchart.rshah.org/4a6bd6/beingamanforever" alt="GitHub contribution heat map for beingamanforever" loading="lazy">
+                <img src="assets/img/github-heatmap.svg" alt="GitHub contribution heat map for beingamanforever" loading="lazy" width="800" height="120">
             </a>
         </div>
     </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer" role="contentinfo">
         <div class="container">
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
-            <div class="footer-colophon">
-                <span class="colophon-item" id="footer-timestamp" style="visibility:hidden"></span>
-                <span class="colophon-separator" id="footer-sep-ts" style="visibility:hidden">·</span>
-                <span class="colophon-item" id="footer-metrics" style="visibility:hidden"></span>
-                <span class="colophon-separator" id="footer-sep-metrics" style="visibility:hidden">·</span>
-                <span class="colophon-item" style="opacity: 0.4; font-size: 0.8rem;">[⌘K] command palette</span>
-            </div>
         </div>
     </footer>
-
-    <!-- Command Palette -->
-    <div id="command-palette" class="command-palette" style="display: none;">
-        <div class="command-palette-content">
-            <input type="text" id="command-input" placeholder="user@aman-infra:~$ _" autocomplete="off">
-            <div id="command-output"></div>
-        </div>
-    </div>
-
-    <script src="../assets/js/main.js?v=20260507" defer></script>
 </body>
 </html>

@@ -1,58 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$title$ - Aman Behera</title>
+    <title>$title$ — $SITE_NAME$</title>
     <meta name="description" content="$desc$">
     <meta property="og:title" content="$title$">
     <meta property="og:description" content="$desc$">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="../assets/js/main.js" defer></script>
+    <meta property="og:image" content="$SITE_URL$/assets/og/$slug$.svg">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="$date$">
+    <meta property="article:author" content="$SITE_NAME$">
+    <link rel="canonical" href="$SITE_URL$/posts/$slug$.html">
+<!-- HEAD_COMMON -->
+    <style>
+$highlighting-css$
+    </style>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "$title$",
+  "description": "$desc$",
+  "datePublished": "$date$",
+  "author": {
+    "@type": "Person",
+    "name": "$SITE_NAME$",
+    "url": "$SITE_URL$/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "$SITE_NAME$"
+  },
+  "mainEntityOfPage": "$SITE_URL$/posts/$slug$.html",
+  "image": "$SITE_URL$/assets/og/$slug$.svg",
+  "keywords": "$tags$",
+  "wordCount": "$word_count$"
+}
+    </script>
 </head>
-<body>
-    <nav id="navbar" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="../index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                    <span id="theme-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                        </svg>
-                    </span>
-                </button>
-            </div>
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="../index.html">Home</a>
-                    <a href="../work.html">Work</a>
-                    <a href="../blog.html">Blog</a>
-                    <a href="../contact.html">Contact</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<body class="dark-mode">
+<!-- NAV -->
 
-    <main id="main-content" style="max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.8;">
-        <a href="../blog.html" style="color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; margin-bottom: 2rem; display: inline-block;">← Back to Notes</a>
-        <h1 style="margin-bottom: 0.5rem; font-size: 2rem; letter-spacing: -0.02em;">$title$</h1>
-        <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 0.75rem; margin-bottom: 2.5rem;">
-            <span>$date$</span>
-            <span>• $tags$</span>
-        </div>
-        
-        <div class="post-content">
+    <main id="main-content" class="post-page">
+        <article class="post-container container">
+            <a href="$ROOT$blog.html" class="post-back">← Back to Notes</a>
+            <header class="post-header">
+                <h1 class="post-title">$title$</h1>
+                <div class="post-meta">
+                    <time class="post-meta-date" datetime="$date$">$date$</time>
+                    <span class="post-meta-sep">·</span>
+                    <span class="post-meta-tags">$tags$</span>
+                    <span class="post-meta-sep">·</span>
+                    <span class="post-meta-readtime">$reading_time$ min read</span>
+                </div>
+            </header>
+
+            <div class="post-content">
 $body$
-        </div>
+            </div>
+        </article>
     </main>
 
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <p>© 2026 Aman Behera. Built with care.</p>
-        </div>
-    </footer>
+<!-- FOOTER -->
 </body>
 </html>

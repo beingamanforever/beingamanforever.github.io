@@ -6,16 +6,13 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https://ghchart.rshah.org; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-/js/*
-  Cache-Control: public, max-age=31536000, immutable
-
-/css/*
-  Cache-Control: public, max-age=31536000, immutable
+/posts/*
+  Cache-Control: public, max-age=3600
 
 /favicon.svg
   Cache-Control: public, max-age=31536000, immutable
@@ -31,12 +28,3 @@
 
 /robots.txt
   Cache-Control: public, max-age=3600
-
-/index.html
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://portfolio-psi-mauve-bbbl16b9ab.vercel.app
-
-/404.html
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://portfolio-psi-mauve-bbbl16b9ab.vercel.app
-
-/dashboard.html
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https://*.basemaps.cartocdn.com; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co

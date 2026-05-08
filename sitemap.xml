@@ -2,10 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://beingamanforever.io/</loc></url>
   <url><loc>https://beingamanforever.io/work.html</loc></url>
-  <url><loc>https://beingamanforever.io/blogs.html</loc></url>
+  <url><loc>https://beingamanforever.io/blog.html</loc></url>
+  <url><loc>https://beingamanforever.io/tags.html</loc></url>
+  <url><loc>https://beingamanforever.io/now.html</loc></url>
   <url><loc>https://beingamanforever.io/contact.html</loc></url>
-  <url><loc>https://beingamanforever.io/verify.html</loc></url>
-  <url><loc>https://beingamanforever.io/rss.html</loc></url>
-  <url><loc>https://beingamanforever.io/feed.xml</loc></url>
-  <url><loc>https://beingamanforever.io/blog/first-post.html</loc></url>
+  <url><loc>https://beingamanforever.io/posts/2026-05-07-swar-parsing-internals.html</loc><lastmod>2026-05-07</lastmod></url>
 </urlset>

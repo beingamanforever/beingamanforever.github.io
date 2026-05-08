@@ -1,14 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Blog — Aman Behera</title>
+    <meta name="description" content="Notes on systems programming, performance, and infrastructure">
+    <meta property="og:title" content="Blog — Aman Behera">
+    <meta property="og:description" content="Notes on systems programming, performance, and infrastructure">
+    <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
+    <meta property="og:url" content="https://beingamanforever.io/blog.html">
+    <link rel="canonical" href="https://beingamanforever.io/blog.html">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Aman Behera</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <link rel="mask-icon" href="favicon.svg" color="#0a0a0a">
+    <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/css/style.css?v=f3c3387" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=f3c3387">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/main.js?v=f3c3387" defer></script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://beingamanforever.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://beingamanforever.io/blog.html" }
+  ]
+}
+    </script>
 </head>
-<body>
+<body class="dark-mode">
     <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-left">
@@ -34,30 +60,37 @@
                     <a href="index.html">Home</a>
                     <a href="work.html">Work</a>
                     <a href="blog.html">Blog</a>
+                    <a href="now.html">Now</a>
                     <a href="contact.html">Contact</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main id="main-content" style="max-width: 800px; margin: 40px auto; padding: 20px;">
-        <h2 style="margin-bottom: 2rem;">Notes</h2>
-        <div id="blog-container">
-  <div class="post" style="margin-bottom: 2rem; padding: 1.25rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary);">
-    <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;"><a href="posts/2026-05-07-swar-parsing-internals.html" style="color: var(--text-primary); text-decoration: none;">SWAR Parsing Internals</a></h3>
-    <p style="color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">How SWAR enables high-performance parsing</p>
-    <div class="meta" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 1rem;">
-      <span>2026-05-07</span>
-      <span>• systems, performance</span>
-    </div>
-  </div>
-
+    <main id="main-content" class="blog-page">
+        <div class="container">
+            <h1 class="page-title">Notes</h1>
+            <p class="page-subtitle">Notes I write to think more clearly, mostly on systems and performance. Browse by <a href="tags.html">tag</a> or <a href="feed.xml">subscribe by RSS</a>.</p>
+            <div id="blog-container" class="post-list">
+                <article class="post-card">
+                    <h3 class="post-card-title"><a href="posts/2026-05-07-swar-parsing-internals.html">SWAR Parsing Internals</a></h3>
+                    <p class="post-card-desc">How SIMD-Within-A-Register turns ordinary 64-bit integers into 8-lane parallel byte processors.</p>
+                    <div class="post-card-meta">
+                        <time class="post-card-date" datetime="2026-05-07">2026-05-07</time>
+                        <span class="post-card-sep">·</span>
+                        <span class="post-card-tags">systems, performance</span>
+                        <span class="post-card-sep">·</span>
+                        <span class="post-card-readtime">4 min read</span>
+                    </div>
+                </article>
+            </div>
         </div>
     </main>
 
     <footer class="footer" role="contentinfo">
         <div class="container">
-            <p>© 2026 Aman Behera. Built with care.</p>
+            <p>© 2026 Aman Behera</p>
+            <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
         </div>
     </footer>
 </body>

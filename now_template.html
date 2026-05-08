@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Now — $SITE_NAME$</title>
+    <meta name="description" content="What I'm working on right now.">
+    <meta property="og:title" content="Now — $SITE_NAME$">
+    <meta property="og:description" content="What I'm working on right now.">
+    <meta property="og:image" content="$SITE_OG_IMAGE$">
+    <meta property="og:url" content="$SITE_URL$/now.html">
+    <link rel="canonical" href="$SITE_URL$/now.html">
+<!-- HEAD_COMMON -->
+</head>
+<body class="dark-mode">
+<!-- NAV -->
+
+    <main id="main-content" class="now-page">
+        <div class="container">
+            <h1 class="page-title">Now</h1>
+            <p class="page-subtitle">What I'm focused on, updated periodically. Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now pages</a>.</p>
+
+            <section class="now-block">
+                <h2 class="now-section-title">Currently working on</h2>
+                <ul class="now-list">
+                    <li>SIMD-accelerated key-value store. Saturating DRAM bandwidth on commodity hardware is the goal.</li>
+                    <li>Single-binary, zero-copy CSV ingestion engine. SWAR scanning into typed columns.</li>
+                    <li>Preparing for Google Summer of Code 2026 with GNU Octave.</li>
+                </ul>
+            </section>
+
+            <section class="now-block">
+                <h2 class="now-section-title">Reading</h2>
+                <ul class="now-list">
+                    <li>Dependency testing literature.</li>
+                    <li>Hennessy &amp; Patterson, <em>Computer Architecture: A Quantitative Approach</em>.</li>
+                </ul>
+            </section>
+
+            <section class="now-block">
+                <h2 class="now-section-title">Writing</h2>
+                <ul class="now-list">
+                    <li>Notes on SWAR-based parsing — see <a href="blog.html">blog</a>.</li>
+                </ul>
+            </section>
+
+            <p class="now-updated"><em>Last updated: $NOW_UPDATED$</em></p>
+        </div>
+    </main>
+
+<!-- FOOTER -->
+</body>
+</html>
