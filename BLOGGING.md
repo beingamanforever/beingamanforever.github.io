@@ -1,36 +1,63 @@
 # Blogging Playbook
 
-This repo is intentionally static. To publish a post, touch only the files below.
+Posts are plain Markdown. The build script regenerates everything
+deterministic — page HTML, blog index, sitemap, and feed.
 
-1. Copy the template.
-
-```sh
-cp blog/template.html blog/my-post-slug.html
-```
-
-2. Edit the title, metadata, and article body in `blog/my-post-slug.html`.
-
-3. Add one object to the `writings` array in `js/main.js`.
-
-```js
-{
-    title: "My Post Title",
-    date: "May 7, 2026",
-    readTime: "6 min",
-    words: "1200 words",
-    author: "Aman",
-    excerpt: "One clean sentence that makes someone want to open it.",
-    tags: ["systems"],
-    url: "blog/my-post-slug.html"
-}
-```
-
-4. Add the same URL to `sitemap.xml` and a matching item to `feed.xml` when the post is ready.
-
-5. Run the site locally.
+## Add a post
 
 ```sh
-npm run dev
+./scripts/new-post.sh "My Post Title"
 ```
 
-Open `http://localhost:3000/blogs.html`, search for the title, and click through once.
+This creates `content/posts/YYYY-MM-DD-my-post-title.md` with metadata
+prefilled. Edit it:
+
+```text
+Title: My Post Title
+Date: 2026-05-07
+Desc: One clean sentence that makes someone want to open it.
+Tags: systems, performance
+
+---
+
+Write Markdown here. Pandoc converts it to HTML.
+
+```c
+// Code blocks get syntax highlighting via Prism.
+int main() { return 0; }
+```
+```
+
+## Build
+
+```sh
+./scripts/build.sh
+```
+
+That's it. The script:
+
+- Renders every `content/posts/*.md` to `posts/*.html` via Pandoc.
+- Rebuilds `index.html`, `blog.html`, `work.html`, `contact.html`,
+  `404.html` from their `*_template.html` sources.
+- Substitutes `_partials/{nav,footer,head_common}.html` into every page.
+- Stamps `$YEAR$` and `$CACHEBUST$` (current year + git short SHA).
+- Regenerates `sitemap.xml` and `feed.xml` from post metadata.
+
+## Preview locally
+
+```sh
+python3 -m http.server 3456
+```
+
+Open <http://localhost:3456/blog.html>.
+
+## What you should *not* edit by hand
+
+These files are generated; changes will be overwritten next build:
+
+- `index.html`, `work.html`, `contact.html`, `blog.html`, `404.html`
+- `posts/*.html`
+- `sitemap.xml`, `feed.xml`
+
+Edit the corresponding `*_template.html`, `template.html`, partials
+under `_partials/`, or `data/projects.json` instead.

@@ -1,0 +1,50 @@
+[
+  {
+    "title": "SIMD-accelerated KV Store",
+    "description": "Building an in-memory key-value store with SIMD-accelerated lookups; targeting saturated DRAM bandwidth on commodity hardware.",
+    "tags": ["C++", "SIMD", "systems"],
+    "url": "https://github.com/beingamanforever",
+    "stars": "WIP",
+    "featured": true
+  },
+  {
+    "title": "Zero-copy CSV Ingestion Engine",
+    "description": "Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.",
+    "tags": ["C++", "SIMD", "parsing"],
+    "url": "https://github.com/beingamanforever",
+    "stars": "WIP",
+    "featured": true
+  },
+  {
+    "title": "GNU Octave — GSoC 2026",
+    "description": "Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure.",
+    "tags": ["Octave", "numerics", "GSoC"],
+    "url": "https://octave.org/",
+    "stars": "active",
+    "featured": true
+  },
+  {
+    "title": "Drishti — ISRO Geospatial VLM",
+    "description": "Vision-language model for geospatial reasoning; 1st runner-up at Inter-IIT Tech Meet 14.0 across 24 IITs.",
+    "tags": ["VLM", "geospatial", "Inter-IIT"],
+    "url": "https://github.com/beingamanforever/Drishti",
+    "stars": "Silver",
+    "featured": false
+  },
+  {
+    "title": "HiLabs AIQuest",
+    "description": "Winning entry for the HiLabs AIQuest hackathon held at IIT Roorkee.",
+    "tags": ["ML", "hackathon"],
+    "url": "https://github.com/beingamanforever/hilabs",
+    "stars": "Winner",
+    "featured": false
+  },
+  {
+    "title": "AI Interview Learning Platform",
+    "description": "AI-driven interview chatbot built for Tech GC at IIT Roorkee.",
+    "tags": ["ML", "NLP", "Tech GC"],
+    "url": "https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform",
+    "stars": "Silver",
+    "featured": false
+  }
+]

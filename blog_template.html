@@ -1,56 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog - Aman Behera</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js" defer></script>
+    <title>Blog — $SITE_NAME$</title>
+    <meta name="description" content="$SITE_DESC$">
+    <meta property="og:title" content="Blog — $SITE_NAME$">
+    <meta property="og:description" content="$SITE_DESC$">
+    <meta property="og:image" content="$SITE_OG_IMAGE$">
+    <meta property="og:url" content="$SITE_URL$/blog.html">
+    <link rel="canonical" href="$SITE_URL$/blog.html">
+<!-- HEAD_COMMON -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "$SITE_URL$/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "$SITE_URL$/blog.html" }
+  ]
+}
+    </script>
 </head>
-<body>
-    <nav id="navbar" role="navigation" aria-label="Main navigation">
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                    <span id="theme-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                    </span>
-                </button>
-            </div>
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="index.html">Home</a>
-                    <a href="work.html">Work</a>
-                    <a href="blog.html">Blog</a>
-                    <a href="contact.html">Contact</a>
-                </div>
-            </div>
-        </div>
-    </nav>
+<body class="dark-mode">
+<!-- NAV -->
 
-    <main id="main-content" style="max-width: 800px; margin: 40px auto; padding: 20px;">
-        <h2 style="margin-bottom: 2rem;">Notes</h2>
-        <div id="blog-container">
+    <main id="main-content" class="blog-page">
+        <div class="container">
+            <h1 class="page-title">Notes</h1>
+            <p class="page-subtitle">Notes I write to think more clearly, mostly on systems and performance. Browse by <a href="tags.html">tag</a> or <a href="feed.xml">subscribe by RSS</a>.</p>
+            <div id="blog-container" class="post-list">
 <!-- BLOG_LIST -->
+            </div>
         </div>
     </main>
 
-    <footer class="footer" role="contentinfo">
-        <div class="container">
-            <p>© 2026 Aman Behera. Built with care.</p>
-        </div>
-    </footer>
+<!-- FOOTER -->
 </body>
 </html>

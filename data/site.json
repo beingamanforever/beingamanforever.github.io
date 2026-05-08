@@ -1,0 +1,33 @@
+{
+  "name": "Aman Behera",
+  "tagline": "Should they come looking for me? I intend to be found",
+  "site_url": "https://beingamanforever.io",
+  "site_title": "aman behera",
+  "site_description": "Notes on systems programming, performance, and infrastructure",
+  "email": "aman.behera.systems@gmail.com",
+  "github": "beingamanforever",
+  "linkedin": "aman-behera-",
+  "og_image": "https://beingamanforever.io/assets/og-home.png",
+  "quotes": [
+    {
+      "text": "You can't trust code that you did not totally create yourself.",
+      "author": "Ken Thompson"
+    },
+    {
+      "text": "If you're not embarrassed by the first version of your product, you've launched too late.",
+      "author": "Reid Hoffman"
+    },
+    {
+      "text": "The competent programmer is fully aware of the limited size of his own skull.",
+      "author": "Edsger Dijkstra"
+    },
+    {
+      "text": "Premature optimization is the root of all evil — yet that does not mean we should pass up our opportunities in that critical 3%.",
+      "author": "Donald Knuth"
+    },
+    {
+      "text": "There are only two hard things in computer science: cache invalidation and naming things.",
+      "author": "Phil Karlton"
+    }
+  ]
+}
