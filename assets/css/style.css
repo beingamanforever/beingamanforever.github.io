@@ -131,7 +131,7 @@ body.dark-mode::before {
     opacity: 0.02;
 }
 
-body.dark-mode nav {
+body.dark-mode #navbar {
     background-color: rgba(30, 30, 30, 0.98);
 }
 
@@ -208,7 +208,7 @@ body.dark-mode *:focus-visible {
 }
 
 /* Navigation */
-nav {
+#navbar {
     position: fixed;
     top: 0;
     width: 100%;
@@ -219,7 +219,7 @@ nav {
     backdrop-filter: blur(10px);
 }
 
-nav.scrolled {
+#navbar.scrolled {
     padding: 0.6rem 0;
 }
 
