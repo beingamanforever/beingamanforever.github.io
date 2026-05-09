@@ -75,6 +75,52 @@ document.addEventListener('DOMContentLoaded', () => {
         apply(initial);
     })();
 
+    // Reading progress: only on post pages. Width of fixed bar at the top
+    // tracks how far the reader has scrolled through the article body.
+    (function readingProgress() {
+        const article = document.querySelector('.post-content');
+        if (!article) return;
+        const bar = document.createElement('div');
+        bar.className = 'reading-progress';
+        document.body.appendChild(bar);
+
+        let raf = 0;
+        const update = () => {
+            raf = 0;
+            const rect = article.getBoundingClientRect();
+            const total = Math.max(1, article.offsetHeight - window.innerHeight);
+            const scrolled = -rect.top;
+            const pct = Math.max(0, Math.min(1, scrolled / total));
+            bar.style.transform = `scaleX(${pct})`;
+        };
+        const schedule = () => {
+            if (raf) return;
+            raf = requestAnimationFrame(update);
+        };
+        update();
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
+    })();
+
+    // Email obfuscation: anchors marked .js-email carry data-user/data-domain
+    // (split address parts) — we assemble the mailto: at runtime so scrapers
+    // grepping for `mailto:` against rendered HTML come up empty.
+    (function emailObfuscation() {
+        document.querySelectorAll('.js-email').forEach((el) => {
+            const u = el.getAttribute('data-user');
+            const d = el.getAttribute('data-domain');
+            if (!u || !d) return;
+            const addr = `${u}@${d}`;
+            el.setAttribute('href', `mailto:${addr}`);
+            el.removeAttribute('data-user');
+            el.removeAttribute('data-domain');
+            // If the link uses a placeholder label, swap to the real address.
+            if (el.dataset.emailReveal === 'true' || el.textContent.trim() === '[email]') {
+                el.textContent = addr;
+            }
+        });
+    })();
+
     // Heading anchors inside post content. Adds a hover-revealed `#` link.
     (function headingAnchors() {
         const slugify = (text) => text.toLowerCase().trim()

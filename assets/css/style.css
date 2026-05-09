@@ -5,6 +5,42 @@
     box-sizing: border-box;
 }
 
+/* Cross-document view transitions: subtle 220ms cross-fade between pages
+ * in browsers that support the View Transitions API (Chromium, Safari).
+ * Other browsers fall back to instant navigation. */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 220ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root) {
+    animation-name: vt-fade-out;
+}
+
+::view-transition-new(root) {
+    animation-name: vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+    to { opacity: 0; }
+}
+
+@keyframes vt-fade-in {
+    from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.001ms;
+    }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -3158,6 +3194,28 @@ body.dark-mode .graph-panel {
 .code-block-copy.is-copied {
     color: var(--walter-green);
     border-color: var(--walter-green);
+}
+
+/* Reading progress bar: thin line fixed at the top of post pages,
+ * width tracks scroll position through the article body. */
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--walter-green);
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 100;
+    pointer-events: none;
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reading-progress {
+        transition: none;
+    }
 }
 
 /* ---------------------------------------------------------------------------

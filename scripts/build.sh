@@ -31,6 +31,8 @@ SITE_URL="$(read_cfg site_url)"
 SITE_TITLE="$(read_cfg site_title)"
 SITE_DESC="$(read_cfg site_description)"
 SITE_EMAIL="$(read_cfg email)"
+SITE_EMAIL_USER="${SITE_EMAIL%@*}"
+SITE_EMAIL_DOMAIN="${SITE_EMAIL#*@}"
 SITE_GITHUB="$(read_cfg github)"
 SITE_LINKEDIN="$(read_cfg linkedin)"
 SITE_OG_IMAGE="$(read_cfg og_image)"
@@ -80,6 +82,8 @@ fill_vars() {
       -v site_title="$SITE_TITLE" \
       -v site_desc="$SITE_DESC" \
       -v site_email="$SITE_EMAIL" \
+      -v site_email_user="$SITE_EMAIL_USER" \
+      -v site_email_domain="$SITE_EMAIL_DOMAIN" \
       -v site_github="$SITE_GITHUB" \
       -v site_linkedin="$SITE_LINKEDIN" \
       -v site_og_image="$SITE_OG_IMAGE" \
@@ -96,6 +100,8 @@ fill_vars() {
       gsub(/\$SITE_TITLE\$/, site_title)
       gsub(/\$SITE_DESC\$/, site_desc)
       gsub(/\$SITE_EMAIL\$/, site_email)
+      gsub(/\$SITE_EMAIL_USER\$/, site_email_user)
+      gsub(/\$SITE_EMAIL_DOMAIN\$/, site_email_domain)
       gsub(/\$SITE_GITHUB\$/, site_github)
       gsub(/\$SITE_LINKEDIN\$/, site_linkedin)
       gsub(/\$SITE_OG_IMAGE\$/, site_og_image)
@@ -215,12 +221,13 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --metadata=word_count:"$word_count" \
     --highlight-style=tango
 
-  # Per-post OG image
+  # Per-post OG image (PNG; renderer falls back to SVG if Pillow is missing).
   python3 scripts/render_og.py \
     --slug "$slug" \
     --title "$title" \
     --tags "$tags" \
-    --out "$OG_DIR/$slug.svg"
+    --site "${SITE_URL#https://}" \
+    --out "$OG_DIR/$slug.png"
 
   printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
     "$slug" "$title" "$date" "$desc" "$tags" "$rt" >> "$BUILD_DIR/posts.index"
