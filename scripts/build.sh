@@ -213,7 +213,7 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --metadata=slug:"$slug" \
     --metadata=reading_time:"$rt" \
     --metadata=word_count:"$word_count" \
-    --syntax-highlighting=tango
+    --highlight-style=tango
 
   # Per-post OG image
   python3 scripts/render_og.py \
@@ -261,16 +261,6 @@ EOF
 done < "$BUILD_DIR/posts.index"
 
 # Tag filter sidebar: unique tags with post counts, alphabetical.
-python3 -c "
-from collections import Counter
-import html, sys
-tags = [t for t in (l.strip() for l in open('$BUILD_DIR/all_tags.txt')) if t]
-counts = Counter(tags)
-out = []
-out.append('                <button class=\"tag-filter-btn is-active\" data-tag=\"\">All <span class=\"tag-filter-count\">(' + str(len(tags) and sum(1 for _ in set(tags)) or 0) + ')</span></button>')
-# Recompute 'All' count to total posts (not unique tags) — we need post count.
-" > "$BUILD_DIR/tags_filter.html" || true
-
 python3 - <<PYEOF > "$BUILD_DIR/tags_filter.html"
 from collections import Counter
 import html, os
