@@ -5,11 +5,11 @@
     <meta name="description" content="How SIMD-Within-A-Register turns ordinary 64-bit integers into 8-lane parallel byte processors.">
     <meta property="og:title" content="SWAR Parsing Internals">
     <meta property="og:description" content="How SIMD-Within-A-Register turns ordinary 64-bit integers into 8-lane parallel byte processors.">
-    <meta property="og:image" content="https://beingamanforever.io/assets/og/2026-05-07-swar-parsing-internals.svg">
+    <meta property="og:image" content="https://beingamanforever.github.io/assets/og/2026-05-07-swar-parsing-internals.png">
     <meta property="og:type" content="article">
     <meta property="article:published_time" content="2026-05-07">
     <meta property="article:author" content="Aman Behera">
-    <link rel="canonical" href="https://beingamanforever.io/posts/2026-05-07-swar-parsing-internals.html">
+    <link rel="canonical" href="https://beingamanforever.github.io/posts/2026-05-07-swar-parsing-internals.html">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
@@ -21,10 +21,10 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="../feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="../assets/css/style.css?v=82fb95a" as="style">
-    <link rel="stylesheet" href="../assets/css/style.css?v=82fb95a">
+    <link rel="preload" href="../assets/css/style.css?v=c93a7c4" as="style">
+    <link rel="stylesheet" href="../assets/css/style.css?v=c93a7c4">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="../assets/js/main.js?v=82fb95a" defer></script>
+    <script src="../assets/js/main.js?v=c93a7c4" defer></script>
     <style>
 html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -100,14 +100,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
   "author": {
     "@type": "Person",
     "name": "Aman Behera",
-    "url": "https://beingamanforever.io/"
+    "url": "https://beingamanforever.github.io/"
   },
   "publisher": {
     "@type": "Person",
     "name": "Aman Behera"
   },
-  "mainEntityOfPage": "https://beingamanforever.io/posts/2026-05-07-swar-parsing-internals.html",
-  "image": "https://beingamanforever.io/assets/og/2026-05-07-swar-parsing-internals.svg",
+  "mainEntityOfPage": "https://beingamanforever.github.io/posts/2026-05-07-swar-parsing-internals.html",
+  "image": "https://beingamanforever.github.io/assets/og/2026-05-07-swar-parsing-internals.png",
   "keywords": "systems, performance",
   "wordCount": "649"
 }
@@ -148,7 +148,13 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 
     <main id="main-content" class="post-page">
         <article class="post-container container">
-            <a href="../blog.html" class="post-back">← Back to Notes</a>
+            <nav class="post-breadcrumbs" aria-label="Breadcrumb">
+                <a href="../blog.html">Notes</a>
+                <span class="post-breadcrumb-sep">/</span>
+                <a href="../tags.html#tag-systems">systems</a>
+                <span class="post-breadcrumb-sep">/</span>
+                <span class="post-breadcrumb-current" aria-current="page">SWAR Parsing Internals</span>
+            </nav>
             <header class="post-header">
                 <h1 class="post-title">SWAR Parsing Internals</h1>
                 <div class="post-meta">
@@ -206,6 +212,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
         <div class="container">
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
+            <p class="footer-feedback">Found a bug or have a sharper take? <a class="js-email" href="#" data-user="aman.behera.systems" data-domain="gmail.com">Email me</a> or <a href="https://github.com/beingamanforever/beingamanforever.github.io" target="_blank" rel="noopener noreferrer">open a PR</a>.</p>
         </div>
     </footer>
 </body>

@@ -31,6 +31,8 @@ SITE_URL="$(read_cfg site_url)"
 SITE_TITLE="$(read_cfg site_title)"
 SITE_DESC="$(read_cfg site_description)"
 SITE_EMAIL="$(read_cfg email)"
+SITE_EMAIL_USER="${SITE_EMAIL%@*}"
+SITE_EMAIL_DOMAIN="${SITE_EMAIL#*@}"
 SITE_GITHUB="$(read_cfg github)"
 SITE_LINKEDIN="$(read_cfg linkedin)"
 SITE_OG_IMAGE="$(read_cfg og_image)"
@@ -80,6 +82,8 @@ fill_vars() {
       -v site_title="$SITE_TITLE" \
       -v site_desc="$SITE_DESC" \
       -v site_email="$SITE_EMAIL" \
+      -v site_email_user="$SITE_EMAIL_USER" \
+      -v site_email_domain="$SITE_EMAIL_DOMAIN" \
       -v site_github="$SITE_GITHUB" \
       -v site_linkedin="$SITE_LINKEDIN" \
       -v site_og_image="$SITE_OG_IMAGE" \
@@ -96,6 +100,8 @@ fill_vars() {
       gsub(/\$SITE_TITLE\$/, site_title)
       gsub(/\$SITE_DESC\$/, site_desc)
       gsub(/\$SITE_EMAIL\$/, site_email)
+      gsub(/\$SITE_EMAIL_USER\$/, site_email_user)
+      gsub(/\$SITE_EMAIL_DOMAIN\$/, site_email_domain)
       gsub(/\$SITE_GITHUB\$/, site_github)
       gsub(/\$SITE_LINKEDIN\$/, site_linkedin)
       gsub(/\$SITE_OG_IMAGE\$/, site_og_image)
@@ -202,6 +208,10 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
   word_count=$(word_count_from_html "$body_md")
   rt=$(reading_time "$word_count")
 
+  # Breadcrumb middle segment uses the first tag.
+  first_tag=$(printf '%s' "$tags" | python3 -c "import sys; t=[s.strip() for s in sys.stdin.read().split(',') if s.strip()]; print(t[0] if t else '')")
+  first_tag_slug=$(printf '%s' "$first_tag" | python3 -c "import sys; t=sys.stdin.read().strip(); print(''.join(c if c.isalnum() else '-' for c in t.lower()).strip('-'))")
+
   pandoc "$body_md" \
     -o "$output" \
     --wrap=none \
@@ -210,17 +220,20 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --metadata=desc:"$desc" \
     --metadata=date:"$date" \
     --metadata=tags:"$tags" \
+    --metadata=first_tag:"$first_tag" \
+    --metadata=first_tag_slug:"$first_tag_slug" \
     --metadata=slug:"$slug" \
     --metadata=reading_time:"$rt" \
     --metadata=word_count:"$word_count" \
     --highlight-style=tango
 
-  # Per-post OG image
+  # Per-post OG image (PNG; renderer falls back to SVG if Pillow is missing).
   python3 scripts/render_og.py \
     --slug "$slug" \
     --title "$title" \
     --tags "$tags" \
-    --out "$OG_DIR/$slug.svg"
+    --site "${SITE_URL#https://}" \
+    --out "$OG_DIR/$slug.png"
 
   printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
     "$slug" "$title" "$date" "$desc" "$tags" "$rt" >> "$BUILD_DIR/posts.index"
@@ -299,7 +312,15 @@ python3 scripts/render_projects.py \
 # ----------------------------------------------------------------------------
 # 4. Tag index
 # ----------------------------------------------------------------------------
-python3 scripts/render_tags.py --out "$BUILD_DIR/tags_index.html" < "$BUILD_DIR/posts.index"
+python3 scripts/render_tags.py \
+  --out "$BUILD_DIR/tags_index.html" \
+  --cloud-out "$BUILD_DIR/tags_cloud.html" \
+  < "$BUILD_DIR/posts.index"
+
+# ----------------------------------------------------------------------------
+# 4b. Graph data (notes + tags as nodes; bipartite post-tag edges)
+# ----------------------------------------------------------------------------
+python3 scripts/render_graph.py --out "$BUILD_DIR/graph_data.html" < "$BUILD_DIR/posts.index"
 
 # ----------------------------------------------------------------------------
 # 5. Render every page template
@@ -324,7 +345,9 @@ substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUI
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
+substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
 substitute_list "<!-- QUOTES_JSON -->"       "$BUILD_DIR/quotes_data.html"       "$BUILD_DIR/index.html"
+substitute_list "<!-- GRAPH_DATA -->"        "$BUILD_DIR/graph_data.html"        "$BUILD_DIR/blog.html"
 
 for out in index.html work.html contact.html blog.html tags.html now.html 404.html; do
   mv "$BUILD_DIR/$out" "$out"

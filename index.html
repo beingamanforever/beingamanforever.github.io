@@ -5,9 +5,9 @@
     <meta name="description" content="Notes on systems programming, performance, and infrastructure">
     <meta property="og:title" content="Aman Behera | Digital Garden">
     <meta property="og:description" content="Notes on systems programming, performance, and infrastructure">
-    <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
-    <meta property="og:url" content="https://beingamanforever.io/">
-    <link rel="canonical" href="https://beingamanforever.io/">
+    <meta property="og:image" content="https://beingamanforever.github.io/assets/og-home.png">
+    <meta property="og:url" content="https://beingamanforever.github.io/">
+    <link rel="canonical" href="https://beingamanforever.github.io/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
@@ -19,16 +19,16 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="assets/css/style.css?v=82fb95a" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=82fb95a">
+    <link rel="preload" href="assets/css/style.css?v=c93a7c4" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=c93a7c4">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=82fb95a" defer></script>
+    <script src="assets/js/main.js?v=c93a7c4" defer></script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Aman Behera",
-  "url": "https://beingamanforever.io/",
+  "url": "https://beingamanforever.github.io/",
   "email": "mailto:aman.behera.systems@gmail.com",
   "sameAs": [
     "https://github.com/beingamanforever",
@@ -82,18 +82,10 @@
             <div class="hero-content">
                 <h1 class="hero-greeting">Hi!</h1>
                 <div class="hero-spacer"></div>
-                <p class="hero-intro">I'm Aman, a student at IIT Roorkee. I work on C++ infrastructure and systems programming.</p>
-                <p class="hero-description">I focus on performance critical software and understanding systems from memory to hardware.</p>
+                <p class="hero-intro">I'm Aman, a student at IIT Roorkee. I write performance-critical software. Mostly systems, infrastructure, and ML pipelines.</p>
+                <p class="hero-description">Currently a Data Science PPO at HiLabs and a GSoC 2026 contributor at GNU Octave. I care about how software maps to real hardware, and I apply the same lens to ML systems.</p>
                 <p class="hero-description">Notes, experiments, and things I care about.</p>
-
-                <!-- Quote: SSR fallback baked at build time; main.js re-randomises on every page load. -->
-                <figure class="quote-box" id="random-quote">
-                    <blockquote class="quote-text" id="quote-text">I'm so much happier now that I'm dead.</blockquote>
-                    <figcaption class="quote-author">— <span id="quote-author">Amy Dunne, Gone Girl</span></figcaption>
-                </figure>
-                <script id="quotes-data" type="application/json">
-[{"text": "You can't trust code that you did not totally create yourself.", "author": "Ken Thompson"}, {"text": "If you're not embarrassed by the first version of your product, you've launched too late.", "author": "Reid Hoffman"}, {"text": "The competent programmer is fully aware of the limited size of his own skull.", "author": "Edsger Dijkstra"}, {"text": "Premature optimization is the root of all evil — yet that does not mean we should pass up our opportunities in that critical 3%.", "author": "Donald Knuth"}, {"text": "There are only two hard things in computer science: cache invalidation and naming things.", "author": "Phil Karlton"}, {"text": "I am the one who knocks.", "author": "Walter White, Breaking Bad"}, {"text": "S'all good, man.", "author": "Saul Goodman, Better Call Saul"}, {"text": "Money makes you more of who you really are.", "author": "Jordan Belfort, The Wolf of Wall Street"}, {"text": "I have to return some videotapes.", "author": "Patrick Bateman, American Psycho"}, {"text": "I'm so much happier now that I'm dead.", "author": "Amy Dunne, Gone Girl"}]
-                </script>
+                <p class="hero-status">Open to systems / infrastructure and ML systems / data-science roles. Best way to reach me: <a class="js-email" href="#" data-user="aman.behera.systems" data-domain="gmail.com">email</a>.</p>
 
                 <!-- Quick Links -->
                 <div class="quick-links">
@@ -113,7 +105,7 @@
                         </svg>
                         Resume
                     </a>
-                    <a href="mailto:aman.behera.systems@gmail.com" class="btn btn-secondary">
+                    <a href="#" class="btn btn-secondary js-email" data-user="aman.behera.systems" data-domain="gmail.com">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                             <polyline points="22,6 12,13 2,6"></polyline>
@@ -131,15 +123,15 @@
             <h2 class="section-title" data-hex="0x08" data-subtitle="Systems and infrastructure.">About</h2>
             <div class="about-content">
                 <p class="about-paragraph">I work on systems, performance-critical software, and the fundamentals of computation, with a focus on how software maps to real hardware.</p>
-                <p class="about-paragraph">I'm also a data scientist. Currently a Data Science PPO at HiLabs, where I build entity-resolution pipelines and LLM-as-a-judge evaluation workflows.</p>
                 <p class="about-paragraph">I approach problems from first principles: understanding why something works, the constraints involved, and how it can be made simpler or faster.</p>
+                <p class="about-paragraph">I also apply systems thinking to ML pipelines. At HiLabs I build entity-resolution and LLM-as-a-judge evaluation workflows; at GSoC I'm rewriting GNU Octave's ANOVA stack for performance.</p>
                 <p class="about-paragraph">Outside of coding, I read technical papers, do art, hit the gym and spend time outdoors.</p>
 
                 <div class="about-details">
                     <div class="detail-group">
                         <span class="detail-label">Currently</span>
-                        <span class="detail-item">Data Science PPO at HiLabs. LLM-as-a-judge evaluation pipelines.</span>
-                        <span class="detail-item">Google Summer of Code 2026 with GNU Octave. Object-oriented ANOVA framework.</span>
+                        <span class="detail-item"><span class="status-dot status-dot-active" aria-hidden="true"></span>Data Science PPO at HiLabs. LLM-as-a-judge evaluation pipelines.</span>
+                        <span class="detail-item"><span class="status-dot status-dot-active" aria-hidden="true"></span>Google Summer of Code 2026 with GNU Octave. Object-oriented ANOVA framework.</span>
                     </div>
 
                     <div class="detail-group-separator"></div>
@@ -165,14 +157,14 @@
                 <h2 class="section-title section-title-kicker" data-hex="0x0C" data-subtitle="Selected signal.">Achievements</h2>
             </div>
             <ol class="achievement-timeline" aria-label="Selected achievements">
-                <li class="achievement-item">
+                <li class="achievement-item is-current">
                     <div class="achievement-year">2026 (Current)</div>
                     <div class="achievement-copy">
                         <h3>Google Summer of Code 2026</h3>
                         <p>Selected for GSoC 2026 and contributing to <a href="https://octave.org/" target="_blank" rel="noopener noreferrer">GNU Octave</a>.</p>
                     </div>
                 </li>
-                <li class="achievement-item">
+                <li class="achievement-item is-current">
                     <div class="achievement-year">2026 (Current)</div>
                     <div class="achievement-copy">
                         <h3>HiLabs Data Science Intern</h3>
@@ -289,6 +281,17 @@
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </a>
+                <a href="blog.html#graph-stage" class="btn-view-all btn-view-all-secondary">
+                    <span>Explore as a graph</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="6" cy="6" r="2"></circle>
+                        <circle cx="18" cy="6" r="2"></circle>
+                        <circle cx="12" cy="18" r="2"></circle>
+                        <line x1="7.5" y1="7" x2="11" y2="16.5"></line>
+                        <line x1="16.5" y1="7" x2="13" y2="16.5"></line>
+                        <line x1="8" y1="6" x2="16" y2="6"></line>
+                    </svg>
+                </a>
             </div>
         </div>
     </section>
@@ -317,6 +320,7 @@
         <div class="container">
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
+            <p class="footer-feedback">Found a bug or have a sharper take? <a class="js-email" href="#" data-user="aman.behera.systems" data-domain="gmail.com">Email me</a> or <a href="https://github.com/beingamanforever/beingamanforever.github.io" target="_blank" rel="noopener noreferrer">open a PR</a>.</p>
         </div>
     </footer>
 </body>

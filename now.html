@@ -5,9 +5,9 @@
     <meta name="description" content="What I'm working on right now.">
     <meta property="og:title" content="Now | Aman Behera">
     <meta property="og:description" content="What I'm working on right now.">
-    <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
-    <meta property="og:url" content="https://beingamanforever.io/now.html">
-    <link rel="canonical" href="https://beingamanforever.io/now.html">
+    <meta property="og:image" content="https://beingamanforever.github.io/assets/og-home.png">
+    <meta property="og:url" content="https://beingamanforever.github.io/now.html">
+    <link rel="canonical" href="https://beingamanforever.github.io/now.html">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
@@ -19,10 +19,10 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="assets/css/style.css?v=82fb95a" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=82fb95a">
+    <link rel="preload" href="assets/css/style.css?v=c93a7c4" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=c93a7c4">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=82fb95a" defer></script>
+    <script src="assets/js/main.js?v=c93a7c4" defer></script>
 </head>
 <body class="dark-mode">
     <nav id="navbar" role="navigation" aria-label="Main navigation">
@@ -59,52 +59,78 @@
 
     <main id="main-content" class="now-page">
         <div class="container">
-            <h1 class="page-title">Now</h1>
-            <p class="page-subtitle">What I'm focused on, updated periodically. Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now pages</a>.</p>
-
-            <section class="now-block">
-                <h2 class="now-section-title">Currently working on</h2>
-                <ul class="now-list">
-                    <li>Data Science PPO at HiLabs. LLM-as-a-judge evaluation pipelines and entity-resolution work on tabular healthcare data.</li>
-                    <li>Google Summer of Code 2026 with GNU Octave. Designing an object-oriented ANOVA framework (classdef-based, lazy refitting, backend routing).</li>
-                </ul>
-            </section>
-
-            <section class="now-block">
-                <h2 class="now-section-title">Training</h2>
-                <div class="training-grid">
-                    <article class="training-card">
-                        <header class="training-card-header">
-                            <h3 class="training-card-title">Lifting</h3>
-                            <a class="training-card-link" href="https://lyfta.app/up/61w9o" target="_blank" rel="noopener noreferrer">Lyfta →</a>
-                        </header>
-                        <dl class="training-stats">
-                            <div class="training-stat"><dt>Deadlift</dt><dd>130 kg</dd></div>
-                            <div class="training-stat"><dt>Squat</dt><dd>110 kg</dd></div>
-                            <div class="training-stat"><dt>Bench</dt><dd>60 kg</dd></div>
-                        </dl>
-                        <p class="training-card-note">Push / pull / legs split.</p>
-                    </article>
-                    <article class="training-card">
-                        <header class="training-card-header">
-                            <h3 class="training-card-title">Running</h3>
-                            <a class="training-card-link" href="https://strava.app.link/HNl7W7NRZ2b" target="_blank" rel="noopener noreferrer">Strava →</a>
-                        </header>
-                        <dl class="training-stats">
-                            <div class="training-stat"><dt>5K</dt><dd>23:00</dd></div>
-                            <div class="training-stat"><dt>10K</dt><dd>53:00</dd></div>
-                            <div class="training-stat"><dt>Half</dt><dd>2:06:00</dd></div>
-                        </dl>
-                        <p class="training-card-note">Zone-2 base, one tempo, one long run a week.</p>
-                    </article>
+            <header class="now-header">
+                <div>
+                    <h1 class="page-title">Now</h1>
+                    <p class="page-subtitle">What I'm focused on. Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now pages</a>.</p>
                 </div>
-                <ul class="now-list training-extras">
-                    <li><strong>Reading.</strong> Hennessy &amp; Patterson, <em>Computer Architecture: A Quantitative Approach</em>.</li>
-                    <li><strong>Writing.</strong> One note a month. See the <a href="blog.html">blog</a>.</li>
+                <span class="now-updated-badge" title="Last updated">Updated May 2026</span>
+            </header>
+
+            <div class="now-grid">
+                <section class="now-block">
+                    <h2 class="now-section-title">Work</h2>
+                    <ul class="now-list">
+                        <li><strong>HiLabs.</strong> Data Science PPO. LLM-as-a-judge evaluation pipelines and entity-resolution work on tabular healthcare data.</li>
+                        <li><strong>GSoC 2026 with GNU Octave.</strong> Designing an object-oriented ANOVA framework (classdef-based, lazy refitting, backend routing).</li>
+                    </ul>
+                </section>
+
+                <section class="now-block">
+                    <h2 class="now-section-title">Training</h2>
+                    <div class="training-grid">
+                        <article class="training-card">
+                            <header class="training-card-header">
+                                <h3 class="training-card-title">Lifting</h3>
+                                <a class="training-card-link" href="https://lyfta.app/up/61w9o" target="_blank" rel="noopener noreferrer">Lyfta →</a>
+                            </header>
+                            <table class="training-table" aria-label="Lifting personal records">
+                                <thead>
+                                    <tr><th>Lift</th><th>Weight</th><th>Date</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Deadlift</td><td>130 kg</td><td>May 2026</td></tr>
+                                    <tr><td>Squat</td><td>110 kg</td><td>May 2026</td></tr>
+                                    <tr><td>Bench</td><td>60 kg</td><td>May 2026</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="training-card-note">Push / pull / legs split.</p>
+                        </article>
+                        <article class="training-card">
+                            <header class="training-card-header">
+                                <h3 class="training-card-title">Running</h3>
+                                <a class="training-card-link" href="https://strava.app.link/HNl7W7NRZ2b" target="_blank" rel="noopener noreferrer">Strava →</a>
+                            </header>
+                            <table class="training-table" aria-label="Running personal records">
+                                <thead>
+                                    <tr><th>Distance</th><th>Time</th><th>Date</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>5K</td><td>23:00</td><td>May 2026</td></tr>
+                                    <tr><td>10K</td><td>53:00</td><td>May 2026</td></tr>
+                                    <tr><td>Half</td><td>2:06:00</td><td>May 2026</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="training-card-note">Zone-2 base, one tempo, one long run a week.</p>
+                        </article>
+                    </div>
+                </section>
+            </div>
+
+            <section class="now-block now-block-wide">
+                <h2 class="now-section-title">Currently reading</h2>
+                <ul class="now-list">
+                    <li><strong>Computer Architecture: A Quantitative Approach.</strong> Hennessy &amp; Patterson. The pipeline / ILP / memory-hierarchy chapters.</li>
+                    <li><strong>Recent papers.</strong> Skim list mostly on parsing, vectorisation, and modern allocator design.</li>
                 </ul>
             </section>
 
-            <p class="now-updated"><em>Last updated: May 2026</em></p>
+            <section class="now-block now-block-wide">
+                <h2 class="now-section-title">Writing</h2>
+                <ul class="now-list">
+                    <li>At least one technical note a month. Latest is on the <a href="blog.html">notes page</a>.</li>
+                </ul>
+            </section>
         </div>
     </main>
 
@@ -112,6 +138,7 @@
         <div class="container">
             <p>© 2026 Aman Behera</p>
             <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
+            <p class="footer-feedback">Found a bug or have a sharper take? <a class="js-email" href="#" data-user="aman.behera.systems" data-domain="gmail.com">Email me</a> or <a href="https://github.com/beingamanforever/beingamanforever.github.io" target="_blank" rel="noopener noreferrer">open a PR</a>.</p>
         </div>
     </footer>
 </body>
