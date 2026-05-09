@@ -35,12 +35,15 @@ SITE_GITHUB="$(read_cfg github)"
 SITE_LINKEDIN="$(read_cfg linkedin)"
 SITE_OG_IMAGE="$(read_cfg og_image)"
 
-# Pick a single random quote for the hero (one Python call → matched text/author).
+# Pick an SSR fallback quote for the hero, AND emit the full quote list as JSON
+# for main.js to re-randomise on every page load.
 eval "$(python3 -c "
 import json, random, shlex
-q = random.choice(json.load(open('data/site.json'))['quotes'])
+data = json.load(open('data/site.json'))['quotes']
+q = random.choice(data)
 print('QUOTE_TEXT=' + shlex.quote(q['text']))
 print('QUOTE_AUTHOR=' + shlex.quote(q['author']))
+print('QUOTES_JSON=' + shlex.quote(json.dumps(data, ensure_ascii=False)))
 ")"
 
 YEAR="$(date +%Y)"
@@ -231,9 +234,13 @@ done
 > "$BUILD_DIR/blog_list_home.html"
 
 count=0
+> "$BUILD_DIR/all_tags.txt"
 while IFS=$'\t' read -r slug title date desc tags rt; do
+  # Normalise tag list into a space-trimmed CSV (no spaces around commas) for the data attribute.
+  data_tags=$(printf '%s' "$tags" | python3 -c "import sys; print(','.join(t.strip() for t in sys.stdin.read().split(',') if t.strip()))")
+  printf '%s\n' "$data_tags" | tr ',' '\n' >> "$BUILD_DIR/all_tags.txt"
   card=$(cat <<EOF
-                <article class="post-card">
+                <article class="post-card" data-tags="$data_tags">
                     <h3 class="post-card-title"><a href="posts/$slug.html">$title</a></h3>
                     <p class="post-card-desc">$desc</p>
                     <div class="post-card-meta">
@@ -252,6 +259,44 @@ EOF
   fi
   count=$((count + 1))
 done < "$BUILD_DIR/posts.index"
+
+# Tag filter sidebar: unique tags with post counts, alphabetical.
+python3 -c "
+from collections import Counter
+import html, sys
+tags = [t for t in (l.strip() for l in open('$BUILD_DIR/all_tags.txt')) if t]
+counts = Counter(tags)
+out = []
+out.append('                <button class=\"tag-filter-btn is-active\" data-tag=\"\">All <span class=\"tag-filter-count\">(' + str(len(tags) and sum(1 for _ in set(tags)) or 0) + ')</span></button>')
+# Recompute 'All' count to total posts (not unique tags) — we need post count.
+" > "$BUILD_DIR/tags_filter.html" || true
+
+python3 - <<PYEOF > "$BUILD_DIR/tags_filter.html"
+from collections import Counter
+import html, os
+tag_lines = [l.strip() for l in open(os.path.join("$BUILD_DIR", "all_tags.txt"))]
+tags_per_post: list[set[str]] = []
+# Re-derive per-post tag sets from posts.index for an accurate post count per tag.
+for line in open(os.path.join("$BUILD_DIR", "posts.index")):
+    parts = line.rstrip("\n").split("\t")
+    if len(parts) < 5:
+        continue
+    tagset = {t.strip() for t in parts[4].split(",") if t.strip()}
+    tags_per_post.append(tagset)
+post_count = len(tags_per_post)
+counts = Counter()
+for s in tags_per_post:
+    for t in s:
+        counts[t] += 1
+out = []
+out.append(f'                <button class="tag-filter-btn is-active" data-tag="">All <span class="tag-filter-count">({post_count})</span></button>')
+for tag in sorted(counts):
+    out.append(
+        f'                <button class="tag-filter-btn" data-tag="{html.escape(tag)}">'
+        f'#{html.escape(tag)} <span class="tag-filter-count">({counts[tag]})</span></button>'
+    )
+print("\n".join(out))
+PYEOF
 
 # ----------------------------------------------------------------------------
 # 3. Project lists from data/projects.json
@@ -276,11 +321,20 @@ for tmpl in index_template.html work_template.html contact_template.html \
   inject_partials < "$tmpl" | fill_vars "" > "$BUILD_DIR/$out"
 done
 
+# Quotes JSON (full list) for client-side hero rotation on every page load.
+python3 -c "
+import json
+data = json.load(open('data/site.json'))['quotes']
+print(json.dumps(data, ensure_ascii=False))
+" > "$BUILD_DIR/quotes_data.html"
+
 substitute_list "<!-- BLOG_LIST_HOME -->" "$BUILD_DIR/blog_list_home.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- BLOG_LIST -->"      "$BUILD_DIR/blog_list.html"      "$BUILD_DIR/blog.html"
+substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUILD_DIR/blog.html"
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
+substitute_list "<!-- QUOTES_JSON -->"       "$BUILD_DIR/quotes_data.html"       "$BUILD_DIR/index.html"
 
 for out in index.html work.html contact.html blog.html tags.html now.html 404.html; do
   mv "$BUILD_DIR/$out" "$out"

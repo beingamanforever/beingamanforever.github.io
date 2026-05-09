@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Blog — $SITE_NAME$</title>
+    <title>Blog | $SITE_NAME$</title>
     <meta name="description" content="$SITE_DESC$">
-    <meta property="og:title" content="Blog — $SITE_NAME$">
+    <meta property="og:title" content="Blog | $SITE_NAME$">
     <meta property="og:description" content="$SITE_DESC$">
     <meta property="og:image" content="$SITE_OG_IMAGE$">
     <meta property="og:url" content="$SITE_URL$/blog.html">
@@ -26,9 +26,18 @@
     <main id="main-content" class="blog-page">
         <div class="container">
             <h1 class="page-title">Notes</h1>
-            <p class="page-subtitle">Notes I write to think more clearly, mostly on systems and performance. Browse by <a href="tags.html">tag</a> or <a href="feed.xml">subscribe by RSS</a>.</p>
-            <div id="blog-container" class="post-list">
+            <p class="page-subtitle">Notes I write to think more clearly, mostly on systems and performance. <a href="feed.xml">Subscribe by RSS</a>.</p>
+            <div class="blog-layout">
+                <aside class="tag-filter" aria-label="Filter posts by tag">
+                    <h2 class="tag-filter-heading">Filter by tag</h2>
+                    <div class="tag-filter-list" role="group">
+<!-- TAGS_FILTER -->
+                    </div>
+                </aside>
+                <div id="blog-container" class="post-list">
 <!-- BLOG_LIST -->
+                    <p class="blog-empty" hidden>No posts match this tag yet.</p>
+                </div>
             </div>
         </div>
     </main>

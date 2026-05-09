@@ -16,7 +16,7 @@
     "featured": true
   },
   {
-    "title": "GNU Octave — GSoC 2026",
+    "title": "GNU Octave (GSoC 2026)",
     "description": "Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.",
     "tags": ["Octave", "numerics", "GSoC"],
     "url": "https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever",
@@ -24,7 +24,7 @@
     "featured": true
   },
   {
-    "title": "Drishti — ISRO Geospatial VLM",
+    "title": "Drishti: ISRO Geospatial VLM",
     "description": "Vision-language model for geospatial reasoning; 1st runner-up at Inter-IIT Tech Meet 14.0 across 24 IITs.",
     "tags": ["VLM", "geospatial", "Inter-IIT"],
     "url": "https://github.com/beingamanforever/Drishti",

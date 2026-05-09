@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Blog — Aman Behera</title>
+    <title>Blog | Aman Behera</title>
     <meta name="description" content="Notes on systems programming, performance, and infrastructure">
-    <meta property="og:title" content="Blog — Aman Behera">
+    <meta property="og:title" content="Blog | Aman Behera">
     <meta property="og:description" content="Notes on systems programming, performance, and infrastructure">
     <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
     <meta property="og:url" content="https://beingamanforever.io/blog.html">
@@ -19,10 +19,10 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="assets/css/style.css?v=03e67c2" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=03e67c2">
+    <link rel="preload" href="assets/css/style.css?v=12a62ec" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=12a62ec">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=03e67c2" defer></script>
+    <script src="assets/js/main.js?v=12a62ec" defer></script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -70,9 +70,18 @@
     <main id="main-content" class="blog-page">
         <div class="container">
             <h1 class="page-title">Notes</h1>
-            <p class="page-subtitle">Notes I write to think more clearly, mostly on systems and performance. Browse by <a href="tags.html">tag</a> or <a href="feed.xml">subscribe by RSS</a>.</p>
-            <div id="blog-container" class="post-list">
-                <article class="post-card">
+            <p class="page-subtitle">Notes I write to think more clearly, mostly on systems and performance. <a href="feed.xml">Subscribe by RSS</a>.</p>
+            <div class="blog-layout">
+                <aside class="tag-filter" aria-label="Filter posts by tag">
+                    <h2 class="tag-filter-heading">Filter by tag</h2>
+                    <div class="tag-filter-list" role="group">
+                <button class="tag-filter-btn is-active" data-tag="">All <span class="tag-filter-count">(1)</span></button>
+                <button class="tag-filter-btn" data-tag="performance">#performance <span class="tag-filter-count">(1)</span></button>
+                <button class="tag-filter-btn" data-tag="systems">#systems <span class="tag-filter-count">(1)</span></button>
+                    </div>
+                </aside>
+                <div id="blog-container" class="post-list">
+                <article class="post-card" data-tags="systems,performance">
                     <h3 class="post-card-title"><a href="posts/2026-05-07-swar-parsing-internals.html">SWAR Parsing Internals</a></h3>
                     <p class="post-card-desc">How SIMD-Within-A-Register turns ordinary 64-bit integers into 8-lane parallel byte processors.</p>
                     <div class="post-card-meta">
@@ -83,6 +92,8 @@
                         <span class="post-card-readtime">4 min read</span>
                     </div>
                 </article>
+                    <p class="blog-empty" hidden>No posts match this tag yet.</p>
+                </div>
             </div>
         </div>
     </main>
