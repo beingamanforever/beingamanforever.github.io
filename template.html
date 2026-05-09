@@ -42,7 +42,15 @@ $highlighting-css$
 
     <main id="main-content" class="post-page">
         <article class="post-container container">
-            <a href="$ROOT$blog.html" class="post-back">← Back to Notes</a>
+            <nav class="post-breadcrumbs" aria-label="Breadcrumb">
+                <a href="$ROOT$blog.html">Notes</a>
+$if(first_tag)$
+                <span class="post-breadcrumb-sep">/</span>
+                <a href="$ROOT$tags.html#tag-$first_tag_slug$">$first_tag$</a>
+$endif$
+                <span class="post-breadcrumb-sep">/</span>
+                <span class="post-breadcrumb-current" aria-current="page">$title$</span>
+            </nav>
             <header class="post-header">
                 <h1 class="post-title">$title$</h1>
                 <div class="post-meta">

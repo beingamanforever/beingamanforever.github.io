@@ -208,6 +208,10 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
   word_count=$(word_count_from_html "$body_md")
   rt=$(reading_time "$word_count")
 
+  # Breadcrumb middle segment uses the first tag.
+  first_tag=$(printf '%s' "$tags" | python3 -c "import sys; t=[s.strip() for s in sys.stdin.read().split(',') if s.strip()]; print(t[0] if t else '')")
+  first_tag_slug=$(printf '%s' "$first_tag" | python3 -c "import sys; t=sys.stdin.read().strip(); print(''.join(c if c.isalnum() else '-' for c in t.lower()).strip('-'))")
+
   pandoc "$body_md" \
     -o "$output" \
     --wrap=none \
@@ -216,6 +220,8 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --metadata=desc:"$desc" \
     --metadata=date:"$date" \
     --metadata=tags:"$tags" \
+    --metadata=first_tag:"$first_tag" \
+    --metadata=first_tag_slug:"$first_tag_slug" \
     --metadata=slug:"$slug" \
     --metadata=reading_time:"$rt" \
     --metadata=word_count:"$word_count" \
