@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Aman Behera — Digital Garden</title>
+    <title>Aman Behera | Digital Garden</title>
     <meta name="description" content="Notes on systems programming, performance, and infrastructure">
-    <meta property="og:title" content="Aman Behera — Digital Garden">
+    <meta property="og:title" content="Aman Behera | Digital Garden">
     <meta property="og:description" content="Notes on systems programming, performance, and infrastructure">
     <meta property="og:image" content="https://beingamanforever.io/assets/og-home.png">
     <meta property="og:url" content="https://beingamanforever.io/">
@@ -19,10 +19,10 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="assets/css/style.css?v=03e67c2" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=03e67c2">
+    <link rel="preload" href="assets/css/style.css?v=12a62ec" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=12a62ec">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=03e67c2" defer></script>
+    <script src="assets/js/main.js?v=12a62ec" defer></script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -86,11 +86,14 @@
                 <p class="hero-description">I focus on performance critical software and understanding systems from memory to hardware.</p>
                 <p class="hero-description">Notes, experiments, and things I care about.</p>
 
-                <!-- Quote (rendered at build time) -->
+                <!-- Quote: SSR fallback baked at build time; main.js re-randomises on every page load. -->
                 <figure class="quote-box" id="random-quote">
-                    <blockquote class="quote-text">Premature optimization is the root of all evil — yet that does not mean we should pass up our opportunities in that critical 3%.</blockquote>
-                    <figcaption class="quote-author">— Donald Knuth</figcaption>
+                    <blockquote class="quote-text" id="quote-text">I'm so much happier now that I'm dead.</blockquote>
+                    <figcaption class="quote-author">— <span id="quote-author">Amy Dunne, Gone Girl</span></figcaption>
                 </figure>
+                <script id="quotes-data" type="application/json">
+[{"text": "You can't trust code that you did not totally create yourself.", "author": "Ken Thompson"}, {"text": "If you're not embarrassed by the first version of your product, you've launched too late.", "author": "Reid Hoffman"}, {"text": "The competent programmer is fully aware of the limited size of his own skull.", "author": "Edsger Dijkstra"}, {"text": "Premature optimization is the root of all evil — yet that does not mean we should pass up our opportunities in that critical 3%.", "author": "Donald Knuth"}, {"text": "There are only two hard things in computer science: cache invalidation and naming things.", "author": "Phil Karlton"}, {"text": "I am the one who knocks.", "author": "Walter White, Breaking Bad"}, {"text": "S'all good, man.", "author": "Saul Goodman, Better Call Saul"}, {"text": "Money makes you more of who you really are.", "author": "Jordan Belfort, The Wolf of Wall Street"}, {"text": "I have to return some videotapes.", "author": "Patrick Bateman, American Psycho"}, {"text": "I'm so much happier now that I'm dead.", "author": "Amy Dunne, Gone Girl"}]
+                </script>
 
                 <!-- Quick Links -->
                 <div class="quick-links">
@@ -128,15 +131,15 @@
             <h2 class="section-title" data-hex="0x08" data-subtitle="Systems and infrastructure.">About</h2>
             <div class="about-content">
                 <p class="about-paragraph">I work on systems, performance-critical software, and the fundamentals of computation, with a focus on how software maps to real hardware.</p>
+                <p class="about-paragraph">I'm also a data scientist. Currently a Data Science PPO at HiLabs, where I build entity-resolution pipelines and LLM-as-a-judge evaluation workflows.</p>
                 <p class="about-paragraph">I approach problems from first principles: understanding why something works, the constraints involved, and how it can be made simpler or faster.</p>
                 <p class="about-paragraph">Outside of coding, I read technical papers, do art, hit the gym and spend time outdoors.</p>
 
                 <div class="about-details">
                     <div class="detail-group">
                         <span class="detail-label">Currently</span>
-                        <span class="detail-item">Building a SIMD Accelerated Key-Value Store</span>
-                        <span class="detail-item">Building a single binary, zero-copy, SIMD-accelerated ingestion engine for large CSV data.</span>
-                        <span class="detail-item">Reading on dependency testing</span>
+                        <span class="detail-item">Data Science PPO at HiLabs. LLM-as-a-judge evaluation pipelines.</span>
+                        <span class="detail-item">Google Summer of Code 2026 with GNU Octave. Object-oriented ANOVA framework.</span>
                     </div>
 
                     <div class="detail-group-separator"></div>
@@ -177,35 +180,35 @@
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — Dec</div>
+                    <div class="achievement-year">Dec 2025</div>
                     <div class="achievement-copy">
                         <h3>Silver in Inter IIT Tech Meet 14.0</h3>
                         <p>1st runner up in the <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">ISRO Geospatial VLM problem statement</a> among 24 IITs.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — Sept</div>
+                    <div class="achievement-year">Sept 2025</div>
                     <div class="achievement-copy">
                         <h3>HiLabs Data Science PPO</h3>
                         <p>Received a pre-placement offer from HiLabs.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — Sept</div>
+                    <div class="achievement-year">Sept 2025</div>
                     <div class="achievement-copy">
                         <h3>HiLabs AIQuest Winner</h3>
                         <p>Won first prize in <a href="https://github.com/beingamanforever/hilabs" target="_blank" rel="noopener noreferrer">HiLabs AIQuest Hackathon</a> organized at IIT Roorkee.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — May–Jul</div>
+                    <div class="achievement-year">May–Jul 2025</div>
                     <div class="achievement-copy">
                         <h3>Info Edge Data Science Intern</h3>
                         <p>Data science internship at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2024 — Dec</div>
+                    <div class="achievement-year">Dec 2024</div>
                     <div class="achievement-copy">
                         <h3>Silver in Tech GC, IIT Roorkee</h3>
                         <p>Silver medal in the ML problem statement for designing an <a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank" rel="noopener noreferrer">AI-interview chatbot</a>.</p>
@@ -240,7 +243,7 @@
                 </article>
                 <article class="project-card">
                     <div class="project-header">
-                        <h3 class="project-title"><a href="https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">GNU Octave — GSoC 2026</a></h3>
+                        <h3 class="project-title"><a href="https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">GNU Octave (GSoC 2026)</a></h3>
                         <span class="project-stars">active</span>
                     </div>
                     <p class="project-description">Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.</p>
@@ -266,7 +269,7 @@
                 <h2 class="section-title section-title-kicker" data-hex="0x18" data-subtitle="Thoughts and notes.">Recent Writing</h2>
             </div>
             <div id="writing-container" class="post-list">
-                <article class="post-card">
+                <article class="post-card" data-tags="systems,performance">
                     <h3 class="post-card-title"><a href="posts/2026-05-07-swar-parsing-internals.html">SWAR Parsing Internals</a></h3>
                     <p class="post-card-desc">How SIMD-Within-A-Register turns ordinary 64-bit integers into 8-lane parallel byte processors.</p>
                     <div class="post-card-meta">

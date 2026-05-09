@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>$SITE_NAME$ — Digital Garden</title>
+    <title>$SITE_NAME$ | Digital Garden</title>
     <meta name="description" content="$SITE_DESC$">
-    <meta property="og:title" content="$SITE_NAME$ — Digital Garden">
+    <meta property="og:title" content="$SITE_NAME$ | Digital Garden">
     <meta property="og:description" content="$SITE_DESC$">
     <meta property="og:image" content="$SITE_OG_IMAGE$">
     <meta property="og:url" content="$SITE_URL$/">
@@ -42,11 +42,14 @@
                 <p class="hero-description">I focus on performance critical software and understanding systems from memory to hardware.</p>
                 <p class="hero-description">Notes, experiments, and things I care about.</p>
 
-                <!-- Quote (rendered at build time) -->
+                <!-- Quote: SSR fallback baked at build time; main.js re-randomises on every page load. -->
                 <figure class="quote-box" id="random-quote">
-                    <blockquote class="quote-text">$QUOTE_TEXT$</blockquote>
-                    <figcaption class="quote-author">— $QUOTE_AUTHOR$</figcaption>
+                    <blockquote class="quote-text" id="quote-text">$QUOTE_TEXT$</blockquote>
+                    <figcaption class="quote-author">— <span id="quote-author">$QUOTE_AUTHOR$</span></figcaption>
                 </figure>
+                <script id="quotes-data" type="application/json">
+<!-- QUOTES_JSON -->
+                </script>
 
                 <!-- Quick Links -->
                 <div class="quick-links">
@@ -84,15 +87,15 @@
             <h2 class="section-title" data-hex="0x08" data-subtitle="Systems and infrastructure.">About</h2>
             <div class="about-content">
                 <p class="about-paragraph">I work on systems, performance-critical software, and the fundamentals of computation, with a focus on how software maps to real hardware.</p>
+                <p class="about-paragraph">I'm also a data scientist. Currently a Data Science PPO at HiLabs, where I build entity-resolution pipelines and LLM-as-a-judge evaluation workflows.</p>
                 <p class="about-paragraph">I approach problems from first principles: understanding why something works, the constraints involved, and how it can be made simpler or faster.</p>
                 <p class="about-paragraph">Outside of coding, I read technical papers, do art, hit the gym and spend time outdoors.</p>
 
                 <div class="about-details">
                     <div class="detail-group">
                         <span class="detail-label">Currently</span>
-                        <span class="detail-item">Building a SIMD Accelerated Key-Value Store</span>
-                        <span class="detail-item">Building a single binary, zero-copy, SIMD-accelerated ingestion engine for large CSV data.</span>
-                        <span class="detail-item">Reading on dependency testing</span>
+                        <span class="detail-item">Data Science PPO at HiLabs. LLM-as-a-judge evaluation pipelines.</span>
+                        <span class="detail-item">Google Summer of Code 2026 with GNU Octave. Object-oriented ANOVA framework.</span>
                     </div>
 
                     <div class="detail-group-separator"></div>
@@ -133,35 +136,35 @@
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — Dec</div>
+                    <div class="achievement-year">Dec 2025</div>
                     <div class="achievement-copy">
                         <h3>Silver in Inter IIT Tech Meet 14.0</h3>
                         <p>1st runner up in the <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">ISRO Geospatial VLM problem statement</a> among 24 IITs.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — Sept</div>
+                    <div class="achievement-year">Sept 2025</div>
                     <div class="achievement-copy">
                         <h3>HiLabs Data Science PPO</h3>
                         <p>Received a pre-placement offer from HiLabs.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — Sept</div>
+                    <div class="achievement-year">Sept 2025</div>
                     <div class="achievement-copy">
                         <h3>HiLabs AIQuest Winner</h3>
                         <p>Won first prize in <a href="https://github.com/beingamanforever/hilabs" target="_blank" rel="noopener noreferrer">HiLabs AIQuest Hackathon</a> organized at IIT Roorkee.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2025 — May–Jul</div>
+                    <div class="achievement-year">May–Jul 2025</div>
                     <div class="achievement-copy">
                         <h3>Info Edge Data Science Intern</h3>
                         <p>Data science internship at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>.</p>
                     </div>
                 </li>
                 <li class="achievement-item">
-                    <div class="achievement-year">2024 — Dec</div>
+                    <div class="achievement-year">Dec 2024</div>
                     <div class="achievement-copy">
                         <h3>Silver in Tech GC, IIT Roorkee</h3>
                         <p>Silver medal in the ML problem statement for designing an <a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank" rel="noopener noreferrer">AI-interview chatbot</a>.</p>

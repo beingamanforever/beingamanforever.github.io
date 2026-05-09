@@ -2305,6 +2305,99 @@ body.dark-mode .post-card {
     margin-bottom: 0.5rem;
 }
 
+/* Blog page: two-column layout with tag-filter sidebar on the left. */
+.blog-layout {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+    align-items: start;
+}
+
+.tag-filter {
+    position: sticky;
+    top: 6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .tag-filter {
+    background: rgba(42, 42, 42, 0.4);
+}
+
+.tag-filter-heading {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0 0 0.85rem;
+}
+
+.tag-filter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.tag-filter-btn {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.tag-filter-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.tag-filter-btn.is-active {
+    color: var(--text-primary);
+    border-color: var(--text-primary);
+    background: rgba(74, 107, 214, 0.08);
+}
+
+.tag-filter-count {
+    font-size: 0.78rem;
+    opacity: 0.65;
+}
+
+.blog-empty {
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 1rem 0;
+}
+
+@media (max-width: 720px) {
+    .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    .tag-filter {
+        position: static;
+    }
+    .tag-filter-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .tag-filter-btn {
+        flex: 0 0 auto;
+    }
+}
+
 /* ---------------------------------------------------------------------------
  * Single-post page (post-page + post-content typography)
  * ------------------------------------------------------------------------- */
@@ -2524,6 +2617,107 @@ figure.quote-box {
     font-family: var(--font-mono);
     font-size: 0.85rem;
     opacity: 0.7;
+}
+
+/* Training cards: visual stat panels for lifts + runs. */
+.training-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.training-card {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem 1.1rem 1.1rem;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .training-card {
+    background: rgba(42, 42, 42, 0.4);
+}
+
+.training-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+
+.training-card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+}
+
+.training-card-link {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 1px;
+}
+
+.training-card-link:hover {
+    color: var(--walter-green);
+    border-bottom-color: var(--walter-green);
+}
+
+.training-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 0 0 0.85rem;
+}
+
+.training-stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px dashed var(--border-color);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+.training-stat:last-child {
+    border-bottom: none;
+}
+
+.training-stat dt {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.training-stat dd {
+    margin: 0;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+}
+
+.training-card-note {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    opacity: 0.85;
+}
+
+.training-extras {
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 720px) {
+    .training-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ---------------------------------------------------------------------------
