@@ -15,52 +15,68 @@
 
     <main id="main-content" class="now-page">
         <div class="container">
-            <h1 class="page-title">Now</h1>
-            <p class="page-subtitle">What I'm focused on, updated periodically. Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now pages</a>.</p>
-
-            <section class="now-block">
-                <h2 class="now-section-title">Currently working on</h2>
-                <ul class="now-list">
-                    <li>Data Science PPO at HiLabs. LLM-as-a-judge evaluation pipelines and entity-resolution work on tabular healthcare data.</li>
-                    <li>Google Summer of Code 2026 with GNU Octave. Designing an object-oriented ANOVA framework (classdef-based, lazy refitting, backend routing).</li>
-                </ul>
-            </section>
-
-            <section class="now-block">
-                <h2 class="now-section-title">Training</h2>
-                <div class="training-grid">
-                    <article class="training-card">
-                        <header class="training-card-header">
-                            <h3 class="training-card-title">Lifting</h3>
-                            <a class="training-card-link" href="https://lyfta.app/up/61w9o" target="_blank" rel="noopener noreferrer">Lyfta →</a>
-                        </header>
-                        <dl class="training-stats">
-                            <div class="training-stat"><dt>Deadlift</dt><dd>130 kg</dd></div>
-                            <div class="training-stat"><dt>Squat</dt><dd>110 kg</dd></div>
-                            <div class="training-stat"><dt>Bench</dt><dd>60 kg</dd></div>
-                        </dl>
-                        <p class="training-card-note">Push / pull / legs split.</p>
-                    </article>
-                    <article class="training-card">
-                        <header class="training-card-header">
-                            <h3 class="training-card-title">Running</h3>
-                            <a class="training-card-link" href="https://strava.app.link/HNl7W7NRZ2b" target="_blank" rel="noopener noreferrer">Strava →</a>
-                        </header>
-                        <dl class="training-stats">
-                            <div class="training-stat"><dt>5K</dt><dd>23:00</dd></div>
-                            <div class="training-stat"><dt>10K</dt><dd>53:00</dd></div>
-                            <div class="training-stat"><dt>Half</dt><dd>2:06:00</dd></div>
-                        </dl>
-                        <p class="training-card-note">Zone-2 base, one tempo, one long run a week.</p>
-                    </article>
+            <header class="now-header">
+                <div>
+                    <h1 class="page-title">Now</h1>
+                    <p class="page-subtitle">What I'm focused on. Inspired by <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer">/now pages</a>.</p>
                 </div>
-                <ul class="now-list training-extras">
-                    <li><strong>Reading.</strong> Hennessy &amp; Patterson, <em>Computer Architecture: A Quantitative Approach</em>.</li>
-                    <li><strong>Writing.</strong> One note a month. See the <a href="blog.html">blog</a>.</li>
+                <span class="now-updated-badge" title="Last updated">Updated $NOW_UPDATED$</span>
+            </header>
+
+            <div class="now-grid">
+                <section class="now-block">
+                    <h2 class="now-section-title">Work</h2>
+                    <ul class="now-list">
+                        <li><strong>HiLabs.</strong> Data Science PPO. LLM-as-a-judge evaluation pipelines and entity-resolution work on tabular healthcare data.</li>
+                        <li><strong>GSoC 2026 with GNU Octave.</strong> Designing an object-oriented ANOVA framework (classdef-based, lazy refitting, backend routing).</li>
+                    </ul>
+                </section>
+
+                <section class="now-block">
+                    <h2 class="now-section-title">Training</h2>
+                    <div class="training-grid">
+                        <article class="training-card">
+                            <header class="training-card-header">
+                                <h3 class="training-card-title">Lifting</h3>
+                                <a class="training-card-link" href="https://lyfta.app/up/61w9o" target="_blank" rel="noopener noreferrer">Lyfta →</a>
+                            </header>
+                            <dl class="training-stats">
+                                <div class="training-stat"><dt>Deadlift</dt><dd>130 kg</dd></div>
+                                <div class="training-stat"><dt>Squat</dt><dd>110 kg</dd></div>
+                                <div class="training-stat"><dt>Bench</dt><dd>60 kg</dd></div>
+                            </dl>
+                            <p class="training-card-note">Push / pull / legs split.</p>
+                        </article>
+                        <article class="training-card">
+                            <header class="training-card-header">
+                                <h3 class="training-card-title">Running</h3>
+                                <a class="training-card-link" href="https://strava.app.link/HNl7W7NRZ2b" target="_blank" rel="noopener noreferrer">Strava →</a>
+                            </header>
+                            <dl class="training-stats">
+                                <div class="training-stat"><dt>5K</dt><dd>23:00</dd></div>
+                                <div class="training-stat"><dt>10K</dt><dd>53:00</dd></div>
+                                <div class="training-stat"><dt>Half</dt><dd>2:06:00</dd></div>
+                            </dl>
+                            <p class="training-card-note">Zone-2 base, one tempo, one long run a week.</p>
+                        </article>
+                    </div>
+                </section>
+            </div>
+
+            <section class="now-block now-block-wide">
+                <h2 class="now-section-title">Currently reading</h2>
+                <ul class="now-list">
+                    <li><strong>Computer Architecture: A Quantitative Approach.</strong> Hennessy &amp; Patterson. The pipeline / ILP / memory-hierarchy chapters.</li>
+                    <li><strong>Recent papers.</strong> Skim list mostly on parsing, vectorisation, and modern allocator design.</li>
                 </ul>
             </section>
 
-            <p class="now-updated"><em>Last updated: $NOW_UPDATED$</em></p>
+            <section class="now-block now-block-wide">
+                <h2 class="now-section-title">Writing</h2>
+                <ul class="now-list">
+                    <li>At least one technical note a month. Latest is on the <a href="blog.html">notes page</a>.</li>
+                </ul>
+            </section>
         </div>
     </main>
 

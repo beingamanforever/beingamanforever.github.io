@@ -16,7 +16,8 @@ def slugify(text: str) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", required=True, help="grouped index fragment")
+    ap.add_argument("--cloud-out", required=False, help="tag cloud fragment")
     args = ap.parse_args()
 
     by_tag: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
@@ -31,6 +32,7 @@ def main() -> None:
         for tag in (t.strip() for t in tags.split(",") if t.strip()):
             by_tag[tag].append((slug, title, date))
 
+    # Grouped tag-section index
     out = []
     for tag in sorted(by_tag):
         posts = sorted(by_tag[tag], key=lambda p: p[2], reverse=True)
@@ -47,6 +49,30 @@ def main() -> None:
 
     with open(args.out, "w") as f:
         f.write("\n".join(out) + "\n")
+
+    # Tag cloud: each tag is a chip, font-size scales with post count.
+    if args.cloud_out:
+        if by_tag:
+            counts = {t: len(p) for t, p in by_tag.items()}
+            min_n, max_n = min(counts.values()), max(counts.values())
+            span = max_n - min_n or 1
+            cloud_lines = []
+            for tag in sorted(by_tag):
+                n = counts[tag]
+                # Font size 0.85rem -> 1.6rem across the count range.
+                size = 0.85 + 0.75 * ((n - min_n) / span)
+                weight = 400 + int(((n - min_n) / span) * 300)  # 400..700
+                href = f"tags.html#tag-{slugify(tag)}"
+                cloud_lines.append(
+                    f'                <a class="tag-cloud-item" href="{href}" '
+                    f'style="font-size:{size:.2f}rem; font-weight:{weight};">'
+                    f'#{html.escape(tag)}<span class="tag-cloud-count">{n}</span></a>'
+                )
+            cloud = "\n".join(cloud_lines) + "\n"
+        else:
+            cloud = '                <p class="tag-cloud-empty">No tags yet.</p>\n'
+        with open(args.cloud_out, "w") as f:
+            f.write(cloud)
 
 
 if __name__ == "__main__":

@@ -299,7 +299,15 @@ python3 scripts/render_projects.py \
 # ----------------------------------------------------------------------------
 # 4. Tag index
 # ----------------------------------------------------------------------------
-python3 scripts/render_tags.py --out "$BUILD_DIR/tags_index.html" < "$BUILD_DIR/posts.index"
+python3 scripts/render_tags.py \
+  --out "$BUILD_DIR/tags_index.html" \
+  --cloud-out "$BUILD_DIR/tags_cloud.html" \
+  < "$BUILD_DIR/posts.index"
+
+# ----------------------------------------------------------------------------
+# 4b. Graph data (notes + tags as nodes; bipartite post-tag edges)
+# ----------------------------------------------------------------------------
+python3 scripts/render_graph.py --out "$BUILD_DIR/graph_data.html" < "$BUILD_DIR/posts.index"
 
 # ----------------------------------------------------------------------------
 # 5. Render every page template
@@ -324,7 +332,9 @@ substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUI
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
+substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
 substitute_list "<!-- QUOTES_JSON -->"       "$BUILD_DIR/quotes_data.html"       "$BUILD_DIR/index.html"
+substitute_list "<!-- GRAPH_DATA -->"        "$BUILD_DIR/graph_data.html"        "$BUILD_DIR/blog.html"
 
 for out in index.html work.html contact.html blog.html tags.html now.html 404.html; do
   mv "$BUILD_DIR/$out" "$out"

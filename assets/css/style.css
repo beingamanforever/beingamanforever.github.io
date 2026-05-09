@@ -2720,6 +2720,446 @@ body.dark-mode .training-card {
     }
 }
 
+/* Graph panel embedded at the top of /blog.html: a bordered card containing
+ * a force-directed graph of notes + tags. */
+.graph-panel {
+    margin: 1.5rem 0 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at center, rgba(74, 107, 214, 0.05) 0%, transparent 60%),
+        rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .graph-panel {
+    background:
+        radial-gradient(ellipse at center, rgba(97, 175, 239, 0.06) 0%, transparent 65%),
+        rgba(42, 42, 42, 0.4);
+}
+
+.graph-panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.graph-panel-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.graph-panel-hint {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    opacity: 0.75;
+}
+
+.graph-stage {
+    position: relative;
+    height: 420px;
+    overflow: hidden;
+    cursor: grab;
+}
+
+.graph-stage.is-dragging-bg {
+    cursor: grabbing;
+}
+
+.graph-stage.is-dragging-node {
+    cursor: grabbing;
+}
+
+.graph-stage svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    user-select: none;
+}
+
+.graph-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-style: italic;
+    pointer-events: none;
+}
+
+.graph-empty[hidden] { display: none; }
+
+.graph-empty a {
+    color: var(--walter-green);
+    margin-left: 0.25rem;
+}
+
+.graph-link {
+    stroke: var(--border-color);
+    stroke-width: 1;
+    stroke-opacity: 0.55;
+    transition: stroke 0.2s ease, stroke-opacity 0.2s ease, stroke-width 0.2s ease;
+}
+
+.graph-link.is-dim {
+    stroke-opacity: 0.12;
+}
+
+.graph-link.is-active {
+    stroke: var(--walter-green);
+    stroke-opacity: 0.9;
+    stroke-width: 1.5;
+}
+
+.graph-node {
+    cursor: pointer;
+    transition: opacity 0.25s ease;
+}
+
+.graph-node-dot {
+    fill: var(--text-secondary);
+    fill-opacity: 0.7;
+    stroke: var(--text-primary);
+    stroke-opacity: 0;
+    stroke-width: 2;
+    transition:
+        fill 0.2s ease,
+        fill-opacity 0.2s ease,
+        stroke-opacity 0.2s ease,
+        r 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.graph-node-tag .graph-node-dot {
+    fill: var(--walter-green);
+    fill-opacity: 0.55;
+}
+
+.graph-node-label {
+    fill: var(--text-secondary);
+    font-family: var(--font-sans, inherit);
+    font-size: 11px;
+    font-weight: 500;
+    paint-order: stroke;
+    stroke: var(--bg-primary, #0a0a0a);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    pointer-events: none;
+    transition: fill 0.2s ease, font-size 0.2s ease;
+}
+
+.graph-node-tag .graph-node-label {
+    font-style: italic;
+    font-size: 10px;
+    opacity: 0.85;
+}
+
+.graph-stage.is-focused .graph-node.is-dim {
+    opacity: 0.18;
+}
+
+.graph-node.is-active .graph-node-dot {
+    fill: var(--walter-green);
+    fill-opacity: 1;
+    stroke-opacity: 0.4;
+}
+
+.graph-node.is-active .graph-node-label {
+    fill: var(--text-primary);
+    font-size: 12.5px;
+}
+
+.graph-node:hover .graph-node-dot {
+    fill-opacity: 1;
+}
+
+.graph-legend {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 1rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: rgba(20, 20, 20, 0.55);
+    backdrop-filter: blur(6px);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    pointer-events: none;
+}
+
+.graph-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.graph-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-secondary);
+}
+
+.graph-legend-tag {
+    background: var(--walter-green);
+    opacity: 0.7;
+}
+
+@media (max-width: 720px) {
+    .graph-stage {
+        height: 320px;
+    }
+    .graph-panel-hint {
+        display: none;
+    }
+    .graph-node-label {
+        font-size: 10px;
+    }
+}
+
+/* Hero status line: "Open to roles..." */
+.hero-status {
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    border-left: 2px solid var(--walter-green);
+    padding-left: 0.75rem;
+}
+
+.hero-status a {
+    color: var(--walter-green);
+    text-decoration: underline;
+    text-decoration-color: rgba(97, 175, 239, 0.4);
+    text-underline-offset: 3px;
+}
+
+.hero-status a:hover {
+    color: var(--text-primary);
+}
+
+/* Footer feedback line */
+.footer-feedback {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.footer-feedback a {
+    color: var(--walter-green);
+    text-decoration: underline;
+    text-decoration-color: rgba(97, 175, 239, 0.35);
+    text-underline-offset: 3px;
+}
+
+.footer-feedback a:hover {
+    color: var(--text-primary);
+}
+
+/* "Explore as a graph" secondary CTA */
+.view-all-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.btn-view-all-secondary {
+    color: var(--text-secondary) !important;
+}
+
+.btn-view-all-secondary:hover {
+    color: var(--text-primary) !important;
+}
+
+/* /now: two-column layout (Work / Training) + reading row beneath */
+.now-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.now-updated-badge {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: rgba(97, 175, 239, 0.08);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.now-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    margin: 2rem 0 0;
+}
+
+.now-grid .now-block {
+    margin: 0;
+    max-width: none;
+}
+
+.now-block-wide {
+    max-width: none;
+}
+
+@media (max-width: 820px) {
+    .now-grid {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+    }
+}
+
+/* Tag cloud at top of /tags.html */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.85rem;
+    align-items: baseline;
+    margin: 1.5rem 0 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    line-height: 1.6;
+}
+
+.tag-cloud-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+    transition: color 0.15s ease, border-bottom-color 0.15s ease;
+}
+
+.tag-cloud-item:hover {
+    color: var(--walter-green);
+    border-bottom-color: var(--walter-green);
+}
+
+.tag-cloud-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-left: 0.15rem;
+    font-weight: 400;
+}
+
+.tag-cloud-empty {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+/* Anchor links on H2/H3 inside .post-content */
+.post-content h2,
+.post-content h3 {
+    position: relative;
+    scroll-margin-top: 6rem;
+}
+
+.post-content h2 .heading-anchor,
+.post-content h3 .heading-anchor {
+    position: absolute;
+    left: -1.2rem;
+    top: 0;
+    color: var(--text-secondary);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease;
+    font-weight: 400;
+    user-select: none;
+}
+
+.post-content h2:hover .heading-anchor,
+.post-content h3:hover .heading-anchor,
+.post-content h2 .heading-anchor:focus,
+.post-content h3 .heading-anchor:focus {
+    opacity: 0.7;
+    color: var(--walter-green);
+}
+
+.post-content h2 .heading-anchor:hover,
+.post-content h3 .heading-anchor:hover {
+    opacity: 1;
+}
+
+/* Code block enhancements: language label + copy button */
+.post-content .code-block-wrapper {
+    position: relative;
+    margin: 1.25rem 0;
+}
+
+.post-content .code-block-wrapper pre {
+    margin: 0;
+}
+
+.code-block-toolbar {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.code-block-lang {
+    pointer-events: none;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    background: rgba(97, 175, 239, 0.12);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: lowercase;
+    letter-spacing: 0.04em;
+}
+
+.code-block-copy {
+    pointer-events: auto;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: rgba(20, 20, 20, 0.55);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.code-block-copy:hover {
+    color: var(--text-primary);
+    border-color: var(--walter-green);
+}
+
+.code-block-copy.is-copied {
+    color: var(--walter-green);
+    border-color: var(--walter-green);
+}
+
 /* ---------------------------------------------------------------------------
  * Tags page
  * ------------------------------------------------------------------------- */
