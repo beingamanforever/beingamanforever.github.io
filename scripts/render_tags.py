@@ -62,7 +62,7 @@ def main() -> None:
                 # Font size 0.85rem -> 1.6rem across the count range.
                 size = 0.85 + 0.75 * ((n - min_n) / span)
                 weight = 400 + int(((n - min_n) / span) * 300)  # 400..700
-                href = f"tags.html#tag-{slugify(tag)}"
+                href = f"blog.html#tag={slugify(tag)}"
                 cloud_lines.append(
                     f'                <a class="tag-cloud-item" href="{href}" '
                     f'style="font-size:{size:.2f}rem; font-weight:{weight};">'

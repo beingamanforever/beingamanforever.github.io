@@ -142,7 +142,9 @@ rfc822_date() {
 }
 
 post_meta() {
-  grep -m1 "^${2}:" "$1" | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+  # Optional metadata: missing keys produce empty strings (not a build failure
+  # under pipefail). Wraps grep in a subshell with `|| true`.
+  (grep -m1 "^${2}:" "$1" 2>/dev/null || true) | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
 }
 
 substitute_list() {
@@ -194,6 +196,8 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
   date=$(post_meta "$file" Date)
   desc=$(post_meta "$file" Desc)
   tags=$(post_meta "$file" Tags)
+  updated=$(post_meta "$file" Updated)
+  links=$(post_meta "$file" Links)
 
   output="$POSTS_OUT_DIR/$slug.html"
   body_md="$BUILD_DIR/${slug}.body.md"
@@ -219,6 +223,7 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --metadata=slug:"$slug" \
     --metadata=reading_time:"$rt" \
     --metadata=word_count:"$word_count" \
+    --metadata=updated:"$updated" \
     --highlight-style=tango
 
   # Per-post OG image (PNG; renderer falls back to SVG if Pillow is missing).
@@ -229,8 +234,8 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --site "${SITE_URL#https://}" \
     --out "$OG_DIR/$slug.png"
 
-  printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
-    "$slug" "$title" "$date" "$desc" "$tags" "$rt" >> "$BUILD_DIR/posts.index"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+    "$slug" "$title" "$date" "$desc" "$tags" "$rt" "$updated" "$links" >> "$BUILD_DIR/posts.index"
 done
 
 # ----------------------------------------------------------------------------
@@ -301,7 +306,8 @@ PYEOF
 python3 scripts/render_projects.py \
   --input data/projects.json \
   --featured-out "$BUILD_DIR/projects_featured.html" \
-  --all-out "$BUILD_DIR/projects_all.html"
+  --all-out "$BUILD_DIR/projects_all.html" \
+  --category-filter-out "$BUILD_DIR/projects_category_filter.html"
 
 # ----------------------------------------------------------------------------
 # 4. Tag index
@@ -312,16 +318,40 @@ python3 scripts/render_tags.py \
   < "$BUILD_DIR/posts.index"
 
 # ----------------------------------------------------------------------------
-# 4b. Graph data (notes + tags as nodes; bipartite post-tag edges)
+# 4b. Graph data (notes + tags as nodes; bipartite post-tag edges + explicit
+#     post-to-post edges from the Links: frontmatter field)
+#
+# Hide the panel entirely for very sparse graphs — with 1 or 2 posts the graph
+# reads as decorative noise, not a navigation aid. Threshold: 3 posts.
 # ----------------------------------------------------------------------------
-python3 scripts/render_graph.py --out "$BUILD_DIR/graph_data.html" < "$BUILD_DIR/posts.index"
+POST_COUNT=$(wc -l < "$BUILD_DIR/posts.index" | tr -d ' ')
+GRAPH_THRESHOLD=3
+GRAPH_PANEL_ENABLED=0
+if [ "$POST_COUNT" -ge "$GRAPH_THRESHOLD" ]; then
+  GRAPH_PANEL_ENABLED=1
+  python3 scripts/render_graph.py --out "$BUILD_DIR/graph_data.html" < "$BUILD_DIR/posts.index"
+fi
 
 # ----------------------------------------------------------------------------
 # 5. Render every page template
+#
+# tags.html is rendered conditionally — with very few posts the page reads as a
+# duplication bug (one post showing under multiple tags). The /blog.html tag
+# filter covers the same UX. Threshold: 5 posts.
 # ----------------------------------------------------------------------------
 
-for tmpl in index_template.html work_template.html contact_template.html \
-            blog_template.html tags_template.html now_template.html 404_template.html; do
+TAGS_THRESHOLD=5
+TAGS_PAGE_ENABLED=0
+if [ "$POST_COUNT" -ge "$TAGS_THRESHOLD" ]; then
+  TAGS_PAGE_ENABLED=1
+fi
+
+PAGE_TEMPLATES=(index_template.html work_template.html contact_template.html
+                blog_template.html now_template.html 404_template.html)
+if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+  PAGE_TEMPLATES+=(tags_template.html)
+fi
+for tmpl in "${PAGE_TEMPLATES[@]}"; do
   out="${tmpl%_template.html}.html"
   inject_partials < "$tmpl" | fill_vars "" > "$BUILD_DIR/$out"
 done
@@ -331,13 +361,108 @@ substitute_list "<!-- BLOG_LIST -->"      "$BUILD_DIR/blog_list.html"      "$BUI
 substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUILD_DIR/blog.html"
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
-substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
-substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
-substitute_list "<!-- GRAPH_DATA -->"        "$BUILD_DIR/graph_data.html"        "$BUILD_DIR/blog.html"
+substitute_list "<!-- PROJECT_CATEGORY_FILTER -->" "$BUILD_DIR/projects_category_filter.html" "$BUILD_DIR/work.html"
+if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+  substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
+  substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
+fi
+if [ "$GRAPH_PANEL_ENABLED" = "1" ]; then
+  cat > "$BUILD_DIR/graph_panel.html" <<'EOF'
+            <section class="graph-panel" aria-label="Graph view of notes and tags">
+                <header class="graph-panel-header">
+                    <h2 class="graph-panel-title">Graph view</h2>
+                    <span class="graph-panel-hint">drag · scroll to zoom · click a node to open</span>
+                </header>
+                <div class="graph-stage" id="graph-stage">
+                    <svg id="graph-svg" role="img" aria-label="Force-directed graph of notes and tags"></svg>
+                    <div class="graph-legend" aria-hidden="true">
+                        <span class="graph-legend-item"><span class="graph-legend-dot graph-legend-post"></span>Note</span>
+                        <span class="graph-legend-item"><span class="graph-legend-dot graph-legend-tag"></span>Tag</span>
+                    </div>
+                </div>
+                <script id="graph-data" type="application/json">
+GRAPH_DATA_PLACEHOLDER
+                </script>
+            </section>
+EOF
+  # Inline the JSON payload into the panel snippet, then drop the panel into blog.html.
+  python3 -c "
+import sys
+panel = open('$BUILD_DIR/graph_panel.html').read()
+data = open('$BUILD_DIR/graph_data.html').read()
+sys.stdout.write(panel.replace('GRAPH_DATA_PLACEHOLDER', data))
+" > "$BUILD_DIR/graph_panel.final.html"
+  substitute_list "<!-- GRAPH_PANEL -->"     "$BUILD_DIR/graph_panel.final.html" "$BUILD_DIR/blog.html"
+fi
 
-for out in index.html work.html contact.html blog.html tags.html now.html 404.html; do
+OUT_PAGES=(index.html work.html contact.html blog.html now.html 404.html)
+if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+  OUT_PAGES+=(tags.html)
+else
+  rm -f tags.html
+fi
+for out in "${OUT_PAGES[@]}"; do
   mv "$BUILD_DIR/$out" "$out"
 done
+
+# ----------------------------------------------------------------------------
+# 5b. Per-post Previous / Next navigation. posts.index is sorted newest-first
+#     (set 1.), so for index i: i+1 is older ("Previous"), i-1 is newer ("Next").
+# ----------------------------------------------------------------------------
+if [ "$POST_COUNT" -ge "2" ]; then
+  python3 - <<PYEOF
+import os, html, re
+
+build_dir = "$BUILD_DIR"
+posts_dir = "$POSTS_OUT_DIR"
+
+with open(os.path.join(build_dir, "posts.index")) as f:
+    rows = [line.rstrip("\n").split("\t") for line in f if line.strip()]
+
+# Each row: slug, title, date, desc, tags, rt, updated?, links?
+posts = [{"slug": r[0], "title": r[1], "date": r[2]} for r in rows if len(r) >= 3]
+
+def render_nav(prev_p, next_p):
+    if not prev_p and not next_p:
+        return ""
+    parts = ['            <nav class="post-nav" aria-label="Adjacent posts">']
+    if prev_p:
+        parts.append(
+            f'              <a class="post-nav-prev" href="{html.escape(prev_p["slug"])}.html">'
+            f'<span class="post-nav-label">← Older</span>'
+            f'<span class="post-nav-title">{html.escape(prev_p["title"])}</span></a>'
+        )
+    else:
+        parts.append('              <span></span>')
+    if next_p:
+        parts.append(
+            f'              <a class="post-nav-next" href="{html.escape(next_p["slug"])}.html">'
+            f'<span class="post-nav-label">Newer →</span>'
+            f'<span class="post-nav-title">{html.escape(next_p["title"])}</span></a>'
+        )
+    else:
+        parts.append('              <span></span>')
+    parts.append("            </nav>")
+    return "\n".join(parts) + "\n"
+
+for i, p in enumerate(posts):
+    older = posts[i + 1] if i + 1 < len(posts) else None
+    newer = posts[i - 1] if i - 1 >= 0 else None
+    nav_html = render_nav(older, newer)
+    path = os.path.join(posts_dir, f"{p['slug']}.html")
+    with open(path) as f:
+        body = f.read()
+    body = body.replace("<!-- POST_NAV -->", nav_html)
+    with open(path, "w") as f:
+        f.write(body)
+PYEOF
+else
+  # Single-post case: strip the marker so it does not leak into output.
+  for f in "$POSTS_OUT_DIR"/*.html; do
+    [ -f "$f" ] || continue
+    sed -i.bak 's|<!-- POST_NAV -->||' "$f" && rm -f "$f.bak"
+  done
+fi
 
 # ----------------------------------------------------------------------------
 # 6. sitemap.xml + feed.xml
@@ -346,7 +471,11 @@ done
 {
   printf '<?xml version="1.0" encoding="UTF-8"?>\n'
   printf '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-  for path in "" work.html blog.html tags.html now.html contact.html; do
+  SITEMAP_PATHS=("" work.html blog.html now.html contact.html)
+  if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+    SITEMAP_PATHS+=(tags.html)
+  fi
+  for path in "${SITEMAP_PATHS[@]}"; do
     printf '  <url><loc>%s/%s</loc></url>\n' "$SITE_URL" "$path"
   done
   while IFS=$'\t' read -r slug title date desc tags rt; do

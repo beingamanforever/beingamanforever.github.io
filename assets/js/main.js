@@ -16,52 +16,93 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Blog tag filter: click a sidebar button to show only matching post-cards.
-    // Hash-based deep links: /blog.html#tag=systems pre-selects that tag.
-    (function tagFilter() {
-        const buttons = document.querySelectorAll('.tag-filter-btn');
-        const cards = document.querySelectorAll('#blog-container .post-card');
+    // Generic sidebar filter — works for both /blog (data-tag, data-tags on posts)
+    // and /work (data-category on a single value per project). Hash-based deep
+    // links: /blog.html#tag=systems or /work.html#category=ml pre-selects.
+    (function sidebarFilter() {
+        const cfg = (() => {
+            if (document.querySelector('.tag-filter-btn[data-tag]')) {
+                return {
+                    btnAttr: 'data-tag',
+                    cardAttr: 'data-tags',
+                    multi: true,
+                    cardSel: '#blog-container .post-card',
+                    hashKey: 'tag',
+                };
+            }
+            if (document.querySelector('.tag-filter-btn[data-category]')) {
+                return {
+                    btnAttr: 'data-category',
+                    cardAttr: 'data-category',
+                    multi: false,
+                    cardSel: '.project-card',
+                    hashKey: 'category',
+                };
+            }
+            return null;
+        })();
+        if (!cfg) return;
+
+        const buttons = document.querySelectorAll(`.tag-filter-btn[${cfg.btnAttr}]`);
+        const cards = document.querySelectorAll(cfg.cardSel);
         const empty = document.querySelector('.blog-empty');
         if (buttons.length === 0 || cards.length === 0) return;
 
-        const apply = (tag) => {
+        const cardMatches = (card, value) => {
+            if (!value) return true;
+            if (cfg.multi) {
+                const csv = (card.getAttribute(cfg.cardAttr) || '').split(',').map((t) => t.trim()).filter(Boolean);
+                return csv.includes(value);
+            }
+            return (card.getAttribute(cfg.cardAttr) || '').trim() === value;
+        };
+
+        const apply = (value) => {
             let visible = 0;
             cards.forEach((card) => {
-                const cardTags = (card.getAttribute('data-tags') || '').split(',').map((t) => t.trim()).filter(Boolean);
-                const match = !tag || cardTags.includes(tag);
+                const match = cardMatches(card, value);
                 card.hidden = !match;
                 if (match) visible += 1;
             });
             if (empty) empty.hidden = visible !== 0;
-            buttons.forEach((b) => b.classList.toggle('is-active', (b.getAttribute('data-tag') || '') === tag));
+            buttons.forEach((b) => b.classList.toggle('is-active', (b.getAttribute(cfg.btnAttr) || '') === value));
         };
 
         buttons.forEach((btn) => {
             btn.addEventListener('click', () => {
-                const tag = btn.getAttribute('data-tag') || '';
-                if (tag) {
-                    history.replaceState(null, '', '#tag=' + encodeURIComponent(tag));
+                const value = btn.getAttribute(cfg.btnAttr) || '';
+                if (value) {
+                    history.replaceState(null, '', `#${cfg.hashKey}=` + encodeURIComponent(value));
                 } else {
                     history.replaceState(null, '', location.pathname + location.search);
                 }
-                apply(tag);
+                apply(value);
             });
         });
 
-        // Initial state from hash
-        const m = location.hash.match(/^#tag=(.+)$/);
-        const initial = m ? decodeURIComponent(m[1]) : '';
-        apply(initial);
+        const re = new RegExp(`^#${cfg.hashKey}=(.+)$`);
+        const m = location.hash.match(re);
+        apply(m ? decodeURIComponent(m[1]) : '');
     })();
 
-    // Reading progress: only on post pages. Width of fixed bar at the top
-    // tracks how far the reader has scrolled through the article body.
-    (function readingProgress() {
+    // Reading progress + back-to-top button: only on post pages.
+    // The progress bar tracks scroll position through .post-content.
+    // The back-to-top button appears once the reader is past 80% through.
+    (function postReadingAffordances() {
         const article = document.querySelector('.post-content');
         if (!article) return;
+
         const bar = document.createElement('div');
         bar.className = 'reading-progress';
         document.body.appendChild(bar);
+
+        const top = document.createElement('button');
+        top.type = 'button';
+        top.className = 'back-to-top';
+        top.setAttribute('aria-label', 'Back to top');
+        top.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>';
+        top.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        document.body.appendChild(top);
 
         let raf = 0;
         const update = () => {
@@ -71,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const scrolled = -rect.top;
             const pct = Math.max(0, Math.min(1, scrolled / total));
             bar.style.transform = `scaleX(${pct})`;
+            top.classList.toggle('is-visible', pct >= 0.8);
         };
         const schedule = () => {
             if (raf) return;

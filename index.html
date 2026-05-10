@@ -19,10 +19,10 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="assets/css/style.css?v=087b709" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=087b709">
+    <link rel="preload" href="assets/css/style.css?v=32cb169" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=32cb169">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=087b709" defer></script>
+    <script src="assets/js/main.js?v=32cb169" defer></script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -104,13 +104,6 @@
                             <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
                         Resume
-                    </a>
-                    <a href="mailto:aman%2Ebehera%2Esystems%40gmail%2Ecom" class="btn btn-secondary js-email" data-user="aman.behera.systems" data-domain="gmail.com">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        Email
                     </a>
                 </div>
             </div>
@@ -214,32 +207,41 @@
     <section id="work" class="section work-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Selected Work<span class="section-kicker" aria-hidden="true">0x10 :: Things I've built.</span></h2>
+                <h2 class="section-title">Currently Shipping<span class="section-kicker" aria-hidden="true">0x10 :: Active and recently shipped projects.</span></h2>
             </div>
             <div id="projects-container">
-                <article class="project-card">
+                <article class="project-card" data-category="systems" data-status="building">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/CSV-Parsing-Engine" class="project-title-link" target="_blank" rel="noopener noreferrer">Zero-copy CSV Ingestion Engine</a></h3>
-                        <span class="project-stars">WIP</span>
+                        <span class="project-status status-building" title="Project status: building">building</span>
                     </div>
                     <p class="project-description">Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.</p>
-                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">parsing</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">parsing</span></div>
+                        <span class="project-signal">WIP</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="systems" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/zeroshred" class="project-title-link" target="_blank" rel="noopener noreferrer">ZeroShred</a></h3>
-                        <span class="project-stars">780 MB/s</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">High-throughput file transfer hitting 780 MB/s via kernel-level zero-copy (sendfile), pipelined SHA-256 on dedicated threads, and hardware crypto acceleration.</p>
-                    <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">systems</span><span class="project-tag">networking</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">systems</span><span class="project-tag">networking</span></div>
+                        <span class="project-signal">780 MB/s</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="systems" data-status="building">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">GNU Octave (GSoC 2026)</a></h3>
-                        <span class="project-stars">active</span>
+                        <span class="project-status status-building" title="Project status: building">building</span>
                     </div>
                     <p class="project-description">Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.</p>
-                    <div class="project-tags"><span class="project-tag">Octave</span><span class="project-tag">numerics</span><span class="project-tag">GSoC</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">Octave</span><span class="project-tag">numerics</span><span class="project-tag">GSoC</span></div>
+                        <span class="project-signal">GSoC &#x27;26</span>
+                    </div>
                 </article>
             </div>
             <div class="view-all-container">

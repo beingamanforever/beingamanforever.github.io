@@ -21,10 +21,10 @@
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="../feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="../assets/css/style.css?v=087b709" as="style">
-    <link rel="stylesheet" href="../assets/css/style.css?v=087b709">
+    <link rel="preload" href="../assets/css/style.css?v=32cb169" as="style">
+    <link rel="stylesheet" href="../assets/css/style.css?v=32cb169">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="../assets/js/main.js?v=087b709" defer></script>
+    <script src="../assets/js/main.js?v=32cb169" defer></script>
     <style>
 html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -151,7 +151,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
             <nav class="post-breadcrumbs" aria-label="Breadcrumb">
                 <a href="../blog.html">Notes</a>
                 <span class="post-breadcrumb-sep">/</span>
-                <a href="../tags.html#tag-systems">systems</a>
+                <a href="../blog.html#tag=systems">systems</a>
                 <span class="post-breadcrumb-sep">/</span>
                 <span class="post-breadcrumb-current" aria-current="page">SWAR Parsing Internals</span>
             </nav>
@@ -205,6 +205,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>The wins compound when you have multiple things to look for in the same byte: a CSV scanner cares about <code>,</code>, <code>\n</code>, <code>"</code>, and <code>\\</code> simultaneously. With SWAR you compute four masks in parallel, OR them, and find the next “interesting” byte in a single <code>ctz</code>. The common case — long runs of uninteresting bytes — costs you a load and a handful of integer ops per eight bytes.</p>
 <p>I’ll get into the column-store ingestion path next, where we feed a SWAR scanner directly into a typed-column writer with no intermediate copy. That’s where SWAR stops being a clever trick and starts being the load-bearing part of the design.</p>
             </div>
+
         </article>
     </main>
 

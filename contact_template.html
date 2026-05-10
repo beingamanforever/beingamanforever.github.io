@@ -21,26 +21,14 @@
                 <p class="page-subtitle">Email is best. I usually respond within 24–48 hours.</p>
 
                 <h2 class="contact-section-title">Channels</h2>
-                <ul class="env-list">
-                    <li>
-                        <div class="cmd-block">
-                            <pre><a href="https://github.com/$SITE_GITHUB$" target="_blank" rel="noopener noreferrer" class="env-cmd-link">export GITHUB="@$SITE_GITHUB$"</a></pre>
-                            <button type="button" class="copy-btn copy-btn--small cmd-copy" data-copy-text="@$SITE_GITHUB$">Copy</button>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="cmd-block">
-                            <pre><a href="mailto:$SITE_EMAIL$" class="env-cmd-link">export EMAIL="$SITE_EMAIL$"</a></pre>
-                            <button type="button" class="copy-btn copy-btn--small cmd-copy" data-copy-text="$SITE_EMAIL$">Copy</button>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="cmd-block">
-                            <pre><a href="https://www.linkedin.com/in/$SITE_LINKEDIN$/" target="_blank" rel="noopener noreferrer" class="env-cmd-link">export LINKEDIN="$SITE_LINKEDIN$"</a></pre>
-                            <button type="button" class="copy-btn copy-btn--small cmd-copy" data-copy-text="$SITE_LINKEDIN$">Copy</button>
-                        </div>
-                    </li>
-                </ul>
+                <div class="contact-env">
+                    <pre class="contact-env-pre"><span class="contact-env-line"><span class="contact-env-key">export GITHUB=</span><a href="https://github.com/$SITE_GITHUB$" target="_blank" rel="noopener noreferrer" class="env-cmd-link">"@$SITE_GITHUB$"</a></span>
+<span class="contact-env-line"><span class="contact-env-key">export EMAIL=</span><a href="mailto:$SITE_EMAIL$" class="env-cmd-link">"$SITE_EMAIL$"</a></span>
+<span class="contact-env-line"><span class="contact-env-key">export LINKEDIN=</span><a href="https://www.linkedin.com/in/$SITE_LINKEDIN$/" target="_blank" rel="noopener noreferrer" class="env-cmd-link">"$SITE_LINKEDIN$"</a></span></pre>
+                    <button type="button" class="copy-btn copy-btn--small contact-env-copy" data-copy-text='export GITHUB="@$SITE_GITHUB$"
+export EMAIL="$SITE_EMAIL$"
+export LINKEDIN="$SITE_LINKEDIN$"'>Copy all</button>
+                </div>
             </div>
         </div>
     </section>

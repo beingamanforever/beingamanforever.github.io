@@ -846,15 +846,61 @@ body.dark-mode .project-card {
     color: var(--walter-green);
 }
 
-.project-stars {
-    font-size: 0.8rem;
-    color: rgba(102, 102, 102, 0.9);
-    font-weight: 400;
+/* Status pill on project card header — green/blue/yellow/gray by status enum. */
+.project-status {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
     white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.project-status.status-building {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.45);
+    background: rgba(74, 222, 128, 0.08);
+}
+
+.project-status.status-shipped {
+    color: var(--walter-green);
+    border-color: rgba(97, 175, 239, 0.45);
+    background: rgba(97, 175, 239, 0.08);
+}
+
+.project-status.status-planning {
+    color: #fcd34d;
+    border-color: rgba(252, 211, 77, 0.4);
+    background: rgba(252, 211, 77, 0.07);
+}
+
+.project-status.status-dormant {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.project-footer {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.project-signal {
     font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    opacity: 0.75;
+    padding: 0.15rem 0.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: 3px;
+    white-space: nowrap;
 }
 
 .project-description {
@@ -868,8 +914,7 @@ body.dark-mode .project-card {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 0.75rem;
-    margin-bottom: 0.75rem;
+    margin: 0;
     font-family: var(--font-mono);
     font-size: 0.85rem;
     color: rgba(136, 136, 136, 0.9);
@@ -894,46 +939,8 @@ body.dark-mode .project-card {
     color: rgba(68, 68, 68, 0.6);
 }
 
-/* Monospaced log-style project block */
-.project-log {
-    font-family: var(--font-mono);
-    background: transparent;
-    color: var(--text-primary);
-    border-radius: 4px;
-    padding: 0.6rem 0.75rem;
-    line-height: 1.45;
-    white-space: pre-wrap;
-    font-size: 0.95rem;
-    margin-bottom: 1.25rem;
-    border-left: 2px solid rgba(107,140,255,0.12);
-}
-
-.project-log a { color: var(--walter-green); text-decoration: none; }
-
-.project-log .meta { color: rgba(160,160,170,0.9); font-family: inherit; }
-
 .project-tag:hover {
     color: var(--text-primary);
-}
-
-.project-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 400;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-bottom: 1px solid rgba(51, 51, 51, 0.4);
-    transition: all 0.2s ease;
-    padding-bottom: 2px;
-}
-
-.project-link:hover {
-    border-color: var(--walter-green);
-    color: var(--walter-green);
-    gap: 0.75rem;
 }
 
 /* GitHub */
@@ -2503,6 +2510,59 @@ body.dark-mode .graph-panel {
     .project-card::after { display: none; }
 }
 
+/* Collapsed contact env block: three exports in one pre + one Copy button. */
+.contact-env {
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 1rem 1.1rem;
+    margin: 1rem 0 2rem;
+}
+
+body.dark-mode .contact-env {
+    background: rgba(42, 42, 42, 0.4);
+}
+
+.contact-env-pre {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.contact-env-line {
+    display: block;
+}
+
+.contact-env-key {
+    color: var(--text-secondary);
+    opacity: 0.85;
+}
+
+.contact-env-pre .env-cmd-link {
+    color: var(--walter-green);
+    text-decoration: none;
+    border-bottom: 1px dashed transparent;
+    transition: border-bottom-color 0.15s ease;
+}
+
+.contact-env-pre .env-cmd-link:hover {
+    border-bottom-color: var(--walter-green);
+}
+
+.contact-env-copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+}
+
 /* Reading progress bar: thin line fixed at the top of post pages,
  * width tracks scroll position through the article body. */
 .reading-progress {
@@ -2523,6 +2583,111 @@ body.dark-mode .graph-panel {
     .reading-progress {
         transition: none;
     }
+}
+
+/* Back-to-top: appears once the reader is past 80% of the article body. */
+.back-to-top {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: rgba(20, 20, 20, 0.7);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 90;
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.back-to-top.is-visible {
+    opacity: 0.85;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.back-to-top:hover {
+    opacity: 1;
+    border-color: var(--walter-green);
+    color: var(--walter-green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .back-to-top { transition: none; }
+}
+
+/* Post meta: optional "Updated <date>" label */
+.post-meta-updated {
+    color: var(--walter-green);
+    opacity: 0.85;
+}
+
+/* Adjacent-post navigation at the bottom of a post. */
+.post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 3rem 0 0;
+    padding: 1.25rem 0 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-nav a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.4);
+    transition: border-color 0.18s ease, transform 0.18s ease;
+    min-width: 0;
+}
+
+body.dark-mode .post-nav a {
+    background: rgba(42, 42, 42, 0.4);
+}
+
+.post-nav a:hover {
+    border-color: var(--walter-green);
+    transform: translateY(-1px);
+}
+
+.post-nav-next {
+    text-align: right;
+}
+
+.post-nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.post-nav-title {
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+@media (max-width: 600px) {
+    .post-nav { grid-template-columns: 1fr; }
+    .post-nav-next { text-align: left; }
 }
 
 /* ---------------------------------------------------------------------------
