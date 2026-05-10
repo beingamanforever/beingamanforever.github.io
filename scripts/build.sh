@@ -37,16 +37,12 @@ SITE_GITHUB="$(read_cfg github)"
 SITE_LINKEDIN="$(read_cfg linkedin)"
 SITE_OG_IMAGE="$(read_cfg og_image)"
 
-# Pick an SSR fallback quote for the hero, AND emit the full quote list as JSON
-# for main.js to re-randomise on every page load.
-eval "$(python3 -c "
-import json, random, shlex
-data = json.load(open('data/site.json'))['quotes']
-q = random.choice(data)
-print('QUOTE_TEXT=' + shlex.quote(q['text']))
-print('QUOTE_AUTHOR=' + shlex.quote(q['author']))
-print('QUOTES_JSON=' + shlex.quote(json.dumps(data, ensure_ascii=False)))
-")"
+# Percent-encoded mailto target so the link works without JS while not exposing
+# a raw "@" character to the simplest email scrapers. Browsers decode "%40"/"%2E"
+# transparently. main.js (.js-email handler) replaces the href with the plain
+# form at runtime. Percent-encoding (vs HTML entities) avoids awk gsub's special
+# treatment of "&" in replacement strings.
+SITE_EMAIL_HTMLENT=$(printf '%s' "$SITE_EMAIL" | python3 -c "import sys; s=sys.stdin.read().strip(); print(''.join(f'%{ord(c):02X}' if c in '.@' else c for c in s))")
 
 YEAR="$(date +%Y)"
 NOW_UPDATED="$(date +'%B %Y')"
@@ -84,11 +80,10 @@ fill_vars() {
       -v site_email="$SITE_EMAIL" \
       -v site_email_user="$SITE_EMAIL_USER" \
       -v site_email_domain="$SITE_EMAIL_DOMAIN" \
+      -v site_email_htment="$SITE_EMAIL_HTMLENT" \
       -v site_github="$SITE_GITHUB" \
       -v site_linkedin="$SITE_LINKEDIN" \
       -v site_og_image="$SITE_OG_IMAGE" \
-      -v quote_text="$QUOTE_TEXT" \
-      -v quote_author="$QUOTE_AUTHOR" \
       -v now_updated="$NOW_UPDATED" '
     {
       gsub(/\$YEAR\$/, year)
@@ -102,11 +97,10 @@ fill_vars() {
       gsub(/\$SITE_EMAIL\$/, site_email)
       gsub(/\$SITE_EMAIL_USER\$/, site_email_user)
       gsub(/\$SITE_EMAIL_DOMAIN\$/, site_email_domain)
+      gsub(/\$SITE_EMAIL_HTMENT\$/, site_email_htment)
       gsub(/\$SITE_GITHUB\$/, site_github)
       gsub(/\$SITE_LINKEDIN\$/, site_linkedin)
       gsub(/\$SITE_OG_IMAGE\$/, site_og_image)
-      gsub(/\$QUOTE_TEXT\$/, quote_text)
-      gsub(/\$QUOTE_AUTHOR\$/, quote_author)
       gsub(/\$NOW_UPDATED\$/, now_updated)
       print
     }
@@ -147,8 +141,15 @@ rfc822_date() {
   else date -d "$1" +"%a, %d %b %Y 00:00:00 +0000"; fi
 }
 
+iso8601_date() {
+  if date -j -f "%Y-%m-%d" "$1" +"%Y-%m-%dT00:00:00Z" 2>/dev/null; then :;
+  else date -d "$1" +"%Y-%m-%dT00:00:00Z"; fi
+}
+
 post_meta() {
-  grep -m1 "^${2}:" "$1" | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
+  # Optional metadata: missing keys produce empty strings (not a build failure
+  # under pipefail). Wraps grep in a subshell with `|| true`.
+  (grep -m1 "^${2}:" "$1" 2>/dev/null || true) | cut -d':' -f2- | sed 's/^[[:space:]]*//;s/[[:space:]]*$//'
 }
 
 substitute_list() {
@@ -184,6 +185,54 @@ else
 fi
 
 # ----------------------------------------------------------------------------
+# Cache the user's most recent merged PRs from GitHub. Best-effort: skip on
+# failure and reuse last cached payload (or write a tiny placeholder).
+# ----------------------------------------------------------------------------
+mkdir -p assets/data
+PRS_CACHE="assets/data/recent-prs.json"
+PRS_QUERY="is:pr+author:$SITE_GITHUB+is:merged"
+PRS_URL="https://api.github.com/search/issues?q=${PRS_QUERY}&sort=updated&order=desc&per_page=5"
+if [ -n "${GH_TOKEN:-}" ]; then
+  pr_curl_ok=$(curl -fsSL --max-time 6 \
+    -H 'Accept: application/vnd.github+json' \
+    -H 'X-GitHub-Api-Version: 2022-11-28' \
+    -H "Authorization: Bearer $GH_TOKEN" \
+    "$PRS_URL" -o "$PRS_CACHE.tmp" 2>/dev/null && echo y || echo n)
+else
+  pr_curl_ok=$(curl -fsSL --max-time 6 \
+    -H 'Accept: application/vnd.github+json' \
+    -H 'X-GitHub-Api-Version: 2022-11-28' \
+    "$PRS_URL" -o "$PRS_CACHE.tmp" 2>/dev/null && echo y || echo n)
+fi
+if [ "$pr_curl_ok" = "y" ]; then
+  # Slim the payload to just the fields we render.
+  python3 -c "
+import json, sys
+data = json.load(open('$PRS_CACHE.tmp'))
+items = data.get('items', [])[:5]
+out = [
+  {
+    'title': it['title'],
+    'url': it['html_url'],
+    'repo': '/'.join(it['repository_url'].split('/')[-2:]),
+    'merged_at': it.get('closed_at') or it.get('updated_at'),
+    'number': it['number'],
+  }
+  for it in items
+]
+json.dump(out, open('$PRS_CACHE', 'w'), ensure_ascii=False)
+"
+  rm -f "$PRS_CACHE.tmp"
+  echo "✓ Recent PRs cached → $PRS_CACHE"
+elif [ ! -f "$PRS_CACHE" ]; then
+  echo "[]" > "$PRS_CACHE"
+  echo "⚠ PR fetch failed; empty placeholder → $PRS_CACHE"
+else
+  rm -f "$PRS_CACHE.tmp"
+  echo "⚠ PR fetch failed; using cached copy → $PRS_CACHE"
+fi
+
+# ----------------------------------------------------------------------------
 # 1. Build per-post HTML and gather post metadata; generate per-post OG images.
 # ----------------------------------------------------------------------------
 
@@ -200,6 +249,8 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
   date=$(post_meta "$file" Date)
   desc=$(post_meta "$file" Desc)
   tags=$(post_meta "$file" Tags)
+  updated=$(post_meta "$file" Updated)
+  links=$(post_meta "$file" Links)
 
   output="$POSTS_OUT_DIR/$slug.html"
   body_md="$BUILD_DIR/${slug}.body.md"
@@ -225,6 +276,7 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --metadata=slug:"$slug" \
     --metadata=reading_time:"$rt" \
     --metadata=word_count:"$word_count" \
+    --metadata=updated:"$updated" \
     --highlight-style=tango
 
   # Per-post OG image (PNG; renderer falls back to SVG if Pillow is missing).
@@ -235,8 +287,8 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     --site "${SITE_URL#https://}" \
     --out "$OG_DIR/$slug.png"
 
-  printf '%s\t%s\t%s\t%s\t%s\t%s\n' \
-    "$slug" "$title" "$date" "$desc" "$tags" "$rt" >> "$BUILD_DIR/posts.index"
+  printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+    "$slug" "$title" "$date" "$desc" "$tags" "$rt" "$updated" "$links" >> "$BUILD_DIR/posts.index"
 done
 
 # ----------------------------------------------------------------------------
@@ -307,7 +359,33 @@ PYEOF
 python3 scripts/render_projects.py \
   --input data/projects.json \
   --featured-out "$BUILD_DIR/projects_featured.html" \
-  --all-out "$BUILD_DIR/projects_all.html"
+  --all-out "$BUILD_DIR/projects_all.html" \
+  --category-filter-out "$BUILD_DIR/projects_category_filter.html"
+
+# Render the recent-PRs widget (read from the cached JSON).
+python3 - <<'PYEOF' > "$BUILD_DIR/recent_prs.html"
+import json, html, os
+try:
+    items = json.load(open('assets/data/recent-prs.json'))
+except Exception:
+    items = []
+if not items:
+    print('                <p class="recent-prs-empty">No recent PRs yet.</p>')
+else:
+    print('                <ul class="recent-prs-list">')
+    for it in items[:5]:
+        date = (it.get('merged_at') or '')[:10]
+        title = html.escape(it.get('title', '')[:90])
+        repo  = html.escape(it.get('repo', ''))
+        url   = html.escape(it.get('url', '#'), quote=True)
+        num   = html.escape(str(it.get('number', '')))
+        print(f'                    <li class="recent-pr">'
+              f'<a class="recent-pr-link" href="{url}" target="_blank" rel="noopener noreferrer">'
+              f'<span class="recent-pr-repo">{repo}</span>'
+              f'<span class="recent-pr-title">{title}</span>'
+              f'<span class="recent-pr-meta">#{num} · {date}</span></a></li>')
+    print('                </ul>')
+PYEOF
 
 # ----------------------------------------------------------------------------
 # 4. Tag index
@@ -318,40 +396,158 @@ python3 scripts/render_tags.py \
   < "$BUILD_DIR/posts.index"
 
 # ----------------------------------------------------------------------------
-# 4b. Graph data (notes + tags as nodes; bipartite post-tag edges)
+# 4c. Search index for /blog client-side search.
 # ----------------------------------------------------------------------------
-python3 scripts/render_graph.py --out "$BUILD_DIR/graph_data.html" < "$BUILD_DIR/posts.index"
+mkdir -p assets/data
+python3 scripts/render_search.py --out assets/data/search-index.json < "$BUILD_DIR/posts.index"
+
+# ----------------------------------------------------------------------------
+# 4b. Graph data (notes + tags as nodes; bipartite post-tag edges + explicit
+#     post-to-post edges from the Links: frontmatter field)
+#
+# Hide the panel entirely for very sparse graphs — with 1 or 2 posts the graph
+# reads as decorative noise, not a navigation aid. Threshold: 3 posts.
+# ----------------------------------------------------------------------------
+POST_COUNT=$(wc -l < "$BUILD_DIR/posts.index" | tr -d ' ')
+GRAPH_THRESHOLD=3
+GRAPH_PANEL_ENABLED=0
+if [ "$POST_COUNT" -ge "$GRAPH_THRESHOLD" ]; then
+  GRAPH_PANEL_ENABLED=1
+  python3 scripts/render_graph.py --out "$BUILD_DIR/graph_data.html" < "$BUILD_DIR/posts.index"
+fi
 
 # ----------------------------------------------------------------------------
 # 5. Render every page template
+#
+# tags.html is rendered conditionally — with very few posts the page reads as a
+# duplication bug (one post showing under multiple tags). The /blog.html tag
+# filter covers the same UX. Threshold: 5 posts.
 # ----------------------------------------------------------------------------
 
-for tmpl in index_template.html work_template.html contact_template.html \
-            blog_template.html tags_template.html now_template.html 404_template.html; do
+TAGS_THRESHOLD=5
+TAGS_PAGE_ENABLED=0
+if [ "$POST_COUNT" -ge "$TAGS_THRESHOLD" ]; then
+  TAGS_PAGE_ENABLED=1
+fi
+
+PAGE_TEMPLATES=(index_template.html work_template.html contact_template.html
+                blog_template.html now_template.html 404_template.html)
+if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+  PAGE_TEMPLATES+=(tags_template.html)
+fi
+for tmpl in "${PAGE_TEMPLATES[@]}"; do
   out="${tmpl%_template.html}.html"
   inject_partials < "$tmpl" | fill_vars "" > "$BUILD_DIR/$out"
 done
-
-# Quotes JSON (full list) for client-side hero rotation on every page load.
-python3 -c "
-import json
-data = json.load(open('data/site.json'))['quotes']
-print(json.dumps(data, ensure_ascii=False))
-" > "$BUILD_DIR/quotes_data.html"
 
 substitute_list "<!-- BLOG_LIST_HOME -->" "$BUILD_DIR/blog_list_home.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- BLOG_LIST -->"      "$BUILD_DIR/blog_list.html"      "$BUILD_DIR/blog.html"
 substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUILD_DIR/blog.html"
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
-substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
-substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
-substitute_list "<!-- QUOTES_JSON -->"       "$BUILD_DIR/quotes_data.html"       "$BUILD_DIR/index.html"
-substitute_list "<!-- GRAPH_DATA -->"        "$BUILD_DIR/graph_data.html"        "$BUILD_DIR/blog.html"
+substitute_list "<!-- PROJECT_CATEGORY_FILTER -->" "$BUILD_DIR/projects_category_filter.html" "$BUILD_DIR/work.html"
+substitute_list "<!-- RECENT_PRS -->"        "$BUILD_DIR/recent_prs.html"        "$BUILD_DIR/work.html"
+if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+  substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
+  substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
+fi
+if [ "$GRAPH_PANEL_ENABLED" = "1" ]; then
+  cat > "$BUILD_DIR/graph_panel.html" <<'EOF'
+            <section class="graph-panel" aria-label="Graph view of notes and tags">
+                <header class="graph-panel-header">
+                    <h2 class="graph-panel-title">Graph view</h2>
+                    <span class="graph-panel-hint">drag · scroll to zoom · click a node to open</span>
+                </header>
+                <div class="graph-stage" id="graph-stage">
+                    <svg id="graph-svg" role="img" aria-label="Force-directed graph of notes and tags"></svg>
+                    <div class="graph-legend" aria-hidden="true">
+                        <span class="graph-legend-item"><span class="graph-legend-dot graph-legend-post"></span>Note</span>
+                        <span class="graph-legend-item"><span class="graph-legend-dot graph-legend-tag"></span>Tag</span>
+                    </div>
+                </div>
+                <script id="graph-data" type="application/json">
+GRAPH_DATA_PLACEHOLDER
+                </script>
+            </section>
+EOF
+  # Inline the JSON payload into the panel snippet, then drop the panel into blog.html.
+  python3 -c "
+import sys
+panel = open('$BUILD_DIR/graph_panel.html').read()
+data = open('$BUILD_DIR/graph_data.html').read()
+sys.stdout.write(panel.replace('GRAPH_DATA_PLACEHOLDER', data))
+" > "$BUILD_DIR/graph_panel.final.html"
+  substitute_list "<!-- GRAPH_PANEL -->"     "$BUILD_DIR/graph_panel.final.html" "$BUILD_DIR/blog.html"
+fi
 
-for out in index.html work.html contact.html blog.html tags.html now.html 404.html; do
+OUT_PAGES=(index.html work.html contact.html blog.html now.html 404.html)
+if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+  OUT_PAGES+=(tags.html)
+else
+  rm -f tags.html
+fi
+for out in "${OUT_PAGES[@]}"; do
   mv "$BUILD_DIR/$out" "$out"
 done
+
+# ----------------------------------------------------------------------------
+# 5b. Per-post Previous / Next navigation. posts.index is sorted newest-first
+#     (set 1.), so for index i: i+1 is older ("Previous"), i-1 is newer ("Next").
+# ----------------------------------------------------------------------------
+if [ "$POST_COUNT" -ge "2" ]; then
+  python3 - <<PYEOF
+import os, html, re
+
+build_dir = "$BUILD_DIR"
+posts_dir = "$POSTS_OUT_DIR"
+
+with open(os.path.join(build_dir, "posts.index")) as f:
+    rows = [line.rstrip("\n").split("\t") for line in f if line.strip()]
+
+# Each row: slug, title, date, desc, tags, rt, updated?, links?
+posts = [{"slug": r[0], "title": r[1], "date": r[2]} for r in rows if len(r) >= 3]
+
+def render_nav(prev_p, next_p):
+    if not prev_p and not next_p:
+        return ""
+    parts = ['            <nav class="post-nav" aria-label="Adjacent posts">']
+    if prev_p:
+        parts.append(
+            f'              <a class="post-nav-prev" href="{html.escape(prev_p["slug"])}.html">'
+            f'<span class="post-nav-label">← Older</span>'
+            f'<span class="post-nav-title">{html.escape(prev_p["title"])}</span></a>'
+        )
+    else:
+        parts.append('              <span></span>')
+    if next_p:
+        parts.append(
+            f'              <a class="post-nav-next" href="{html.escape(next_p["slug"])}.html">'
+            f'<span class="post-nav-label">Newer →</span>'
+            f'<span class="post-nav-title">{html.escape(next_p["title"])}</span></a>'
+        )
+    else:
+        parts.append('              <span></span>')
+    parts.append("            </nav>")
+    return "\n".join(parts) + "\n"
+
+for i, p in enumerate(posts):
+    older = posts[i + 1] if i + 1 < len(posts) else None
+    newer = posts[i - 1] if i - 1 >= 0 else None
+    nav_html = render_nav(older, newer)
+    path = os.path.join(posts_dir, f"{p['slug']}.html")
+    with open(path) as f:
+        body = f.read()
+    body = body.replace("<!-- POST_NAV -->", nav_html)
+    with open(path, "w") as f:
+        f.write(body)
+PYEOF
+else
+  # Single-post case: strip the marker so it does not leak into output.
+  for f in "$POSTS_OUT_DIR"/*.html; do
+    [ -f "$f" ] || continue
+    sed -i.bak 's|<!-- POST_NAV -->||' "$f" && rm -f "$f.bak"
+  done
+fi
 
 # ----------------------------------------------------------------------------
 # 6. sitemap.xml + feed.xml
@@ -360,7 +556,11 @@ done
 {
   printf '<?xml version="1.0" encoding="UTF-8"?>\n'
   printf '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-  for path in "" work.html blog.html tags.html now.html contact.html; do
+  SITEMAP_PATHS=("" work.html blog.html now.html contact.html)
+  if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
+    SITEMAP_PATHS+=(tags.html)
+  fi
+  for path in "${SITEMAP_PATHS[@]}"; do
     printf '  <url><loc>%s/%s</loc></url>\n' "$SITE_URL" "$path"
   done
   while IFS=$'\t' read -r slug title date desc tags rt; do
@@ -400,5 +600,40 @@ EOF
   printf '</rss>\n'
 } > feed.xml
 
+# Atom feed (modern feed readers prefer atom; we ship both).
+last_build_iso=$(iso8601_date "$(date +%Y-%m-%d)")
+{
+  printf '<?xml version="1.0" encoding="UTF-8"?>\n'
+  printf '<feed xmlns="http://www.w3.org/2005/Atom">\n'
+  printf '  <title>%s</title>\n' "$SITE_TITLE"
+  printf '  <link rel="alternate" type="text/html" href="%s/"/>\n' "$SITE_URL"
+  printf '  <link rel="self" type="application/atom+xml" href="%s/feed.atom"/>\n' "$SITE_URL"
+  printf '  <id>%s/</id>\n' "$SITE_URL"
+  printf '  <subtitle>%s</subtitle>\n' "$SITE_DESC"
+  printf '  <updated>%s</updated>\n' "$last_build_iso"
+  printf '  <author><name>%s</name><email>%s</email></author>\n' "$SITE_NAME" "$SITE_EMAIL"
+  while IFS=$'\t' read -r slug title date desc tags rt updated links; do
+    iso=$(iso8601_date "$date")
+    cat <<EOF
+  <entry>
+    <title>$title</title>
+    <link rel="alternate" type="text/html" href="$SITE_URL/posts/$slug.html"/>
+    <id>$SITE_URL/posts/$slug.html</id>
+    <published>$iso</published>
+    <updated>$iso</updated>
+    <summary>$desc</summary>
+EOF
+    # Per-tag <category> elements
+    if [ -n "$tags" ]; then
+      printf '%s' "$tags" | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | while read -r tag; do
+        [ -z "$tag" ] && continue
+        printf '    <category term="%s"/>\n' "$tag"
+      done
+    fi
+    printf '  </entry>\n'
+  done < "$BUILD_DIR/posts.index"
+  printf '</feed>\n'
+} > feed.atom
+
 n=$(wc -l < "$BUILD_DIR/posts.index" | tr -d ' ')
-echo "✓ Built $n post(s); pages, sitemap, feed, OG images, tag index regenerated."
+echo "✓ Built $n post(s); pages, sitemap, feed (rss + atom), OG images, tag index regenerated."

@@ -17,9 +17,27 @@
     <section class="work-page">
         <div class="container">
             <h1 class="page-title">All Projects</h1>
-            <p class="page-subtitle">A collection of things that I am proud of.</p>
-            <div id="all-projects-container">
+            <p class="page-subtitle">A collection of things I have shipped, am building, or am still poking at.</p>
+
+            <section class="recent-prs" aria-label="Recent merged GitHub PRs">
+                <header class="recent-prs-header">
+                    <h2 class="recent-prs-title">Recent merged PRs</h2>
+                    <a class="recent-prs-link" href="https://github.com/$SITE_GITHUB$?tab=overview" target="_blank" rel="noopener noreferrer">GitHub →</a>
+                </header>
+<!-- RECENT_PRS -->
+            </section>
+
+            <div class="blog-layout">
+                <aside class="tag-filter" aria-label="Filter projects by category">
+                    <h2 class="tag-filter-heading">Filter by category</h2>
+                    <div class="tag-filter-list" role="group">
+<!-- PROJECT_CATEGORY_FILTER -->
+                    </div>
+                </aside>
+                <div id="all-projects-container">
 <!-- PROJECTS_ALL -->
+                    <p class="blog-empty" hidden>No projects in this category yet.</p>
+                </div>
             </div>
         </div>
     </section>

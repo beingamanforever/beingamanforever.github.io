@@ -7,47 +7,5 @@
   "email": "aman.behera.systems@gmail.com",
   "github": "beingamanforever",
   "linkedin": "aman-behera-",
-  "og_image": "https://beingamanforever.github.io/assets/og-home.png",
-  "quotes": [
-    {
-      "text": "You can't trust code that you did not totally create yourself.",
-      "author": "Ken Thompson"
-    },
-    {
-      "text": "If you're not embarrassed by the first version of your product, you've launched too late.",
-      "author": "Reid Hoffman"
-    },
-    {
-      "text": "The competent programmer is fully aware of the limited size of his own skull.",
-      "author": "Edsger Dijkstra"
-    },
-    {
-      "text": "Premature optimization is the root of all evil — yet that does not mean we should pass up our opportunities in that critical 3%.",
-      "author": "Donald Knuth"
-    },
-    {
-      "text": "There are only two hard things in computer science: cache invalidation and naming things.",
-      "author": "Phil Karlton"
-    },
-    {
-      "text": "I am the one who knocks.",
-      "author": "Walter White, Breaking Bad"
-    },
-    {
-      "text": "S'all good, man.",
-      "author": "Saul Goodman, Better Call Saul"
-    },
-    {
-      "text": "Money makes you more of who you really are.",
-      "author": "Jordan Belfort, The Wolf of Wall Street"
-    },
-    {
-      "text": "I have to return some videotapes.",
-      "author": "Patrick Bateman, American Psycho"
-    },
-    {
-      "text": "I'm so much happier now that I'm dead.",
-      "author": "Amy Dunne, Gone Girl"
-    }
-  ]
+  "og_image": "https://beingamanforever.github.io/assets/og-home.png"
 }

@@ -1,4 +1,0 @@
-This is my portfolio.
-I work on C++ infrastructure and systems programming.
-Timestamp: 2026-01-04
-Nonce: $(openssl rand -hex 8)

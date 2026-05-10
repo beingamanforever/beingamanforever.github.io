@@ -46,7 +46,7 @@ $highlighting-css$
                 <a href="$ROOT$blog.html">Notes</a>
 $if(first_tag)$
                 <span class="post-breadcrumb-sep">/</span>
-                <a href="$ROOT$tags.html#tag-$first_tag_slug$">$first_tag$</a>
+                <a href="$ROOT$blog.html#tag=$first_tag_slug$">$first_tag$</a>
 $endif$
                 <span class="post-breadcrumb-sep">/</span>
                 <span class="post-breadcrumb-current" aria-current="page">$title$</span>
@@ -59,12 +59,17 @@ $endif$
                     <span class="post-meta-tags">$tags$</span>
                     <span class="post-meta-sep">·</span>
                     <span class="post-meta-readtime">$reading_time$ min read</span>
+$if(updated)$
+                    <span class="post-meta-sep">·</span>
+                    <span class="post-meta-updated" title="Last updated">Updated <time datetime="$updated$">$updated$</time></span>
+$endif$
                 </div>
             </header>
 
             <div class="post-content">
 $body$
             </div>
+<!-- POST_NAV -->
         </article>
     </main>
 

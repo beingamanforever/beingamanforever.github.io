@@ -17,12 +17,15 @@
     <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="mask-icon" href="favicon.svg" color="#0a0a0a">
     <link rel="alternate" type="application/rss+xml" title="aman behera" href="feed.xml">
+    <link rel="alternate" type="application/atom+xml" title="aman behera (Atom)" href="feed.atom">
+    <link rel="me" href="https://github.com/beingamanforever">
+    <link rel="me" href="https://www.linkedin.com/in/aman-behera-/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="assets/css/style.css?v=c93a7c4" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=c93a7c4">
+    <link rel="preload" href="assets/css/style.css?v=95635fc" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=95635fc">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=c93a7c4" defer></script>
+    <script src="assets/js/main.js?v=95635fc" defer></script>
 </head>
 <body class="dark-mode">
     <nav id="navbar" role="navigation" aria-label="Main navigation">
@@ -61,80 +64,134 @@
     <section class="work-page">
         <div class="container">
             <h1 class="page-title">All Projects</h1>
-            <p class="page-subtitle">A collection of things that I am proud of.</p>
-            <div id="all-projects-container">
-                <article class="project-card">
+            <p class="page-subtitle">A collection of things I have shipped, am building, or am still poking at.</p>
+
+            <section class="recent-prs" aria-label="Recent merged GitHub PRs">
+                <header class="recent-prs-header">
+                    <h2 class="recent-prs-title">Recent merged PRs</h2>
+                    <a class="recent-prs-link" href="https://github.com/beingamanforever?tab=overview" target="_blank" rel="noopener noreferrer">GitHub →</a>
+                </header>
+                <ul class="recent-prs-list">
+                    <li class="recent-pr"><a class="recent-pr-link" href="https://github.com/beingamanforever/beingamanforever.github.io/pull/6" target="_blank" rel="noopener noreferrer"><span class="recent-pr-repo">beingamanforever/beingamanforever.github.io</span><span class="recent-pr-title">Claude/blissful faraday 660342</span><span class="recent-pr-meta">#6 · 2026-05-09</span></a></li>
+                    <li class="recent-pr"><a class="recent-pr-link" href="https://github.com/beingamanforever/beingamanforever.github.io/pull/5" target="_blank" rel="noopener noreferrer"><span class="recent-pr-repo">beingamanforever/beingamanforever.github.io</span><span class="recent-pr-title">fix CI build: use --highlight-style for older pandoc</span><span class="recent-pr-meta">#5 · 2026-05-09</span></a></li>
+                    <li class="recent-pr"><a class="recent-pr-link" href="https://github.com/beingamanforever/beingamanforever.github.io/pull/4" target="_blank" rel="noopener noreferrer"><span class="recent-pr-repo">beingamanforever/beingamanforever.github.io</span><span class="recent-pr-title">site refresh</span><span class="recent-pr-meta">#4 · 2026-05-09</span></a></li>
+                    <li class="recent-pr"><a class="recent-pr-link" href="https://github.com/beingamanforever/beingamanforever.github.io/pull/3" target="_blank" rel="noopener noreferrer"><span class="recent-pr-repo">beingamanforever/beingamanforever.github.io</span><span class="recent-pr-title">update projects: drop SIMD-KV, add ZeroShred + 4 more, link Octave PRs</span><span class="recent-pr-meta">#3 · 2026-05-08</span></a></li>
+                    <li class="recent-pr"><a class="recent-pr-link" href="https://github.com/beingamanforever/beingamanforever.github.io/pull/2" target="_blank" rel="noopener noreferrer"><span class="recent-pr-repo">beingamanforever/beingamanforever.github.io</span><span class="recent-pr-title">rebuild static site: partials, tags, /now, OG</span><span class="recent-pr-meta">#2 · 2026-05-08</span></a></li>
+                </ul>
+            </section>
+
+            <div class="blog-layout">
+                <aside class="tag-filter" aria-label="Filter projects by category">
+                    <h2 class="tag-filter-heading">Filter by category</h2>
+                    <div class="tag-filter-list" role="group">
+                <button class="tag-filter-btn is-active" data-category="">All <span class="tag-filter-count">(9)</span></button>
+                <button class="tag-filter-btn" data-category="systems">Systems <span class="tag-filter-count">(4)</span></button>
+                <button class="tag-filter-btn" data-category="ml">ML <span class="tag-filter-count">(3)</span></button>
+                <button class="tag-filter-btn" data-category="hackathon">Hackathons <span class="tag-filter-count">(2)</span></button>
+                    </div>
+                </aside>
+                <div id="all-projects-container">
+                <article class="project-card" data-category="systems" data-status="building">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/CSV-Parsing-Engine" class="project-title-link" target="_blank" rel="noopener noreferrer">Zero-copy CSV Ingestion Engine</a></h3>
-                        <span class="project-stars">WIP</span>
+                        <span class="project-status status-building" title="Project status: building">building</span>
                     </div>
                     <p class="project-description">Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.</p>
-                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">parsing</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">SIMD</span><span class="project-tag">parsing</span></div>
+                        <span class="project-signal">WIP</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="systems" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/zeroshred" class="project-title-link" target="_blank" rel="noopener noreferrer">ZeroShred</a></h3>
-                        <span class="project-stars">780 MB/s</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">High-throughput file transfer hitting 780 MB/s via kernel-level zero-copy (sendfile), pipelined SHA-256 on dedicated threads, and hardware crypto acceleration.</p>
-                    <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">systems</span><span class="project-tag">networking</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">C</span><span class="project-tag">systems</span><span class="project-tag">networking</span></div>
+                        <span class="project-signal">780 MB/s</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="systems" data-status="building">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever" class="project-title-link" target="_blank" rel="noopener noreferrer">GNU Octave (GSoC 2026)</a></h3>
-                        <span class="project-stars">active</span>
+                        <span class="project-status status-building" title="Project status: building">building</span>
                     </div>
                     <p class="project-description">Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.</p>
-                    <div class="project-tags"><span class="project-tag">Octave</span><span class="project-tag">numerics</span><span class="project-tag">GSoC</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">Octave</span><span class="project-tag">numerics</span><span class="project-tag">GSoC</span></div>
+                        <span class="project-signal">GSoC &#x27;26</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="ml" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/Drishti" class="project-title-link" target="_blank" rel="noopener noreferrer">Drishti: ISRO Geospatial VLM</a></h3>
-                        <span class="project-stars">Silver</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">Vision-language model for geospatial reasoning; 1st runner-up at Inter-IIT Tech Meet 14.0 across 24 IITs.</p>
-                    <div class="project-tags"><span class="project-tag">VLM</span><span class="project-tag">geospatial</span><span class="project-tag">Inter-IIT</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">VLM</span><span class="project-tag">geospatial</span><span class="project-tag">Inter-IIT</span></div>
+                        <span class="project-signal">Silver</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="hackathon" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/hilabs" class="project-title-link" target="_blank" rel="noopener noreferrer">HiLabs AIQuest</a></h3>
-                        <span class="project-stars">Winner</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">Winning entry for the HiLabs AIQuest hackathon held at IIT Roorkee.</p>
-                    <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">hackathon</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">hackathon</span></div>
+                        <span class="project-signal">Winner</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="systems" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/binary-protocol-cpp" class="project-title-link" target="_blank" rel="noopener noreferrer">Binary protocol (C++)</a></h3>
-                        <span class="project-stars">lib</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">Minimal byte-level binary wire protocol with explicit layout, endian-safe serialization, XOR checksum, and offset-based encoding.</p>
-                    <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">protocols</span><span class="project-tag">systems</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">C++</span><span class="project-tag">protocols</span><span class="project-tag">systems</span></div>
+                        <span class="project-signal">library</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="ml" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/LLM-Text-Detection" class="project-title-link" target="_blank" rel="noopener noreferrer">LLM Text Detection</a></h3>
-                        <span class="project-stars">BERT</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">BERT-based classifier distinguishing AI-generated text from human-authored text using semantic, statistical, and stylistic features.</p>
-                    <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">NLP</span><span class="project-tag">BERT</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">NLP</span><span class="project-tag">BERT</span></div>
+                        <span class="project-signal">BERT</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="ml" data-status="dormant">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/Monte-Carlo-Simulation" class="project-title-link" target="_blank" rel="noopener noreferrer">Monte Carlo Portfolio Optimization</a></h3>
-                        <span class="project-stars">explore</span>
+                        <span class="project-status status-dormant" title="Project status: dormant">dormant</span>
                     </div>
                     <p class="project-description">Monte Carlo simulation for portfolio optimization; computes asset weights for maximum expected return at minimal risk via Sharpe ratio.</p>
-                    <div class="project-tags"><span class="project-tag">simulation</span><span class="project-tag">finance</span><span class="project-tag">Python</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">simulation</span><span class="project-tag">finance</span><span class="project-tag">Python</span></div>
+                        <span class="project-signal">exploration</span>
+                    </div>
                 </article>
-                <article class="project-card">
+                <article class="project-card" data-category="hackathon" data-status="shipped">
                     <div class="project-header">
                         <h3 class="project-title"><a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" class="project-title-link" target="_blank" rel="noopener noreferrer">AI Interview Learning Platform</a></h3>
-                        <span class="project-stars">Silver</span>
+                        <span class="project-status status-shipped" title="Project status: shipped">shipped</span>
                     </div>
                     <p class="project-description">AI-driven interview chatbot built for Tech GC at IIT Roorkee.</p>
-                    <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">NLP</span><span class="project-tag">Tech GC</span></div>
+                    <div class="project-footer">
+                        <div class="project-tags"><span class="project-tag">ML</span><span class="project-tag">NLP</span><span class="project-tag">Tech GC</span></div>
+                        <span class="project-signal">Silver</span>
+                    </div>
                 </article>
+                    <p class="blog-empty" hidden>No projects in this category yet.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -143,8 +200,7 @@
     <footer class="footer" role="contentinfo">
         <div class="container">
             <p>© 2026 Aman Behera</p>
-            <p class="footer-tagline">Should they come looking for me? I intend to be found</p>
-            <p class="footer-feedback">Found a bug or have a sharper take? <a class="js-email" href="#" data-user="aman.behera.systems" data-domain="gmail.com">Email me</a> or <a href="https://github.com/beingamanforever/beingamanforever.github.io" target="_blank" rel="noopener noreferrer">open a PR</a>.</p>
+            <p class="footer-feedback">Found a bug or have a sharper take? <a class="js-email" href="mailto:aman%2Ebehera%2Esystems%40gmail%2Ecom" data-user="aman.behera.systems" data-domain="gmail.com">Email me</a> or <a href="https://github.com/beingamanforever/beingamanforever.github.io" target="_blank" rel="noopener noreferrer">open a PR</a>.</p>
         </div>
     </footer>
 </body>
