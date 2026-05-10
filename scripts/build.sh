@@ -37,16 +37,12 @@ SITE_GITHUB="$(read_cfg github)"
 SITE_LINKEDIN="$(read_cfg linkedin)"
 SITE_OG_IMAGE="$(read_cfg og_image)"
 
-# Pick an SSR fallback quote for the hero, AND emit the full quote list as JSON
-# for main.js to re-randomise on every page load.
-eval "$(python3 -c "
-import json, random, shlex
-data = json.load(open('data/site.json'))['quotes']
-q = random.choice(data)
-print('QUOTE_TEXT=' + shlex.quote(q['text']))
-print('QUOTE_AUTHOR=' + shlex.quote(q['author']))
-print('QUOTES_JSON=' + shlex.quote(json.dumps(data, ensure_ascii=False)))
-")"
+# Percent-encoded mailto target so the link works without JS while not exposing
+# a raw "@" character to the simplest email scrapers. Browsers decode "%40"/"%2E"
+# transparently. main.js (.js-email handler) replaces the href with the plain
+# form at runtime. Percent-encoding (vs HTML entities) avoids awk gsub's special
+# treatment of "&" in replacement strings.
+SITE_EMAIL_HTMLENT=$(printf '%s' "$SITE_EMAIL" | python3 -c "import sys; s=sys.stdin.read().strip(); print(''.join(f'%{ord(c):02X}' if c in '.@' else c for c in s))")
 
 YEAR="$(date +%Y)"
 NOW_UPDATED="$(date +'%B %Y')"
@@ -84,11 +80,10 @@ fill_vars() {
       -v site_email="$SITE_EMAIL" \
       -v site_email_user="$SITE_EMAIL_USER" \
       -v site_email_domain="$SITE_EMAIL_DOMAIN" \
+      -v site_email_htment="$SITE_EMAIL_HTMLENT" \
       -v site_github="$SITE_GITHUB" \
       -v site_linkedin="$SITE_LINKEDIN" \
       -v site_og_image="$SITE_OG_IMAGE" \
-      -v quote_text="$QUOTE_TEXT" \
-      -v quote_author="$QUOTE_AUTHOR" \
       -v now_updated="$NOW_UPDATED" '
     {
       gsub(/\$YEAR\$/, year)
@@ -102,11 +97,10 @@ fill_vars() {
       gsub(/\$SITE_EMAIL\$/, site_email)
       gsub(/\$SITE_EMAIL_USER\$/, site_email_user)
       gsub(/\$SITE_EMAIL_DOMAIN\$/, site_email_domain)
+      gsub(/\$SITE_EMAIL_HTMENT\$/, site_email_htment)
       gsub(/\$SITE_GITHUB\$/, site_github)
       gsub(/\$SITE_LINKEDIN\$/, site_linkedin)
       gsub(/\$SITE_OG_IMAGE\$/, site_og_image)
-      gsub(/\$QUOTE_TEXT\$/, quote_text)
-      gsub(/\$QUOTE_AUTHOR\$/, quote_author)
       gsub(/\$NOW_UPDATED\$/, now_updated)
       print
     }
@@ -332,13 +326,6 @@ for tmpl in index_template.html work_template.html contact_template.html \
   inject_partials < "$tmpl" | fill_vars "" > "$BUILD_DIR/$out"
 done
 
-# Quotes JSON (full list) for client-side hero rotation on every page load.
-python3 -c "
-import json
-data = json.load(open('data/site.json'))['quotes']
-print(json.dumps(data, ensure_ascii=False))
-" > "$BUILD_DIR/quotes_data.html"
-
 substitute_list "<!-- BLOG_LIST_HOME -->" "$BUILD_DIR/blog_list_home.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- BLOG_LIST -->"      "$BUILD_DIR/blog_list.html"      "$BUILD_DIR/blog.html"
 substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUILD_DIR/blog.html"
@@ -346,7 +333,6 @@ substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
 substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
-substitute_list "<!-- QUOTES_JSON -->"       "$BUILD_DIR/quotes_data.html"       "$BUILD_DIR/index.html"
 substitute_list "<!-- GRAPH_DATA -->"        "$BUILD_DIR/graph_data.html"        "$BUILD_DIR/blog.html"
 
 for out in index.html work.html contact.html blog.html tags.html now.html 404.html; do

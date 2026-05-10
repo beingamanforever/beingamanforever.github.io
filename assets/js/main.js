@@ -16,27 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Hero quote: pick a random quote on every page load. SSR-rendered fallback
-    // stays put if the JSON payload is missing or unparseable.
-    (function rotateQuote() {
-        const dataEl = document.getElementById('quotes-data');
-        const textEl = document.getElementById('quote-text');
-        const authorEl = document.getElementById('quote-author');
-        if (!dataEl || !textEl || !authorEl) return;
-        let quotes;
-        try {
-            quotes = JSON.parse(dataEl.textContent || '[]');
-        } catch {
-            return;
-        }
-        if (!Array.isArray(quotes) || quotes.length === 0) return;
-        const q = quotes[Math.floor(Math.random() * quotes.length)];
-        if (q && typeof q.text === 'string' && typeof q.author === 'string') {
-            textEl.textContent = q.text;
-            authorEl.textContent = q.author;
-        }
-    })();
-
     // Blog tag filter: click a sidebar button to show only matching post-cards.
     // Hash-based deep links: /blog.html#tag=systems pre-selects that tag.
     (function tagFilter() {

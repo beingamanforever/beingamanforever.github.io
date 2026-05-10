@@ -5,6 +5,13 @@ Twitter, LinkedIn, and most chat unfurlers reject SVG OG images, so we render
 PNG via Pillow. Falls back to a tiny SVG file if Pillow is unavailable so the
 build never breaks — but the og:image meta should reference the PNG.
 
+Font dependency: this script tries DejaVu / Liberation / Helvetica in that order.
+GitHub Actions runners have DejaVu installed by default, so CI output is the
+canonical render. macOS only has DejaVu if you `brew install --cask font-dejavu`;
+without it, the local OG falls through to Helvetica and looks slightly different
+from the CI image. Either install DejaVu locally for parity, or just trust that
+the next CI run will overwrite the committed PNG with the canonical one.
+
 Usage:
     render_og.py --slug <slug> --title "..." --tags "..." --site "..." --out <path>
 """
