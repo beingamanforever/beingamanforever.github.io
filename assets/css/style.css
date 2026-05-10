@@ -2510,6 +2510,297 @@ body.dark-mode .graph-panel {
     .project-card::after { display: none; }
 }
 
+/* Tiny ephemeral toast for "copied" / "saved" feedback. */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translate(-50%, 8px);
+    padding: 0.5rem 0.85rem;
+    background: rgba(20, 20, 20, 0.92);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 200;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast { transition: none; }
+}
+
+/* Post sidebar TOC (≥1024px) */
+.post-toc {
+    display: none;
+}
+
+@media (min-width: 1100px) {
+    .post-container {
+        position: relative;
+    }
+    .post-toc {
+        display: block;
+        position: absolute;
+        top: 7.5rem;
+        left: calc(100% + 1.5rem);
+        width: 220px;
+        max-height: calc(100vh - 9rem);
+        overflow-y: auto;
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        line-height: 1.5;
+        padding-right: 0.5rem;
+        position: sticky;
+        align-self: start;
+    }
+    .post-page .post-container {
+        max-width: 760px;
+    }
+    .post-toc {
+        position: fixed;
+        top: 7.5rem;
+        left: calc(50% + 760px / 2 + 1.5rem);
+    }
+}
+
+.post-toc-heading {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin: 0 0 0.6rem;
+    font-weight: 500;
+}
+
+.post-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 1px solid var(--border-color);
+}
+
+.post-toc-item {
+    margin: 0;
+}
+
+.post-toc-item a {
+    display: block;
+    padding: 0.25rem 0 0.25rem 0.85rem;
+    margin-left: -1px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-left: 1px solid transparent;
+    transition: color 0.15s ease, border-left-color 0.15s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.post-toc-item.is-h3 a {
+    padding-left: 1.5rem;
+    font-size: 0.78rem;
+    opacity: 0.85;
+}
+
+.post-toc-item a:hover {
+    color: var(--text-primary);
+}
+
+.post-toc-item a.is-active {
+    color: var(--walter-green);
+    border-left-color: var(--walter-green);
+}
+
+/* Compiler Explorer "godbolt" button on C/C++ code blocks */
+.code-block-godbolt {
+    pointer-events: auto;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: rgba(20, 20, 20, 0.55);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.code-block-godbolt:hover {
+    color: #4ade80;
+    border-color: #4ade80;
+}
+
+/* Blog page: search input above the layout */
+.blog-search {
+    margin: 1.25rem 0 1rem;
+}
+
+.blog-search-input {
+    width: 100%;
+    max-width: 480px;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    transition: border-color 0.15s ease;
+}
+
+body.dark-mode .blog-search-input {
+    background: rgba(42, 42, 42, 0.4);
+}
+
+.blog-search-input:focus {
+    outline: none;
+    border-color: var(--walter-green);
+}
+
+.blog-search-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Recent merged PRs widget on /work */
+.recent-prs {
+    margin: 1.5rem 0 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
+    background: rgba(255, 255, 255, 0.4);
+}
+
+body.dark-mode .recent-prs {
+    background: rgba(42, 42, 42, 0.4);
+}
+
+.recent-prs-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+}
+
+.recent-prs-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.recent-prs-link {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 1px;
+}
+
+.recent-prs-link:hover {
+    color: var(--walter-green);
+    border-bottom-color: var(--walter-green);
+}
+
+.recent-prs-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.recent-pr-link {
+    display: grid;
+    grid-template-columns: minmax(80px, max-content) 1fr auto;
+    gap: 0.85rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: 4px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    transition: background 0.15s ease;
+    align-items: baseline;
+}
+
+.recent-pr-link:hover {
+    background: rgba(97, 175, 239, 0.06);
+}
+
+.recent-pr-repo {
+    color: var(--walter-green);
+    opacity: 0.85;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.recent-pr-title {
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.recent-pr-meta {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    opacity: 0.75;
+    white-space: nowrap;
+}
+
+.recent-prs-empty {
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+}
+
+/* Optional project thumbnail */
+.project-image {
+    display: block;
+    margin: -1px -1px 1rem;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.project-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.18s ease;
+}
+
+.project-card.has-image {
+    padding-top: 0;
+}
+
+.project-card.has-image .project-image img:hover {
+    opacity: 0.92;
+}
+
 /* Collapsed contact env block: three exports in one pre + one Copy button. */
 .contact-env {
     position: relative;

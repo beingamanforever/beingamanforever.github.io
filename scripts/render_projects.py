@@ -31,8 +31,8 @@ STATUS_LABELS = {
 
 
 CARD_TEMPLATE = """\
-                <article class="project-card" data-category="{category}" data-status="{status}">
-                    <div class="project-header">
+                <article class="project-card{has_image_class}" data-category="{category}" data-status="{status}">
+                    {image_block}<div class="project-header">
                         <h3 class="project-title"><a href="{url_attr}" class="project-title-link"{rel_attr}>{title}</a></h3>
                         <span class="project-status status-{status}" title="Project status: {status_label}">{status_label}</span>
                     </div>
@@ -53,6 +53,17 @@ def render_card(p: dict) -> str:
         f'<span class="project-tag">{html.escape(t)}</span>' for t in p.get("tags", [])
     )
     status = (p.get("status") or "shipped").lower()
+    image = p.get("image") or ""
+    if image:
+        alt = html.escape(p.get("title", "") + " preview")
+        image_block = (
+            f'<a class="project-image" href="{html.escape(url, quote=True)}"{rel_attr} aria-hidden="true" tabindex="-1">'
+            f'<img src="{html.escape(image, quote=True)}" alt="{alt}" loading="lazy" width="640" height="360"></a>'
+        )
+        has_image_class = " has-image"
+    else:
+        image_block = ""
+        has_image_class = ""
     return CARD_TEMPLATE.format(
         url_attr=html.escape(url, quote=True),
         rel_attr=rel_attr,
@@ -63,6 +74,8 @@ def render_card(p: dict) -> str:
         description=html.escape(p.get("description", "")),
         tags=tags_html,
         category=html.escape((p.get("category") or "").lower()),
+        image_block=image_block,
+        has_image_class=has_image_class,
     )
 
 

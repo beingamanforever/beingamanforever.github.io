@@ -7,6 +7,23 @@
     document.body.classList.toggle('dark-mode', isDark);
 })();
 
+// Tiny ephemeral toast for "copied" / "saved" feedback. Reusable across
+// heading-anchor clicks, code copy, contact copy.
+function flashToast(message) {
+    let el = document.querySelector('.toast');
+    if (!el) {
+        el = document.createElement('div');
+        el.className = 'toast';
+        el.setAttribute('role', 'status');
+        el.setAttribute('aria-live', 'polite');
+        document.body.appendChild(el);
+    }
+    el.textContent = message;
+    el.classList.add('is-visible');
+    clearTimeout(flashToast._t);
+    flashToast._t = setTimeout(() => el.classList.remove('is-visible'), 1400);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn) {
@@ -15,6 +32,70 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
     }
+
+    // Client-side blog search: lightweight substring scoring over title +
+    // tags + snippet, fed by assets/data/search-index.json. Results overwrite
+    // the visible post list. Empty query restores the full list (and the
+    // active tag filter, which the next IIFE re-applies).
+    (function blogSearch() {
+        const input = document.getElementById('blog-search-input');
+        const container = document.getElementById('blog-container');
+        if (!input || !container) return;
+        let index = null;
+        const fetchIndex = async () => {
+            if (index) return index;
+            try {
+                const r = await fetch('assets/data/search-index.json', { cache: 'no-store' });
+                index = await r.json();
+            } catch {
+                index = [];
+            }
+            return index;
+        };
+        const score = (entry, q) => {
+            const ql = q.toLowerCase();
+            const titleHit = entry.title.toLowerCase().includes(ql) ? 5 : 0;
+            const tagHit = (entry.tags || []).some((t) => t.toLowerCase().includes(ql)) ? 3 : 0;
+            const snipHit = (entry.snippet || '').toLowerCase().includes(ql) ? 1 : 0;
+            return titleHit + tagHit + snipHit;
+        };
+        const escape = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const renderCard = (e) => `
+                <article class="post-card" data-tags="${escape((e.tags || []).join(','))}">
+                    <h3 class="post-card-title"><a href="${escape(e.url)}">${escape(e.title)}</a></h3>
+                    <p class="post-card-desc">${escape(e.desc || e.snippet || '')}</p>
+                    <div class="post-card-meta">
+                        <time class="post-card-date" datetime="${escape(e.date)}">${escape(e.date)}</time>
+                        <span class="post-card-sep">·</span>
+                        <span class="post-card-tags">${escape((e.tags || []).join(', '))}</span>
+                    </div>
+                </article>`;
+        const original = container.innerHTML;
+        let timer = 0;
+        const apply = async () => {
+            const q = input.value.trim();
+            if (!q) {
+                container.innerHTML = original;
+                container.dataset.search = '';
+                return;
+            }
+            const idx = await fetchIndex();
+            const ranked = idx
+                .map((e) => ({ e, s: score(e, q) }))
+                .filter((r) => r.s > 0)
+                .sort((a, b) => b.s - a.s)
+                .map((r) => r.e);
+            container.dataset.search = q;
+            container.innerHTML = ranked.length
+                ? ranked.map(renderCard).join('\n')
+                + '\n                <p class="blog-empty" hidden>No posts match this tag yet.</p>'
+                : '<p class="blog-empty">No matches.</p>';
+        };
+        input.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(apply, 80);
+        });
+    })();
 
     // Generic sidebar filter — works for both /blog (data-tag, data-tags on posts)
     // and /work (data-category on a single value per project). Hash-based deep
@@ -166,8 +247,75 @@ document.addEventListener('DOMContentLoaded', () => {
             a.href = `#${unique}`;
             a.setAttribute('aria-label', `Permalink to ${h.textContent}`);
             a.textContent = '#';
+            // Click also copies the deep-link URL and flashes a toast.
+            a.addEventListener('click', async (ev) => {
+                const url = `${location.origin}${location.pathname}#${unique}`;
+                try {
+                    await navigator.clipboard.writeText(url);
+                    flashToast('Link copied');
+                } catch {
+                    // Clipboard blocked: fall through, browser still handles the # navigation.
+                }
+            });
             h.appendChild(a);
         });
+    })();
+
+    // Post table of contents: right-rail sticky list of H2/H3 in .post-content.
+    // Highlights the active section via IntersectionObserver. Hidden by CSS on
+    // narrow viewports; only injected when there are at least 2 headings.
+    (function postToc() {
+        const article = document.querySelector('.post-content');
+        const container = document.querySelector('.post-container');
+        if (!article || !container) return;
+        const headings = Array.from(article.querySelectorAll('h2[id], h3[id]'));
+        if (headings.length < 2) return;
+
+        const aside = document.createElement('aside');
+        aside.className = 'post-toc';
+        aside.setAttribute('aria-label', 'Table of contents');
+        aside.innerHTML = '<h2 class="post-toc-heading">On this page</h2>';
+        const list = document.createElement('ol');
+        list.className = 'post-toc-list';
+        const linkById = new Map();
+        headings.forEach((h) => {
+            const li = document.createElement('li');
+            li.className = h.tagName === 'H3' ? 'post-toc-item is-h3' : 'post-toc-item';
+            const a = document.createElement('a');
+            a.href = `#${h.id}`;
+            a.textContent = h.textContent.replace(/#$/, '').trim();
+            li.appendChild(a);
+            list.appendChild(li);
+            linkById.set(h.id, a);
+        });
+        aside.appendChild(list);
+        container.appendChild(aside);
+
+        // Highlight: a heading is "active" if it is the most recent one whose
+        // top has crossed below the navbar boundary.
+        const setActive = (id) => {
+            linkById.forEach((a, key) => a.classList.toggle('is-active', key === id));
+        };
+        const onScroll = () => {
+            let activeId = headings[0].id;
+            const cutoff = 120;
+            for (const h of headings) {
+                if (h.getBoundingClientRect().top - cutoff <= 0) {
+                    activeId = h.id;
+                } else {
+                    break;
+                }
+            }
+            setActive(activeId);
+        };
+        let raf = 0;
+        const schedule = () => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => { raf = 0; onScroll(); });
+        };
+        onScroll();
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
     })();
 
     // Code block toolbar: language label + Copy button. Pandoc emits
@@ -195,6 +343,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 toolbar.appendChild(label);
             }
 
+            // Compiler Explorer (godbolt) "Run" button for C / C++ blocks. Encodes
+            // the snippet as a clientstate payload and opens it with -O3
+            // -march=native on a recent compiler.
+            if (lang === 'c' || lang === 'cpp' || lang === 'c++') {
+                const runBtn = document.createElement('a');
+                runBtn.className = 'code-block-godbolt';
+                runBtn.target = '_blank';
+                runBtn.rel = 'noopener noreferrer';
+                runBtn.textContent = 'godbolt ↗';
+                runBtn.title = 'Open this snippet on Compiler Explorer';
+                runBtn.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    const src = (code || pre).textContent || '';
+                    const compilerId = (lang === 'c') ? 'cg132' : 'g132';
+                    const ceLang = (lang === 'c') ? 'c' : 'c++';
+                    const state = {
+                        sessions: [{
+                            id: 1,
+                            language: ceLang,
+                            source: src,
+                            compilers: [{
+                                id: compilerId,
+                                options: '-O3 -march=native -std=c++20',
+                                libs: [],
+                            }],
+                        }],
+                    };
+                    // base64-url encode the JSON for the clientstate URL.
+                    const json = JSON.stringify(state);
+                    const b64 = btoa(unescape(encodeURIComponent(json)))
+                        .replace(/\+/g, '-')
+                        .replace(/\//g, '_')
+                        .replace(/=+$/, '');
+                    window.open('https://godbolt.org/clientstate/' + b64, '_blank', 'noopener');
+                });
+                toolbar.appendChild(runBtn);
+            }
+
             const copyBtn = document.createElement('button');
             copyBtn.type = 'button';
             copyBtn.className = 'code-block-copy';
@@ -213,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 copyBtn.classList.add('is-copied');
                 copyBtn.textContent = 'Copied';
+                flashToast('Code copied');
                 setTimeout(() => {
                     copyBtn.classList.remove('is-copied');
                     copyBtn.textContent = 'Copy';

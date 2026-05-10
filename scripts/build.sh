@@ -141,6 +141,11 @@ rfc822_date() {
   else date -d "$1" +"%a, %d %b %Y 00:00:00 +0000"; fi
 }
 
+iso8601_date() {
+  if date -j -f "%Y-%m-%d" "$1" +"%Y-%m-%dT00:00:00Z" 2>/dev/null; then :;
+  else date -d "$1" +"%Y-%m-%dT00:00:00Z"; fi
+}
+
 post_meta() {
   # Optional metadata: missing keys produce empty strings (not a build failure
   # under pipefail). Wraps grep in a subshell with `|| true`.
@@ -177,6 +182,54 @@ EOF
 else
   rm -f "$HEATMAP.tmp"
   echo "⚠ Heatmap fetch failed; using cached copy → $HEATMAP"
+fi
+
+# ----------------------------------------------------------------------------
+# Cache the user's most recent merged PRs from GitHub. Best-effort: skip on
+# failure and reuse last cached payload (or write a tiny placeholder).
+# ----------------------------------------------------------------------------
+mkdir -p assets/data
+PRS_CACHE="assets/data/recent-prs.json"
+PRS_QUERY="is:pr+author:$SITE_GITHUB+is:merged"
+PRS_URL="https://api.github.com/search/issues?q=${PRS_QUERY}&sort=updated&order=desc&per_page=5"
+if [ -n "${GH_TOKEN:-}" ]; then
+  pr_curl_ok=$(curl -fsSL --max-time 6 \
+    -H 'Accept: application/vnd.github+json' \
+    -H 'X-GitHub-Api-Version: 2022-11-28' \
+    -H "Authorization: Bearer $GH_TOKEN" \
+    "$PRS_URL" -o "$PRS_CACHE.tmp" 2>/dev/null && echo y || echo n)
+else
+  pr_curl_ok=$(curl -fsSL --max-time 6 \
+    -H 'Accept: application/vnd.github+json' \
+    -H 'X-GitHub-Api-Version: 2022-11-28' \
+    "$PRS_URL" -o "$PRS_CACHE.tmp" 2>/dev/null && echo y || echo n)
+fi
+if [ "$pr_curl_ok" = "y" ]; then
+  # Slim the payload to just the fields we render.
+  python3 -c "
+import json, sys
+data = json.load(open('$PRS_CACHE.tmp'))
+items = data.get('items', [])[:5]
+out = [
+  {
+    'title': it['title'],
+    'url': it['html_url'],
+    'repo': '/'.join(it['repository_url'].split('/')[-2:]),
+    'merged_at': it.get('closed_at') or it.get('updated_at'),
+    'number': it['number'],
+  }
+  for it in items
+]
+json.dump(out, open('$PRS_CACHE', 'w'), ensure_ascii=False)
+"
+  rm -f "$PRS_CACHE.tmp"
+  echo "✓ Recent PRs cached → $PRS_CACHE"
+elif [ ! -f "$PRS_CACHE" ]; then
+  echo "[]" > "$PRS_CACHE"
+  echo "⚠ PR fetch failed; empty placeholder → $PRS_CACHE"
+else
+  rm -f "$PRS_CACHE.tmp"
+  echo "⚠ PR fetch failed; using cached copy → $PRS_CACHE"
 fi
 
 # ----------------------------------------------------------------------------
@@ -309,6 +362,31 @@ python3 scripts/render_projects.py \
   --all-out "$BUILD_DIR/projects_all.html" \
   --category-filter-out "$BUILD_DIR/projects_category_filter.html"
 
+# Render the recent-PRs widget (read from the cached JSON).
+python3 - <<'PYEOF' > "$BUILD_DIR/recent_prs.html"
+import json, html, os
+try:
+    items = json.load(open('assets/data/recent-prs.json'))
+except Exception:
+    items = []
+if not items:
+    print('                <p class="recent-prs-empty">No recent PRs yet.</p>')
+else:
+    print('                <ul class="recent-prs-list">')
+    for it in items[:5]:
+        date = (it.get('merged_at') or '')[:10]
+        title = html.escape(it.get('title', '')[:90])
+        repo  = html.escape(it.get('repo', ''))
+        url   = html.escape(it.get('url', '#'), quote=True)
+        num   = html.escape(str(it.get('number', '')))
+        print(f'                    <li class="recent-pr">'
+              f'<a class="recent-pr-link" href="{url}" target="_blank" rel="noopener noreferrer">'
+              f'<span class="recent-pr-repo">{repo}</span>'
+              f'<span class="recent-pr-title">{title}</span>'
+              f'<span class="recent-pr-meta">#{num} · {date}</span></a></li>')
+    print('                </ul>')
+PYEOF
+
 # ----------------------------------------------------------------------------
 # 4. Tag index
 # ----------------------------------------------------------------------------
@@ -316,6 +394,12 @@ python3 scripts/render_tags.py \
   --out "$BUILD_DIR/tags_index.html" \
   --cloud-out "$BUILD_DIR/tags_cloud.html" \
   < "$BUILD_DIR/posts.index"
+
+# ----------------------------------------------------------------------------
+# 4c. Search index for /blog client-side search.
+# ----------------------------------------------------------------------------
+mkdir -p assets/data
+python3 scripts/render_search.py --out assets/data/search-index.json < "$BUILD_DIR/posts.index"
 
 # ----------------------------------------------------------------------------
 # 4b. Graph data (notes + tags as nodes; bipartite post-tag edges + explicit
@@ -362,6 +446,7 @@ substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUI
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- PROJECT_CATEGORY_FILTER -->" "$BUILD_DIR/projects_category_filter.html" "$BUILD_DIR/work.html"
+substitute_list "<!-- RECENT_PRS -->"        "$BUILD_DIR/recent_prs.html"        "$BUILD_DIR/work.html"
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
   substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
   substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"
@@ -515,5 +600,40 @@ EOF
   printf '</rss>\n'
 } > feed.xml
 
+# Atom feed (modern feed readers prefer atom; we ship both).
+last_build_iso=$(iso8601_date "$(date +%Y-%m-%d)")
+{
+  printf '<?xml version="1.0" encoding="UTF-8"?>\n'
+  printf '<feed xmlns="http://www.w3.org/2005/Atom">\n'
+  printf '  <title>%s</title>\n' "$SITE_TITLE"
+  printf '  <link rel="alternate" type="text/html" href="%s/"/>\n' "$SITE_URL"
+  printf '  <link rel="self" type="application/atom+xml" href="%s/feed.atom"/>\n' "$SITE_URL"
+  printf '  <id>%s/</id>\n' "$SITE_URL"
+  printf '  <subtitle>%s</subtitle>\n' "$SITE_DESC"
+  printf '  <updated>%s</updated>\n' "$last_build_iso"
+  printf '  <author><name>%s</name><email>%s</email></author>\n' "$SITE_NAME" "$SITE_EMAIL"
+  while IFS=$'\t' read -r slug title date desc tags rt updated links; do
+    iso=$(iso8601_date "$date")
+    cat <<EOF
+  <entry>
+    <title>$title</title>
+    <link rel="alternate" type="text/html" href="$SITE_URL/posts/$slug.html"/>
+    <id>$SITE_URL/posts/$slug.html</id>
+    <published>$iso</published>
+    <updated>$iso</updated>
+    <summary>$desc</summary>
+EOF
+    # Per-tag <category> elements
+    if [ -n "$tags" ]; then
+      printf '%s' "$tags" | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | while read -r tag; do
+        [ -z "$tag" ] && continue
+        printf '    <category term="%s"/>\n' "$tag"
+      done
+    fi
+    printf '  </entry>\n'
+  done < "$BUILD_DIR/posts.index"
+  printf '</feed>\n'
+} > feed.atom
+
 n=$(wc -l < "$BUILD_DIR/posts.index" | tr -d ' ')
-echo "✓ Built $n post(s); pages, sitemap, feed, OG images, tag index regenerated."
+echo "✓ Built $n post(s); pages, sitemap, feed (rss + atom), OG images, tag index regenerated."
