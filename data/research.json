@@ -1,0 +1,30 @@
+[
+  {
+    "title": "QCRT: Breathing Trees",
+    "venue": "EMNLP '26 target",
+    "url": "",
+    "featured": true,
+    "desc": "Query-conditional retrieval trees. Hierarchical RAG indexes are built once and frozen; QCRT keeps the cheap offline scaffold but lets the retrieved subtree re-cluster itself per query, with retrieval entropy setting the resolution. Clusters contract when retrieval is confident and expand when it is diffuse. Currently benchmarking against five RAG baselines on four QA benchmarks."
+  },
+  {
+    "title": "Trust the Subject, Cap the Item",
+    "venue": "AIMS @ COLM '26 · winner",
+    "url": "https://github.com/beingamanforever/capped-irt",
+    "featured": true,
+    "desc": "Predicting how a model answers evaluation items it has never seen, using amortized Item Response Theory. Subject ability carries most of the signal; item difficulty is retrieved rather than regressed and its weight is capped, so the embedding-based difficulty stays useful without turning overconfident out of distribution. Won the Predictive AI Evaluation Challenge; write-up submitted to the AIMS workshop at COLM 2026."
+  },
+  {
+    "title": "MycoGate-VL",
+    "venue": "SHROOM-Visions '26",
+    "url": "https://github.com/beingamanforever/MycoGate-VL",
+    "featured": true,
+    "desc": "Scorer-aware serialization for multilingual vision-language hallucination detection: per-character hallucination probabilities and categories in English, French, Italian, and Chinese. A deliberately text-centric detector ensemble with a clean-document gate; per-language bests clear the baseline on both official metrics."
+  },
+  {
+    "title": "Gemma-4 loop surgery, reproduced",
+    "venue": "BlackboxNLP '26",
+    "url": "",
+    "featured": false,
+    "desc": "Reproducibility study of <a href=\"https://arxiv.org/abs/2606.13705\" target=\"_blank\" rel=\"noopener noreferrer\">arXiv:2606.13705</a> for the BlackboxNLP 2026 Reproducibility Challenge: pre-registered probes across three model scales test whether the published loop-removal weight edit fixes looping behaviour, or only the probes it was selected on."
+  }
+]

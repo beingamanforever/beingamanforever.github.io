@@ -27,6 +27,7 @@ and regenerates `sitemap.xml` and `feed.xml` from post metadata.
 ├── content/posts/          post sources (Markdown + YAML-style metadata)
 ├── data/projects.json      project list (single source of truth)
 ├── data/news.json          homepage News items (single source of truth)
+├── data/research.json      research entries (homepage section + /research page)
 ├── assets/images/profile.jpg   homepage portrait (swap in your photo)
 ├── posts/                  rendered post HTML  (generated)
 ├── scripts/
@@ -74,4 +75,4 @@ Everything on the homepage is data-driven; edit the source, rerun
 | Showcase a project screenshot | add `"image": "assets/images/<file>.png"` to that project |
 | Change my photo               | replace `assets/images/profile.jpg` (square, ≥240px) |
 | Change bio / affiliations     | `index_template.html` (masthead + about section) |
-| Update research items         | `index_template.html` (research section) + `now_template.html` |
+| Update research items         | `data/research.json` (drives the homepage section + `/research` page; homepage shows the first 4) |

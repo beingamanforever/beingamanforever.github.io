@@ -22,11 +22,11 @@
     <link rel="me" href="https://www.linkedin.com/in/aman-behera-/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="assets/js/theme.js?v=b7af08c"></script>
-    <link rel="preload" href="assets/css/style.css?v=b7af08c" as="style">
-    <link rel="stylesheet" href="assets/css/style.css?v=b7af08c">
+    <script src="assets/js/theme.js?v=0a36485"></script>
+    <link rel="preload" href="assets/css/style.css?v=0a36485" as="style">
+    <link rel="stylesheet" href="assets/css/style.css?v=0a36485">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <script src="assets/js/main.js?v=b7af08c" defer></script>
+    <script src="assets/js/main.js?v=0a36485" defer></script>
     <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -55,7 +55,7 @@
         <div class="nav-container">
             <a href="index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
             <div class="nav-links">
-                <a href="index.html#research">research</a>
+                <a href="research.html">research</a>
                 <a href="blog.html">writing</a>
                 <a href="work.html">projects</a>
                 <a href="now.html">now</a>
@@ -88,48 +88,12 @@
             <div class="masthead-body">
                 <h1 class="masthead-name">Aman Behera</h1>
                 <p class="masthead-role">RL · mechanistic interpretability · inference engineering · agentic systems</p>
-                <p class="masthead-affil">data scientist at <a href="https://www.hilabs.com/" target="_blank" rel="noopener noreferrer">HiLabs</a> · independent researcher · <a href="https://www.iitr.ac.in/" target="_blank" rel="noopener noreferrer">IIT Roorkee</a> graduate</p>
+                <p class="masthead-affil">Data Scientist | <a href="https://www.hilabs.com/" target="_blank" rel="noopener noreferrer">HiLabs</a> · independent researcher · <a href="https://www.iitr.ac.in/" target="_blank" rel="noopener noreferrer">IIT Roorkee</a> graduate</p>
                 <p class="masthead-links">
                     <a href="https://github.com/beingamanforever" target="_blank" rel="noopener noreferrer">github</a><span class="masthead-sep">·</span><a class="js-email" href="mailto:aman%2Ebehera%2Esystems%40gmail%2Ecom" data-user="aman.behera.systems" data-domain="gmail.com">email</a><span class="masthead-sep">·</span><a href="https://x.com/beingamanFF" target="_blank" rel="noopener noreferrer">x</a><span class="masthead-sep">·</span><a href="assets/resume/aman_behera_resume.pdf">cv</a><span class="masthead-sep">·</span><a href="https://www.linkedin.com/in/aman-behera-/" target="_blank" rel="noopener noreferrer">linkedin</a><span class="masthead-sep">·</span><a href="feed.atom">rss</a>
                 </p>
             </div>
         </header>
-
-        <!-- Research -->
-        <section id="research" class="rp-section">
-            <h2 class="rp-title"><span class="rp-dash" aria-hidden="true">—</span> research</h2>
-            <p class="rp-lead">Current work, all in progress and aimed at the venues below.</p>
-            <div class="research-list">
-                <article class="research-item">
-                    <div class="research-header">
-                        <h3 class="research-title">QCRT: Breathing Trees</h3>
-                        <span class="research-venue">EMNLP '26 target</span>
-                    </div>
-                    <p class="research-desc">Query-conditional retrieval trees. Hierarchical RAG indexes are built once and frozen; QCRT keeps the cheap offline scaffold but lets the retrieved subtree re-cluster itself per query, with retrieval entropy setting the resolution. Clusters contract when retrieval is confident and expand when it is diffuse. Currently benchmarking against five RAG baselines on four QA benchmarks.</p>
-                </article>
-                <article class="research-item">
-                    <div class="research-header">
-                        <h3 class="research-title"><a href="https://github.com/beingamanforever/capped-irt" target="_blank" rel="noopener noreferrer">Trust the Subject, Cap the Item</a></h3>
-                        <span class="research-venue">AIMS @ COLM '26 · winner</span>
-                    </div>
-                    <p class="research-desc">Predicting how a model answers evaluation items it has never seen, using amortized Item Response Theory. Subject ability carries most of the signal; item difficulty is retrieved rather than regressed and its weight is capped, so the embedding-based difficulty stays useful without turning overconfident out of distribution. Won the Predictive AI Evaluation Challenge; write-up submitted to the AIMS workshop at COLM 2026.</p>
-                </article>
-                <article class="research-item">
-                    <div class="research-header">
-                        <h3 class="research-title"><a href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer">MycoGate-VL</a></h3>
-                        <span class="research-venue">SHROOM-Visions '26</span>
-                    </div>
-                    <p class="research-desc">Scorer-aware serialization for multilingual vision-language hallucination detection: per-character hallucination probabilities and categories in English, French, Italian, and Chinese. A deliberately text-centric detector ensemble with a clean-document gate; per-language bests clear the baseline on both official metrics.</p>
-                </article>
-                <article class="research-item">
-                    <div class="research-header">
-                        <h3 class="research-title">Gemma-4 loop surgery, reproduced</h3>
-                        <span class="research-venue">BlackboxNLP '26</span>
-                    </div>
-                    <p class="research-desc">Reproducibility study of <a href="https://arxiv.org/abs/2606.13705" target="_blank" rel="noopener noreferrer">arXiv:2606.13705</a> for the BlackboxNLP 2026 Reproducibility Challenge: pre-registered probes across three model scales test whether the published loop-removal weight edit fixes looping behaviour, or only the probes it was selected on.</p>
-                </article>
-            </div>
-        </section>
 
         <!-- About -->
         <section id="about" class="rp-section">
@@ -139,6 +103,37 @@
             <aside class="rp-callout">
                 Happy to talk about inference systems, interpretability, or evaluation. Reach out via <a class="js-email" href="mailto:aman%2Ebehera%2Esystems%40gmail%2Ecom" data-user="aman.behera.systems" data-domain="gmail.com">email</a> or <a href="https://x.com/beingamanFF" target="_blank" rel="noopener noreferrer">X</a>.
             </aside>
+        </section>
+
+        <!-- Research -->
+        <section id="research" class="rp-section">
+            <h2 class="rp-title"><span class="rp-dash" aria-hidden="true">—</span> research</h2>
+            <p class="rp-lead">Current work, all in progress and aimed at the venues below.</p>
+            <div class="research-list">
+                <article class="research-item">
+                    <div class="research-header">
+                        <h3 class="research-title">QCRT: Breathing Trees</h3>
+                        <span class="research-venue">EMNLP &#x27;26 target</span>
+                    </div>
+                    <p class="research-desc">Query-conditional retrieval trees. Hierarchical RAG indexes are built once and frozen; QCRT keeps the cheap offline scaffold but lets the retrieved subtree re-cluster itself per query, with retrieval entropy setting the resolution. Clusters contract when retrieval is confident and expand when it is diffuse. Currently benchmarking against five RAG baselines on four QA benchmarks.</p>
+                </article>
+                <article class="research-item">
+                    <div class="research-header">
+                        <h3 class="research-title"><a href="https://github.com/beingamanforever/capped-irt" target="_blank" rel="noopener noreferrer">Trust the Subject, Cap the Item</a></h3>
+                        <span class="research-venue">AIMS @ COLM &#x27;26 · winner</span>
+                    </div>
+                    <p class="research-desc">Predicting how a model answers evaluation items it has never seen, using amortized Item Response Theory. Subject ability carries most of the signal; item difficulty is retrieved rather than regressed and its weight is capped, so the embedding-based difficulty stays useful without turning overconfident out of distribution. Won the Predictive AI Evaluation Challenge; write-up submitted to the AIMS workshop at COLM 2026.</p>
+                </article>
+                <article class="research-item">
+                    <div class="research-header">
+                        <h3 class="research-title"><a href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer">MycoGate-VL</a></h3>
+                        <span class="research-venue">SHROOM-Visions &#x27;26</span>
+                    </div>
+                    <p class="research-desc">Scorer-aware serialization for multilingual vision-language hallucination detection: per-character hallucination probabilities and categories in English, French, Italian, and Chinese. A deliberately text-centric detector ensemble with a clean-document gate; per-language bests clear the baseline on both official metrics.</p>
+                </article>
+            </div>
+            <p class="rp-more"><a href="research.html">all research →</a></p>
+        </section>
         </section>
 
         <!-- Writing -->
@@ -207,7 +202,7 @@
                 </li>
                 <li class="news-item">
                     <span class="news-date">May 2026</span>
-                    <span class="news-text"><span class="news-title">Started Google Summer of Code 2026</span><span class="news-detail">With <a href="https://octave.org/" target="_blank" rel="noopener noreferrer">GNU Octave</a>, rewriting the ANOVA stack as an object-oriented framework.</span></span>
+                    <span class="news-text"><span class="news-title">GSoC 2026 @ GNU Octave</span><span class="news-detail">With <a href="https://octave.org/" target="_blank" rel="noopener noreferrer">GNU Octave</a>, rewriting the ANOVA stack as an object-oriented framework.</span></span>
                 </li>
                 <li class="news-item">
                     <span class="news-date">Jan 2026</span>
@@ -215,7 +210,7 @@
                 </li>
                 <li class="news-item">
                     <span class="news-date">Dec 2025</span>
-                    <span class="news-text"><span class="news-title">Silver at Inter-IIT Tech Meet 14.0</span><span class="news-detail">1st runner-up on the <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">ISRO geospatial VLM problem statement</a> among 24 IITs.</span></span>
+                    <span class="news-text"><span class="news-title">Silver at Inter-IIT Tech Meet 14.0</span><span class="news-detail">Led a team of 6 to a 1st runner-up finish on the <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">ISRO geospatial VLM problem statement</a> among 24 IITs.</span></span>
                 </li>
                 <li class="news-item">
                     <span class="news-date">Sep 2025</span>
@@ -223,7 +218,7 @@
                 </li>
                 <li class="news-item">
                     <span class="news-date">May 2025</span>
-                    <span class="news-text"><span class="news-title">Data science intern at Info Edge</span><span class="news-detail">Working on generative engine optimisation (GEO) at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>.</span></span>
+                    <span class="news-text"><span class="news-title">Info Edge · data science intern</span><span class="news-detail">Working on generative engine optimisation (GEO) at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>.</span></span>
                 </li>
                 <li class="news-item">
                     <span class="news-date">Dec 2024</span>

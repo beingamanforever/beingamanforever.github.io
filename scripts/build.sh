@@ -300,6 +300,12 @@ python3 scripts/render_news.py \
   --input data/news.json \
   --out "$BUILD_DIR/news_list.html"
 
+# Research list from data/research.json (homepage-featured + full /research page).
+python3 scripts/render_research.py \
+  --input data/research.json \
+  --featured-out "$BUILD_DIR/research_featured.html" \
+  --all-out "$BUILD_DIR/research_all.html"
+
 # ----------------------------------------------------------------------------
 # 4. Tag index
 # ----------------------------------------------------------------------------
@@ -344,7 +350,8 @@ if [ "$POST_COUNT" -ge "$TAGS_THRESHOLD" ]; then
 fi
 
 PAGE_TEMPLATES=(index_template.html work_template.html contact_template.html
-                blog_template.html now_template.html 404_template.html)
+                blog_template.html now_template.html 404_template.html
+                research_template.html)
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
   PAGE_TEMPLATES+=(tags_template.html)
 fi
@@ -358,6 +365,8 @@ substitute_list "<!-- BLOG_LIST -->"      "$BUILD_DIR/blog_list.html"      "$BUI
 substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUILD_DIR/blog.html"
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
 substitute_list "<!-- NEWS_LIST -->"         "$BUILD_DIR/news_list.html"         "$BUILD_DIR/index.html"
+substitute_list "<!-- RESEARCH_FEATURED -->" "$BUILD_DIR/research_featured.html" "$BUILD_DIR/index.html"
+substitute_list "<!-- RESEARCH_ALL -->"      "$BUILD_DIR/research_all.html"      "$BUILD_DIR/research.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- PROJECT_CATEGORY_FILTER -->" "$BUILD_DIR/projects_category_filter.html" "$BUILD_DIR/work.html"
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
@@ -393,7 +402,7 @@ sys.stdout.write(panel.replace('GRAPH_DATA_PLACEHOLDER', data))
   substitute_list "<!-- GRAPH_PANEL -->"     "$BUILD_DIR/graph_panel.final.html" "$BUILD_DIR/blog.html"
 fi
 
-OUT_PAGES=(index.html work.html contact.html blog.html now.html 404.html)
+OUT_PAGES=(index.html work.html contact.html blog.html now.html 404.html research.html)
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
   OUT_PAGES+=(tags.html)
 else
@@ -469,7 +478,7 @@ fi
 {
   printf '<?xml version="1.0" encoding="UTF-8"?>\n'
   printf '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-  SITEMAP_PATHS=("" work.html blog.html now.html contact.html)
+  SITEMAP_PATHS=("" research.html work.html blog.html now.html contact.html)
   if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
     SITEMAP_PATHS+=(tags.html)
   fi
