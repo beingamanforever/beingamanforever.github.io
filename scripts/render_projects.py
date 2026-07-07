@@ -34,12 +34,10 @@ CARD_TEMPLATE = """\
                 <article class="project-card{has_image_class}" data-category="{category}" data-status="{status}">
                     {image_block}<div class="project-header">
                         <h3 class="project-title"><a href="{url_attr}" class="project-title-link"{rel_attr}>{title}</a></h3>
-                        <span class="project-status status-{status}" title="Project status: {status_label}">{status_label}</span>
                     </div>
                     <p class="project-description">{description}</p>
                     <div class="project-footer">
                         <div class="project-tags">{tags}</div>
-                        <span class="project-signal">{signal}</span>
                     </div>
                 </article>
 """

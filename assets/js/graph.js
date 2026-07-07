@@ -67,11 +67,18 @@
 
     // -- Constants -----------------------------------------------------------
     const sim = {
-        repulsion: 1400,
-        springLength: 70,
-        springK: 0.045,
-        gravity: 0.025,
+        repulsion: 3800,
+        springLength: 150,
+        springK: 0.038,
+        gravity: 0.015,
         damping: 0.82,
+    };
+
+    // Post titles are long; truncate the on-canvas label so neighbouring
+    // labels don't collide. The full title still opens on click/hover focus.
+    const shortLabel = (s) => {
+        const t = (s || '').trim();
+        return t.length > 24 ? t.slice(0, 23).trimEnd() + '…' : t;
     };
     let alpha = 1;
 
@@ -111,7 +118,7 @@
         label.setAttribute('class', 'graph-node-label');
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('dy', -(n.radius + 8));
-        label.textContent = n.label;
+        label.textContent = shortLabel(n.label);
         g.appendChild(label);
 
         nodeLayer.appendChild(g);

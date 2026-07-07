@@ -50,19 +50,10 @@
             </div>
         </header>
 
-        <!-- About -->
-        <section id="about" class="rp-section">
-            <h2 class="rp-title"><span class="rp-dash" aria-hidden="true">—</span> about</h2>
-            <p>I like understanding LLMs inside the black box: how they work, how to make them faster, and how to tell whether their outputs hold up. Most of my time goes to reinforcement learning, mechanistic interpretability, inference engineering, and agentic frameworks.</p>
-            <p>At <em>HiLabs</em> I'm setting up our first LLM-inference GPU infrastructure: scalable serving for fine-tuned small language models on downstream tasks, with KV-cache-aware routing to save tokens and speed up inference. Alongside that I work on agentic memory, and I contribute to <em>GNU Octave</em> through GSoC 2026.</p>
-            <aside class="rp-callout">
-                Happy to talk about inference systems, interpretability, or evaluation. Reach out via <a class="js-email" href="mailto:$SITE_EMAIL_HTMENT$" data-user="$SITE_EMAIL_USER$" data-domain="$SITE_EMAIL_DOMAIN$">email</a> or <a href="https://x.com/beingamanFF" target="_blank" rel="noopener noreferrer">X</a>.
-            </aside>
-        </section>
-
         <!-- Research -->
         <section id="research" class="rp-section">
             <h2 class="rp-title"><span class="rp-dash" aria-hidden="true">—</span> research</h2>
+            <p class="rp-lead">Current work, all in progress and aimed at the venues below.</p>
             <div class="research-list">
                 <article class="research-item">
                     <div class="research-header">
@@ -73,10 +64,10 @@
                 </article>
                 <article class="research-item">
                     <div class="research-header">
-                        <h3 class="research-title">Trust the Subject, Cap the Item</h3>
+                        <h3 class="research-title"><a href="https://github.com/beingamanforever/capped-irt" target="_blank" rel="noopener noreferrer">Trust the Subject, Cap the Item</a></h3>
                         <span class="research-venue">AIMS @ COLM '26 · winner</span>
                     </div>
-                    <p class="research-desc">Predicting how a model answers evaluation items it has never seen, using amortized Item Response Theory. Subject ability carries most of the signal; item difficulty is retrieved rather than regressed and its weight is capped, so the embedding-based difficulty stays useful without turning overconfident out of distribution. Won the Predictive AI Evaluation Challenge; write-up under review at the AIMS workshop.</p>
+                    <p class="research-desc">Predicting how a model answers evaluation items it has never seen, using amortized Item Response Theory. Subject ability carries most of the signal; item difficulty is retrieved rather than regressed and its weight is capped, so the embedding-based difficulty stays useful without turning overconfident out of distribution. Won the Predictive AI Evaluation Challenge; write-up submitted to the AIMS workshop at COLM 2026.</p>
                 </article>
                 <article class="research-item">
                     <div class="research-header">
@@ -93,6 +84,16 @@
                     <p class="research-desc">Reproducibility study of <a href="https://arxiv.org/abs/2606.13705" target="_blank" rel="noopener noreferrer">arXiv:2606.13705</a> for the BlackboxNLP 2026 Reproducibility Challenge: pre-registered probes across three model scales test whether the published loop-removal weight edit fixes looping behaviour, or only the probes it was selected on.</p>
                 </article>
             </div>
+        </section>
+
+        <!-- About -->
+        <section id="about" class="rp-section">
+            <h2 class="rp-title"><span class="rp-dash" aria-hidden="true">—</span> about</h2>
+            <p>I like understanding LLMs inside the black box: how they work, how to make them faster, and how to tell whether their outputs hold up. Most of my time goes to reinforcement learning, mechanistic interpretability, inference engineering, and agentic frameworks.</p>
+            <p>At <em>HiLabs</em> I'm setting up our first LLM-inference GPU infrastructure: scalable serving for fine-tuned small language models on downstream tasks, with KV-cache-aware routing to save tokens and speed up inference. Alongside that I work on agentic memory, and I contribute to <em>GNU Octave</em> through GSoC 2026.</p>
+            <aside class="rp-callout">
+                Happy to talk about inference systems, interpretability, or evaluation. Reach out via <a class="js-email" href="mailto:$SITE_EMAIL_HTMENT$" data-user="$SITE_EMAIL_USER$" data-domain="$SITE_EMAIL_DOMAIN$">email</a> or <a href="https://x.com/beingamanFF" target="_blank" rel="noopener noreferrer">X</a>.
+            </aside>
         </section>
 
         <!-- Writing -->

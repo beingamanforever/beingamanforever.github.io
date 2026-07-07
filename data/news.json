@@ -1,34 +1,42 @@
 [
   {
     "date": "2026-06",
-    "html": "Graduated from IIT Roorkee and joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a> as a Data Scientist. Now building our first LLM-inference GPU infrastructure: a serving framework that does GPU-aware request routing, autoscaling, and KV-cache sharing to cut token spend and speed up inference for fine-tuned SLMs."
+    "title": "Joined HiLabs as a Data Scientist",
+    "detail": "Graduated from IIT Roorkee and joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a>. Building our first LLM-inference GPU infrastructure: a serving framework with GPU-aware request routing, autoscaling, and KV-cache sharing to cut token spend and speed up inference for fine-tuned SLMs."
   },
   {
     "date": "2026-05",
-    "html": "\"Trust the Subject, Cap the Item\" (capped amortized IRT) won the Predictive AI Evaluation Challenge; write-up submitted to the AIMS workshop at COLM 2026."
+    "title": "Won the Predictive AI Evaluation Challenge",
+    "detail": "\"Trust the Subject, Cap the Item\" (<a href=\"https://github.com/beingamanforever/capped-irt\" target=\"_blank\" rel=\"noopener noreferrer\">capped amortized IRT</a>); write-up submitted to the AIMS workshop at COLM 2026."
   },
   {
     "date": "2026-05",
-    "html": "Started <a href=\"https://summerofcode.withgoogle.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Google Summer of Code 2026</a> with GNU Octave, rewriting the ANOVA stack as an object-oriented framework."
+    "title": "Started Google Summer of Code 2026",
+    "detail": "With <a href=\"https://octave.org/\" target=\"_blank\" rel=\"noopener noreferrer\">GNU Octave</a>, rewriting the ANOVA stack as an object-oriented framework."
   },
   {
     "date": "2026-01",
-    "html": "Interned at <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a>: improved the OCR pipeline and the webpage-classifier model, built agentic memory for an internal agent framework, and prototyped parallel document splitting."
+    "title": "HiLabs internship",
+    "detail": "Improved the OCR pipeline and the webpage-classifier model, built agentic memory for an internal agent framework, and prototyped parallel document splitting."
   },
   {
     "date": "2025-12",
-    "html": "Silver at Inter-IIT Tech Meet 14.0: 1st runner-up on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs."
+    "title": "Silver at Inter-IIT Tech Meet 14.0",
+    "detail": "1st runner-up on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs."
   },
   {
     "date": "2025-09",
-    "html": "Received a pre-placement offer from HiLabs after winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee."
+    "title": "Pre-placement offer from HiLabs",
+    "detail": "After winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee."
   },
   {
     "date": "2025-05",
-    "html": "Data science intern at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>, working on generative engine optimisation (GEO)."
+    "title": "Data science intern at Info Edge",
+    "detail": "Working on generative engine optimisation (GEO) at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>."
   },
   {
     "date": "2024-12",
-    "html": "Silver in Tech GC, IIT Roorkee, for an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>."
+    "title": "Silver in Tech GC, IIT Roorkee",
+    "detail": "For an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>."
   }
 ]
