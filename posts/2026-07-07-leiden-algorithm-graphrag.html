@@ -24,11 +24,11 @@
     <link rel="me" href="https://www.linkedin.com/in/aman-behera-/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="../assets/js/theme.js?v=e948f18"></script>
-    <link rel="preload" href="../assets/css/style.css?v=e948f18" as="style">
-    <link rel="stylesheet" href="../assets/css/style.css?v=e948f18">
+    <script src="../assets/js/theme.js?v=c64529a"></script>
+    <link rel="preload" href="../assets/css/style.css?v=c64529a" as="style">
+    <link rel="stylesheet" href="../assets/css/style.css?v=c64529a">
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <script src="../assets/js/main.js?v=e948f18" defer></script>
+    <script src="../assets/js/main.js?v=c64529a" defer></script>
     <style>
 
     </style>
@@ -113,15 +113,9 @@
 <h2 id="why-communities-matter">Why communities matter?</h2>
 <p>Networks are rarely random. People form friend circles, papers form research areas, videos form interest bubbles, and entities inside a knowledge graph form semantic neighborhoods. Community detection is useful because it gives us a way to discover these groups automatically.</p>
 <p>On <a href="https://snap.stanford.edu/data/com-Youtube.html">YouTube</a>, a viewer does not just watch isolated videos. Their clicks slowly reveal a sphere of interest, if we represent videos as nodes and similarities as edges, communities become recommendation neighborhoods.</p>
-<figure>
-<img src="../assets/images/posts/leiden/fig-04.png" alt="image" />
-<figcaption aria-hidden="true">image</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-04.png" alt="image" /></p>
 <p><a href="https://www.connectedpapers.com/main/0b4c513b66754d5e7c700508629e2d28b1061609/Science-mapping-software-tools:-Review,-analysis,-and-cooperative-study-among-tools/graph">Connected Papers</a> works in a similar spirit. A single paper is connected to nearby papers through citations, shared references, and semantic similarity. The graph around it naturally separates into research clusters: methods, applications and related fields</p>
-<figure>
-<img src="../assets/images/posts/leiden/fig-02.png" alt="image" />
-<figcaption aria-hidden="true">image</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-02.png" alt="image" /></p>
 <p>For GraphRAG, this becomes especially important. After documents are converted into a knowledge graph, the graph may contain thousands of entities and relationships. Leiden helps divide that graph into semantic clusters. Each cluster can then be summarized by an LLM, turning a messy knowledge graph into a layered map of meaning</p>
 <h2 id="graph-partitions-and-the-combinatorial-explosion">Graph partitions and the combinatorial explosion</h2>
 <p>A graph is a set of nodes and edges:</p>
@@ -217,10 +211,7 @@ C=\{V\}
 \text{How surprising is this partition compared to random wiring?}
 </annotation></semantics></math></p>
 <p>That difference is subtle, but extremely important. A good partition is not just one with many internal edges. A good partition has <strong>more internal structure than we would expect to appear by chance alone.</strong></p>
-<figure>
-<img src="../assets/images/posts/leiden/fig-18.png" alt="image" />
-<figcaption aria-hidden="true">image</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-18.png" alt="image" /></p>
 <table>
 <thead>
 <tr>
@@ -593,10 +584,7 @@ Q_{2|4} = \frac{1}{30} \left( 4- \frac{8\cdot6}{30} \right) = 0.080
 C=\{\{0\},\{1\},\{2,4\},\{3\}\}
 </annotation></semantics></math> <img src="../assets/images/posts/leiden/fig-14.png" alt="image" /></p>
 <h3 id="step-2-node-0-evaluates-its-neighbors">Step 2: Node 0 Evaluates Its Neighbors</h3>
-<figure>
-<img src="../assets/images/posts/leiden/fig-15.png" alt="image" />
-<figcaption aria-hidden="true">image</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-15.png" alt="image" /></p>
 <p>Now node (0) considers possible moves. The strongest neighboring community is node (1)</p>
 <p>The modularity gain becomes:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mn>0</mn><mo stretchy="false" form="prefix">|</mo><mn>1</mn></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mn>30</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mn>4</mn><mo>−</mo><mfrac><mrow><mn>5</mn><mo>⋅</mo><mn>6</mn></mrow><mn>30</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mn>0.100</mn></mrow><annotation encoding="application/x-tex">
@@ -626,15 +614,9 @@ Q_{0|\{2,4\}} = \frac{1}{30} \left( 1-\frac{5\cdot14}{30} \right) = -0.044
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mo stretchy="false" form="prefix">{</mo><mn>2</mn><mo>,</mo><mn>4</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mo stretchy="false" form="prefix">{</mo><mn>3</mn><mo stretchy="false" form="postfix">}</mo><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">
 C=\{\{0,1\},\{2,4\},\{3\}\}
 </annotation></semantics></math></p>
-<figure>
-<img src="../assets/images/posts/leiden/fig-09.png" alt="image" />
-<figcaption aria-hidden="true">image</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-09.png" alt="image" /></p>
 <h3 id="step-3-node-3-decides">Step 3: Node 3 Decides</h3>
-<figure>
-<img src="../assets/images/posts/leiden/fig-10.png" alt="image" />
-<figcaption aria-hidden="true">image</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-10.png" alt="image" /></p>
 <p>Now node (3) must decide where it belongs.</p>
 <p>There are two candidate communities:</p>
 <ul>
@@ -706,10 +688,7 @@ m \sim 10^6
 1400
 </annotation></semantics></math></p>
 <p>edges. Any meaningful cluster smaller than this scale may be absorbed into a larger neighboring community.</p>
-<figure>
-<img src="../assets/images/posts/leiden/fig-12.jpg" alt="resolutionlimi" />
-<figcaption aria-hidden="true">resolutionlimi</figcaption>
-</figure>
+<p><img src="../assets/images/posts/leiden/fig-12.jpg" alt="resolutionlimi" /></p>
 <h3 id="cpm-the-constant-potts-model">CPM: the Constant Potts Model</h3>
 <p>The cleanest answer to the resolution limit is to abandon modularity’s expected-edge term entirely and replace it with a <strong>resolution parameter</strong> <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math> that has a clean interpretation. The <strong>Constant Potts Model</strong> (Traag, Van Dooren &amp; Nesterov, 2011) is defined by:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mtext mathvariant="normal">CPM</mtext></msub><mo stretchy="false" form="prefix">(</mo><mi>C</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.278em"></mspace><mo>=</mo><mspace width="0.278em"></mspace><mo>−</mo><munder><mo>∑</mo><mrow><mi>c</mi><mo>∈</mo><mi>C</mi></mrow></munder><mspace width="-0.167em"></mspace><mrow><mo stretchy="true" form="prefix">[</mo><mspace width="0.167em"></mspace><msub><mi>e</mi><mi>c</mi></msub><mspace width="0.278em"></mspace><mo>−</mo><mspace width="0.278em"></mspace><mi>γ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><msub><mi>n</mi><mi>c</mi></msub><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
@@ -825,7 +804,7 @@ P_0 \succ P_1 \succ \cdots \succ P_L
 </ol>
             </div>
             <nav class="post-nav" aria-label="Adjacent posts">
-              <a class="post-nav-prev" href="2026-05-07-swar-parsing-internals.html"><span class="post-nav-label">← Older</span><span class="post-nav-title">SWAR Parsing Internals</span></a>
+              <a class="post-nav-prev" href="2026-07-02-writing-cpp-the-machine-runs-fast.html"><span class="post-nav-label">← Older</span><span class="post-nav-title">Writing C++ the Machine Can Run Fast</span></a>
               <span></span>
             </nav>
 

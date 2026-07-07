@@ -1,19 +1,19 @@
 [
   {
-    "date": "2026-07",
-    "html": "Setting up the first LLM-inference GPU infrastructure at <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a>, serving fine-tuned SLMs for downstream tasks to cut token spend and speed up inference."
-  },
-  {
     "date": "2026-06",
-    "html": "Graduated from IIT Roorkee and joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a> as a Data Scientist."
+    "html": "Graduated from IIT Roorkee and joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a> as a Data Scientist. Now building our first LLM-inference GPU infrastructure: a serving framework that does GPU-aware request routing, autoscaling, and KV-cache sharing to cut token spend and speed up inference for fine-tuned SLMs."
   },
   {
     "date": "2026-05",
-    "html": "Started <a href=\"https://summerofcode.withgoogle.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Google Summer of Code 2026</a> with GNU Octave: rewriting the ANOVA stack as an object-oriented framework."
+    "html": "\"Trust the Subject, Cap the Item\" (capped amortized IRT) won the Predictive AI Evaluation Challenge; write-up submitted to the AIMS workshop at COLM 2026."
+  },
+  {
+    "date": "2026-05",
+    "html": "Started <a href=\"https://summerofcode.withgoogle.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Google Summer of Code 2026</a> with GNU Octave, rewriting the ANOVA stack as an object-oriented framework."
   },
   {
     "date": "2026-01",
-    "html": "Joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a> as a Data Science intern, building LLM-as-a-judge evaluation pipelines."
+    "html": "Interned at <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a>: improved the OCR pipeline and the webpage-classifier model, built agentic memory for an internal agent framework, and prototyped parallel document splitting."
   },
   {
     "date": "2025-12",
@@ -25,7 +25,7 @@
   },
   {
     "date": "2025-05",
-    "html": "Data science internship at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>."
+    "html": "Data science intern at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>, working on generative engine optimisation (GEO)."
   },
   {
     "date": "2024-12",

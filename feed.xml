@@ -18,6 +18,22 @@
       <category>rag, graphs, algorithms</category>
     </item>
     <item>
+      <title>Writing C++ the Machine Can Run Fast</title>
+      <link>https://beingamanforever.github.io/posts/2026-07-02-writing-cpp-the-machine-runs-fast.html</link>
+      <guid isPermaLink="true">https://beingamanforever.github.io/posts/2026-07-02-writing-cpp-the-machine-runs-fast.html</guid>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
+      <description>Cache locality, branch prediction, why the stack is cheap, what optimization flags actually do, and why the size of a variable matters. Notes on the gap between source and silicon.</description>
+      <category>cpp, performance, systems</category>
+    </item>
+    <item>
+      <title>The Many Flavours of Constness in C++</title>
+      <link>https://beingamanforever.github.io/posts/2026-06-28-flavours-of-const-in-cpp.html</link>
+      <guid isPermaLink="true">https://beingamanforever.github.io/posts/2026-06-28-flavours-of-const-in-cpp.html</guid>
+      <pubDate>Sun, 28 Jun 2026 00:00:00 +0000</pubDate>
+      <description>const, const_cast, constexpr, consteval, constinit. What each one promises, how the compiler sees it, and when work moves from runtime to compile time.</description>
+      <category>cpp, systems</category>
+    </item>
+    <item>
       <title>SWAR Parsing Internals</title>
       <link>https://beingamanforever.github.io/posts/2026-05-07-swar-parsing-internals.html</link>
       <guid isPermaLink="true">https://beingamanforever.github.io/posts/2026-05-07-swar-parsing-internals.html</guid>

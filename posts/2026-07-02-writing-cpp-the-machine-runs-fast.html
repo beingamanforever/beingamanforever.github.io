@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Writing C++ the Machine Can Run Fast | Aman Behera</title>
+    <meta name="description" content="Cache locality, branch prediction, why the stack is cheap, what optimization flags actually do, and why the size of a variable matters. Notes on the gap between source and silicon.">
+    <meta property="og:title" content="Writing C++ the Machine Can Run Fast">
+    <meta property="og:description" content="Cache locality, branch prediction, why the stack is cheap, what optimization flags actually do, and why the size of a variable matters. Notes on the gap between source and silicon.">
+    <meta property="og:image" content="https://beingamanforever.github.io/assets/og/2026-07-02-writing-cpp-the-machine-runs-fast.png">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2026-07-02">
+    <meta property="article:author" content="Aman Behera">
+    <link rel="canonical" href="https://beingamanforever.github.io/posts/2026-07-02-writing-cpp-the-machine-runs-fast.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="no-referrer">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="../favicon.svg">
+    <link rel="mask-icon" href="../favicon.svg" color="#0a0a0a">
+    <link rel="alternate" type="application/rss+xml" title="aman behera" href="../feed.xml">
+    <link rel="alternate" type="application/atom+xml" title="aman behera (Atom)" href="../feed.atom">
+    <link rel="me" href="https://github.com/beingamanforever">
+    <link rel="me" href="https://www.linkedin.com/in/aman-behera-/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="../assets/js/theme.js?v=c64529a"></script>
+    <link rel="preload" href="../assets/css/style.css?v=c64529a" as="style">
+    <link rel="stylesheet" href="../assets/css/style.css?v=c64529a">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="../assets/js/main.js?v=c64529a" defer></script>
+    <style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #204a87; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #204a87; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #ce5c00; font-weight: bold; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+    </style>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Writing C++ the Machine Can Run Fast",
+  "description": "Cache locality, branch prediction, why the stack is cheap, what optimization flags actually do, and why the size of a variable matters. Notes on the gap between source and silicon.",
+  "datePublished": "2026-07-02",
+  "author": {
+    "@type": "Person",
+    "name": "Aman Behera",
+    "url": "https://beingamanforever.github.io/"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Aman Behera"
+  },
+  "mainEntityOfPage": "https://beingamanforever.github.io/posts/2026-07-02-writing-cpp-the-machine-runs-fast.html",
+  "image": "https://beingamanforever.github.io/assets/og/2026-07-02-writing-cpp-the-machine-runs-fast.png",
+  "keywords": "cpp, performance, systems",
+  "wordCount": "2198"
+}
+    </script>
+</head>
+<body>
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo" aria-label="Home">Aman Behera</a>
+            <div class="nav-links">
+                <a href="../blog.html">writing</a>
+                <a href="../work.html">projects</a>
+                <a href="../now.html">now</a>
+                <a href="../contact.html">contact</a>
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <line x1="12" y1="2" x2="12" y2="5"></line>
+                        <line x1="12" y1="19" x2="12" y2="22"></line>
+                        <line x1="2" y1="12" x2="5" y2="12"></line>
+                        <line x1="19" y1="12" x2="22" y2="12"></line>
+                        <line x1="4.9" y1="4.9" x2="7" y2="7"></line>
+                        <line x1="17" y1="17" x2="19.1" y2="19.1"></line>
+                        <line x1="4.9" y1="19.1" x2="7" y2="17"></line>
+                        <line x1="17" y1="7" x2="19.1" y2="4.9"></line>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content" class="post-page">
+        <article class="post-container container">
+            <nav class="post-breadcrumbs" aria-label="Breadcrumb">
+                <a href="../blog.html">Notes</a>
+                <span class="post-breadcrumb-sep">/</span>
+                <a href="../blog.html#tag=cpp">cpp</a>
+                <span class="post-breadcrumb-sep">/</span>
+                <span class="post-breadcrumb-current" aria-current="page">Writing C++ the Machine Can Run Fast</span>
+            </nav>
+            <header class="post-header">
+                <h1 class="post-title">Writing C++ the Machine Can Run Fast</h1>
+                <div class="post-meta">
+                    <time class="post-meta-date" datetime="2026-07-02">2026-07-02</time>
+                    <span class="post-meta-sep">·</span>
+                    <span class="post-meta-tags">cpp, performance, systems</span>
+                    <span class="post-meta-sep">·</span>
+                    <span class="post-meta-readtime">11 min read</span>
+                </div>
+            </header>
+
+            <div class="post-content">
+<p>Two functions with the same big-O can differ by an order of magnitude in wall-clock time. The reason is rarely the algorithm on paper, it is how the code meets the machine: whether data is where the cache expects it, whether branches are predictable, whether the compiler could prove enough to optimise. These notes collect what I learned poking at that gap, from cache lines and the stack up through compiler flags and why a variable’s size is itself a performance decision.</p>
+<h2 id="cache-locality-and-branch-prediction">Cache locality and branch prediction</h2>
+<ol type="1">
+<li>For smaller N, N^2 algorithm performs faster than NlogN algorithms , quick sort and merge sort are both NlogN algorithms but they perform worse, std::sort performs the best. Cache locality and branch predictability are more important factors.</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/sortingtimes.png" alt="sorting speed comparison" /></p>
+<ol start="2" type="1">
+<li><a href="https://medium.com/cemac/obtaining-cpu-cache-size-bafd9607e61a">How to check cache size?</a>, On my Mac I have: L1I=128kb, L1D=64kb and L2=4MB (per core), Cache line size = 128B
+<ul>
+<li>Cache line is the smallest chunk of memory moved between RAM and CPU cache. When you load one byte, the CPU actually loads the entire cache line. x86: usually 64 bytes, in my MAC (M2): 128 bytes</li>
+<li>CPUs don’t load variables, they load cache lines. Nearby data is “free” once a cache line is loaded. This is called spatial locality, why it matters? Good layouts:
+<ul>
+<li>arrays of structs (AoS) for sequential access</li>
+<li>tight structs that fit in one cache line</li>
+</ul></li>
+<li>Usually it goes on checking L1 cache first, then L2, then L3, then RAM. Each level is larger but slower.</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/cachehierarchy.png" alt="cache hierarchy" /></p>
+<pre><code>- There is soeme prefetching logic in modern CPUs that tries to predict what data will be needed next and loads it into cache ahead of time, based on access patterns. This depends vendor to vendor  (prefetcher live b/w CPU and cache)</code></pre>
+<ol start="3" type="1">
+<li><p>How the CPU Cache Works (Spatial Locality)</p>
+<ul>
+<li><p>This example demonstrates why the layout of the data structures that matters for performance.</p></li>
+<li><p>Example1: ```cpp struct S { int x; // 4 bytes int y; // 4 bytes };</p>
+<p>void what_is_cache(S s) { auto x = s.x; // Accessing x auto y = s.y; // Accessing y } ```</p></li>
+<li><p>auto x = s.x; * Result: Cache Miss (First load). The CPU fetches the entire cache line containing s from RAM. This line now contains both x and y.</p></li>
+<li><p>auto y = s.y; * Result: Cache Hit (Already in cache). Since y was pulled in during the first fetch, the CPU reads it directly from the high-speed cache.</p></li>
+<li><p>Example2: <code>cpp   auto get_sum(auto const &amp;vec, auto const &amp;indices) {       int sum = 0;       for (auto idx : indices) {           sum += vec[idx]; // Accessing elements based on indices       }       return sum;   }</code></p></li>
+<li><p>If indices are sequential (0,1,2,3…), we get many cache hits because accessing vec[idx] pulls in contiguous cache lines.</p></li>
+<li><p>If indices are random (3, 1000, 42…), we get many cache misses because each access likely pulls in a new cache line from RAM.</p></li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/vectorcachehits.png" alt="cache line fetch" /></p>
+<pre><code>    - The kinks are the cache sizes, in the above system L3 cache size is 8MB, so once the working set exceeds that size, cache misses increase significantly. But for inorder acess, spatial locality helps a lot. And after 8MB it didn&#39;t matter due to &quot;cache prefeching&quot;, which loads data into cache before it&#39;s actually needed based on access patterns.
+- Example3: Matrix Multiplication:
+    ```cpp
+    void matmul_row_major_ijk(auto const &amp;A, auto const &amp;B, auto &amp;C, int N) {
+        std::fill(C.begin(), C.end(), 0);
+        for (int i = 0; i &lt; N; i++) {
+            for (int j = 0; j &lt; N; j++) {
+                // i, j fixed, k varies
+                for (int k = 0; k &lt; N; k++) {
+                    C[i*N + j] += A[i*N + k] * B[k*N + j]; // (not changing) += (changing but one element at a time) * (jump k elements, hence bad for cache locality)
+                }
+            }
+        }
+    }
+    ```
+- If instead of ijk we loop, ikj or jik, we get better cache performance because we access contiguous memory locations more frequently. As C[i*N + j] is changing only once per i,j, A[i*N + k] is changing contiguously for k, and B[k*N + j] is changing but 1 element at a time, so better cache locality.</code></pre>
+<ol start="4" type="1">
+<li>AoS vs SoA (Cache Efficiency in Loops):
+<ul>
+<li>When we need to access all elements then AoS is fine but when we need to access only a few fields of a large collection of structs, SoA is much better.</li>
+<li>When processing large collections of data, how you organize your memory determines whether your CPU spends its time calculating or waiting for RAM.</li>
+<li><h3 id="array-of-structs-aos">Array of Structs (AoS):</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Particle <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> velocity<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Particle particles<span class="op">[</span><span class="dv">1000</span><span class="op">];</span> <span class="co">// Array of Structs</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">1000</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    particles<span class="op">[</span>i<span class="op">].</span>velocity <span class="op">+=</span> <span class="fl">1.0</span><span class="bu">f</span><span class="op">;</span> <span class="co">// Updating only &#39;velocity&#39;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li>In AoS, each <code>Particle</code> is 16 bytes. A 64-byte cache line loads 4 structs, but only <code>velocity</code> is needed. The other 12 bytes (x, y, z) are wasted, leading to inefficient cache usage.</li>
+<li><h3 id="struct-of-arrays-soa">Struct of Arrays (SoA):</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> Particles <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> x<span class="op">[</span><span class="dv">1000</span><span class="op">];</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">[</span><span class="dv">1000</span><span class="op">];</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> z<span class="op">[</span><span class="dv">1000</span><span class="op">];</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> velocity<span class="op">[</span><span class="dv">1000</span><span class="op">];</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>Particles particles<span class="op">;</span> <span class="co">// Struct of Arrays</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">1000</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    particles<span class="op">.</span>velocity<span class="op">[</span>i<span class="op">]</span> <span class="op">+=</span> <span class="fl">1.0</span><span class="bu">f</span><span class="op">;</span> <span class="co">// Updating only &#39;velocity&#39;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li>In SoA, <code>velocity</code> is contiguous. Each cache line loads multiple relevant values, maximizing utilization. This minimizes memory bandwidth waste, making SoA significantly faster for field-specific updates.</li>
+</ul></li>
+<li>Branch Prediction:
+<ul>
+<li>Modern CPUs use branch prediction to guess the outcome of conditional operations (like if-else statements) before they are executed. If the CPU guesses correctly, it can continue executing instructions without interruption. However, if it guesses incorrectly, it must discard the speculative work and start over, which can lead to performance penalties.</li>
+<li>Example: <code>cpp   for (int i = 0; i &lt; 1000000; i++) {       if (i % 2 == 0) {           // Do something for even numbers       } else {           // Do something for odd numbers       }   }</code></li>
+<li>In this loop, the branch predictor may struggle because the outcome alternates every iteration. This can lead to mispredictions and performance hits.</li>
+<li>To improve branch predictability, you can restructure your code to minimize unpredictable branches or use techniques like loop unrolling.</li>
+<li>Loop Unrolling Example: <code>cpp   for (int i = 0; i &lt; 1000000; i += 4) {       // Handle 4 iterations at a time       if (i % 2 == 0) { /* even */ } else { /* odd */ }       if ((i + 1) % 2 == 0) { /* even */ } else { /* odd */ }       if ((i + 2) % 2 == 0) { /* even */ } else { /* odd */ }       if ((i + 3) % 2 == 0) { /* even */ } else { /* odd */ }   }</code></li>
+<li>By processing multiple iterations in a single loop iteration, you can reduce the number of branches the CPU needs to predict, improving overall performance. Why loop unrolling works? https://en.algorithmica.org/hpc/architecture/loops/ (Hint: go via the number of useful associated instructions being instructed per loop iteration we can go from 25% to 4/7 = 53% efficienct loops)</li>
+<li>In modern development, compilers (GCC/Clang/MSVC) usually unroll loops for you automatically if you use -O2 or -O3 flags (also new gen compilers are smart enough to do many trivial branch predictions like predicitng True False True False patterns etc), -O2 and -O3 are “optimization presets.”</li>
+<li>My exploration with O2 vs O3:</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/o2vso3.png" alt="performance comparison" /></p>
+<p><img src="../assets/images/posts/cpp-notes/o2vso3binarysize.png" alt="binary size comparison" /></p>
+<pre><code>    - I wrote a simple C++ matrix multiplication [code](../assets/images/posts/cpp-notes/bench.cpp) and compiled it using -o2 &amp; -o3 optimization flags. As you can see, o3 generates a larger binary (due to unrolling and inlining) but achieves better performance due to reduced branching and improved instruction-level parallelism.
+- Another example:
+    ```cpp
+    for (int i = 0; i &lt; N; i++) {
+        if (array[i] &gt; threshold) {
+            process_high(array[i]);
+        } else {
+            process_low(array[i]);
+        }
+    }
+    ```
+- If the data in `array` is random, the branch predictor will struggle, leading to frequent mispredictions and performance degradation.</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/branchpredictabilityinproduct.png" alt="branch prediction" /></p>
+<h2 id="why-the-stack-is-so-fast">Why the stack is so fast</h2>
+<ol type="1">
+<li><p>stack is <strong>aka</strong>: program stack, call stack, execution stack.</p></li>
+<li><p>a program (executable) must ask the OS for memory space. The OS allocates it, but while running, if the program tries to access memory it shouldn’t, the OS terminates it with <strong>Segmentation Fault (core dumped)</strong>.</p></li>
+<li><p><strong>external fragmentation</strong>: memory exists, but we still run out of usable space due to bad allocation patterns.</p></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/externalfragmentation.png" alt="external fragmentation" /></p>
+<ul>
+<li>requesting more memory takes time; hence using the <strong>heap</strong> gives a performance hit.</li>
+<li>if main memory (RAM) is exhausted, the OS gives <strong>storage-backed memory</strong> (aka <em>virtual memory</em>), but storage is <strong>thousands of times slower</strong> than RAM.</li>
+</ul>
+<p><img src="../assets/images/posts/cpp-notes/compofspeedofmemory.png" alt="comparison of speeds between different types of memory" /></p>
+<ul>
+<li>even fetching data from main memory has a noticeable cost, hence we have <strong>CPU caches</strong> (different from registers).</li>
+<li>if data is present in cache → <strong>cache hit</strong>; otherwise → <strong>cache miss</strong> (CPU stalls while data is fetched from main memory).</li>
+<li>hence keeping data <strong>compact and contiguous</strong> is beneficial to maximize cache hits (this is <strong>locality</strong>: spatial + temporal).</li>
+</ul>
+<p><img src="../assets/images/posts/cpp-notes/cacheandlocality.png" alt="cache and locality" /></p>
+<ol start="4" type="1">
+<li>the size of the preallocated stack region depends on the <strong>compiler / OS / platform</strong>.</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/sizeofstackindiffcompilers.png" alt="size of stack in diff compilers" /></p>
+<p>might seem small, but <code>1 MB = 1,048,576 bytes → 1,048,576 / 8 = 131,072</code> 64-bit integers.</p>
+<ol start="5" type="1">
+<li>stack is a contiguous memory region:
+<ul>
+<li>beginning of stack = <strong>stack origin</strong></li>
+<li>the <strong>stack pointer (SP)</strong> keeps track of the top (yes, it usually grows <em>downwards</em>).</li>
+<li>the stack pointer must be stored somewhere → it lives in a <strong>CPU register</strong>.</li>
+</ul></li>
+<li><strong>stack allocation is extremely cheap</strong>:
+<ul>
+<li>allocation = adjust stack pointer (<code>SP +=/-= size</code>)</li>
+<li>no OS call, no searching for free blocks</li>
+<li>heap allocation requires OS involvement, metadata, bookkeeping, and fragmentation-handling strategies → slower.</li>
+</ul></li>
+<li>when a function is called:
+<ul>
+<li>a <strong>stack frame</strong> is pushed onto the stack.</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/stackframe.png" alt="stack frame" /></p>
+<ul>
+<li>it contains:
+<ul>
+<li>local variables</li>
+<li>function arguments (depending on ABI)</li>
+<li>saved registers</li>
+<li><strong>return address</strong> (return-link)</li>
+</ul></li>
+<li>the starting point of the frame must be tracked so that after function completion, the stack pointer can be reset correctly.</li>
+</ul>
+<ol start="8" type="1">
+<li>in <strong>recursion</strong>, if there is no base case:
+<ul>
+<li>new stack frames keep getting added</li>
+<li>eventually, the stack runs out of space → <strong>stack overflow</strong>.</li>
+</ul></li>
+<li>each <strong>thread has its own stack</strong>:
+<ul>
+<li>pros: no synchronization needed for local variables</li>
+<li>cons: fixed size per thread, memory overhead</li>
+<li><h2 id="this-is-one-of-the-reasons-shared-data-structures-usually-live-on-the-heap.">this is one of the reasons shared data structures usually live on the <strong>heap</strong>.</h2>
+<a href="https://youtu.be/N3o5yHYLviQ?si=Rl5FE-83EAskkHWy">nice video for reference by core dumped</a></li>
+</ul></li>
+</ol>
+<h2 id="what-the-compiler-does-for-you">What the compiler does for you</h2>
+<ol type="1">
+<li>A lot of things compiler can do for us to make the code faste:
+<ul>
+<li>loop unrolling, splitting, fusion</li>
+<li>reordering instructions</li>
+<li>precomputing values</li>
+<li>branch prediction hints</li>
+<li>inlining functions</li>
+<li>dead code elimination</li>
+<li>constant propagation</li>
+<li>vectorization and so on!</li>
+</ul></li>
+<li>Some optimizations don’t work well with volatile variables (variables which can be changed by hardware, like in embedded systems where a sensor is linked to a memory address). Hence “volatile” forces the CPU to fetch the variable from memory every time it is being used, to push away the arrogant compiler optimizations. <code>cpp  int some_int = 100;  while(some_int == 100) // The compiler sees this loop &amp; makes it while(true)  {     // Code that does NOT change 'some_int'  }</code>
+<ul>
+<li>The compiler might optimize this to an infinite loop, since it sees that ‘some_int’ is never changed in the loop.</li>
+<li>To prevent this, we can declare ‘some_int’ as volatile, as it might be changed by some external hardware.</li>
+</ul></li>
+<li>Downside of compiler optimizations is that they can mess up debugging, as the optimized code may not correspond directly to the source code. Using gdb with optimizations can overlook errors.</li>
+<li>Tail call optimization: When we have something like a recursive funciton, when we need it’s other operands in the memory as well which keeps on increasing the stack size. But if we pass the result of the function directly when we won’t be needed more stack frames, hence it would just be a loop. Example: in this code I ran a fact(5) with -o0 and -o3 optimizations</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/TCO.png" alt="tail call optimization" /></p>
+<p><img src="../assets/images/posts/cpp-notes/resultstco.png" alt="tail call optimization assembly" /></p>
+<pre><code>- bl stands for Branch with Link
+- It saves the return address to the link register and jumps to the function.
+- In the optimized version, it replaced the recursive &quot;call&quot; with a simple jump (or a loop) back to the top of the function, hence we can now calulate factorials of large numbers without stack overflow.
+- Tail Recursion is the &quot;proper&quot; way to write, so that we dont depend on compiler to be clever enough</code></pre>
+<ol start="5" type="1">
+<li>Branch Predictions:
+<ul>
+<li>Modern CPUs use branch prediction to guess the outcome of conditional operations (like if-else statements) before they are executed. If the CPU guesses correctly, it can continue executing instructions without interruption. However, if it guesses incorrectly, it must discard the speculative work and start over, which can lead to performance penalties.</li>
+<li>I did an experiment with branch predictions and optimizations (-o0 vs -o3 vs -ofast) on diff array sizes:</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/branchcode.png" alt="branch prediction experiment" /></p>
+<p><img src="../assets/images/posts/cpp-notes/branch_prediction.png" alt="branch prediction" /></p>
+<p><img src="../assets/images/posts/cpp-notes/branch_prediction2.png" alt="branch prediction2" /></p>
+<pre><code>- Key take aways:
+    - Branch prediction is a hardware bottleneck that -O3 cannot always solve automatically.
+    - If-Conversion: Compilers like GCC with -O3 can convert branches to branchless conditional moves (cmov), making performance consistent for sorted and unsorted data.
+    - Paradoxically, -O3 can be slower than -O2: the cmov instruction has higher latency (especially on older CPUs). When placed on the critical path, this branchless optimization can underperform the branch predictor on predictable data.</code></pre>
+<hr />
+<h2 id="optimization-flags-measured">Optimization flags, measured</h2>
+<ol type="1">
+<li>Flags are options passed to the compiler to control the optimization level and behavior during the compilation process.</li>
+<li>Optimization flags:
+<ul>
+<li>O0: (no optimization, fast compilation and good for debugging)</li>
+<li>O1: (some optimization, balances between speed and compilation time)</li>
+<li>O2: (more optimization, good for production code)</li>
+<li>O3: (maximum optimization, may increase binary size and compilation time)(also reorders floating point operations which may lead to precision issues)</li>
+<li>Ofast: (aggressive optimizations that may violate strict standards compliance)</li>
+<li>Os: (optimize for size, reduces binary size, basically enables all -O2 optimizations that do not increase size)</li>
+<li>Oz: (optimize for minimum size, even more aggressive than -Os)</li>
+<li>Og: (optimize for debugging, improves debugging experience)</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/optflags.png" alt="alt text" /></p>
+<pre><code>- Theoritically, Oz or Os can be fatser if they allow more code to fit in cache, but in practice O2 or O3 are often faster due to better overall optimizations (again it&#39;s dependent)</code></pre>
+<ol start="3" type="1">
+<li>I ran some benchmarks to compare the size and performance of binaries compiled with different optimization flags. I then ran a bash script to see the size -m results of all the files piped with grep and i/o’ed to a csv file which was then used to generate plots using matplotlib. This is what i got (Code which was compiled was a simple loop to add elements from an array):</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/testcpp.png" alt="o2 vs o3 matrix multiplication" /></p>
+<p><img src="../assets/images/posts/cpp-notes/comparisonbwflagsizesandspeeds.png" alt="optimization flags comparison" /></p>
+<pre><code>- O0 basically dumbs down the compiler, best for debugging.
+- from my experiments i concluded that sometimes even O2 can outperform O3 in some cases, probably because O3&#39;s aggressive optimizations can lead to larger binaries that may not fit well in cache, negating some performance benefits.</code></pre>
+<ol start="4" type="1">
+<li>Downside of compiler optimizations is that they can mess up debugging, as the optimized code may not correspond directly to the source code. Using gdb with optimizations can overlook errors.</li>
+<li>GCC and Clang both support these, but both’s implementaitions may vary slightly.</li>
+</ol>
+<h2 id="why-the-size-of-a-variable-matters">Why the size of a variable matters</h2>
+<h2 id="why-sizeof-variable-matters">Why Sizeof Variable Matters?</h2>
+<p><a href="https://youtu.be/hwyRnHA54lI?si=D5QBjPgSuC1H_6TC">Video</a></p>
+<ol type="1">
+<li><strong>Fixed-size types</strong> exist in C++, Rust (Systems Programming Languages), as compared to Python and JavaScript (Scripting Languages).</li>
+<li>In SPLs, you have explicit control over how much memory is used to represent data.</li>
+<li>Fixed types tell the compiler how much space is needed in memory.</li>
+<li>Computers operate in <strong>bytes (8 bits)</strong>; hence sizes always appear in multiples of 8 (not arbitrary values like 3, 4, or 5).</li>
+<li>We might allocate more space to something that requires a smaller range by definition.</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/interpretedlangvariablealloc.png" alt="Interpreted language allocation" /></p>
+<ol start="6" type="1">
+<li>Hence, we end up using more memory than necessary in scripting languages (since resource allocation is handled by the interpreter).</li>
+<li>Enforcing a fixed type avoids mis-allocations (e.g., rejecting a negative value for an <code>age</code> variable).</li>
+</ol>
+<h3 id="performance-implications">Performance Implications</h3>
+<ol type="1">
+<li>In scripting languages, once the interpreter assigns memory to variables, how does it later know whether those bits represent a string, number, or something else (since everything is machine code)?</li>
+<li>This is solved by attaching <strong>runtime type metadata (tags)</strong> to values. This enables runtime type checks and errors (Python throws errors; JavaScript often doesn’t).</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/javascripthavocks.png" alt="JavaScript type coercion" /></p>
+<ol start="3" type="1">
+<li>These tags require extra memory.</li>
+<li>Tags must be:
+<ul>
+<li>initialized,</li>
+<li>read,</li>
+<li>compared,</li>
+<li>written at runtime.</li>
+</ul>
+All of this adds runtime cost. As a result, the CPU spends time performing comparisons instead of arithmetic.</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/tagcompfunction.png" alt="Tag comparison function" /></p>
+<p><img src="../assets/images/posts/cpp-notes/tagcomparison.png" alt="Tag comparison" /></p>
+<ol start="5" type="1">
+<li>In compiled languages, this overhead is removed. The compiler directly generates assembly that performs arithmetic without runtime type checks.</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/runtimeoverhead.png" alt="Runtime overhead" /></p>
+<h3 id="what-if-size-is-unknown-at-compile-time">What if size is unknown at compile time?</h3>
+<ol type="1">
+<li>We keep references to memory regions that can grow or shrink at runtime (stack or heap).</li>
+<li><strong>Stack</strong>: fixed-size, fast, scoped <strong>Heap</strong>: dynamic-size, flexible, slower</li>
+</ol>
+            </div>
+            <nav class="post-nav" aria-label="Adjacent posts">
+              <a class="post-nav-prev" href="2026-06-28-flavours-of-const-in-cpp.html"><span class="post-nav-label">← Older</span><span class="post-nav-title">The Many Flavours of Constness in C++</span></a>
+              <a class="post-nav-next" href="2026-07-07-leiden-algorithm-graphrag.html"><span class="post-nav-label">Newer →</span><span class="post-nav-title">The Leiden Algorithm: How GraphRAG Finds Order Inside Knowledge Graphs</span></a>
+            </nav>
+
+        </article>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="footer-inner">
+            <p>© 2026 Aman Behera</p>
+            <p class="footer-feedback">Found a bug or have a sharper take? <a class="js-email" href="mailto:aman%2Ebehera%2Esystems%40gmail%2Ecom" data-user="aman.behera.systems" data-domain="gmail.com">Email me</a> or <a href="https://github.com/beingamanforever/beingamanforever.github.io" target="_blank" rel="noopener noreferrer">open a PR</a>.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -198,6 +198,7 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
     -o "$output" \
     --wrap=none \
     --mathml \
+    -f markdown-implicit_figures \
     --template="$BUILD_DIR/post_template.html" \
     --metadata=title:"$title" \
     --metadata=desc:"$desc" \
