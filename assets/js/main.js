@@ -1,12 +1,3 @@
-// Theme toggle: persists choice in localStorage; respects prefers-color-scheme
-// when the user has never explicitly toggled.
-(function initTheme() {
-    const stored = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = stored ? stored === 'dark' : prefersDark;
-    document.body.classList.toggle('dark-mode', isDark);
-})();
-
 // Tiny ephemeral toast for "copied" / "saved" feedback. Reusable across
 // heading-anchor clicks, code copy, contact copy.
 function flashToast(message) {
@@ -25,11 +16,13 @@ function flashToast(message) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Theme toggle: theme.js applied the initial html.dark class pre-paint;
+    // this button flips it and persists the explicit choice.
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn) {
         themeBtn.addEventListener('click', () => {
-            const isDark = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            const dark = document.documentElement.classList.toggle('dark');
+            try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
         });
     }
 

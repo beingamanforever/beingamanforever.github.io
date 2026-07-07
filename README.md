@@ -26,6 +26,8 @@ and regenerates `sitemap.xml` and `feed.xml` from post metadata.
 ├── assets/                 css, js, og image, resume pdf
 ├── content/posts/          post sources (Markdown + YAML-style metadata)
 ├── data/projects.json      project list (single source of truth)
+├── data/news.json          homepage News items (single source of truth)
+├── assets/images/profile.jpg   homepage portrait (swap in your photo)
 ├── posts/                  rendered post HTML  (generated)
 ├── scripts/
 │   ├── build.sh            builds the whole site
@@ -40,7 +42,7 @@ and regenerates `sitemap.xml` and `feed.xml` from post metadata.
 └── feed.xml                generated
 ```
 
-Edit templates, partials, post Markdown, or `data/projects.json` —
+Edit templates, partials, post Markdown, or `data/projects.json`,
 never the generated files. See [BLOGGING.md](BLOGGING.md) for the
 post workflow.
 
@@ -50,8 +52,26 @@ Pandoc for Markdown → HTML. Bash + awk for templating. Plain CSS
 (no preprocessor). Prism.js for syntax highlighting. No bundler,
 no framework.
 
-## Add a project
+## Design
 
-Edit `data/projects.json` and rerun `./scripts/build.sh`. Featured
-projects (`"featured": true`) appear on the home page; all of them
-appear on `work.html`.
+Minimal research-page look: warm cream paper, deep-green ink,
+`Source Serif 4` for headings, `IBM Plex Mono` for body text.
+A dark ink-green theme ships too (nav toggle; respects the OS
+preference via `assets/js/theme.js`). All colors live in the
+`:root` and `html.dark` token blocks at the top and bottom of
+`assets/css/style.css`; change them there, nowhere else.
+
+## Everyday maintenance
+
+Everything on the homepage is data-driven; edit the source, rerun
+`./scripts/build.sh`, commit.
+
+| I want to…                    | Edit                              |
+|-------------------------------|-----------------------------------|
+| Publish a post                | `scripts/new-post.sh "Title"`, write Markdown (HackMD-style), build |
+| Add a news item               | `data/news.json` (append anywhere; sorted newest-first, top 8 shown) |
+| Add / feature a project       | `data/projects.json` (`"featured": true` → homepage; all → work.html) |
+| Showcase a project screenshot | add `"image": "assets/images/<file>.png"` to that project |
+| Change my photo               | replace `assets/images/profile.jpg` (square, ≥240px) |
+| Change bio / affiliations     | `index_template.html` (masthead + about section) |
+| Update research items         | `index_template.html` (research section) + `now_template.html` |

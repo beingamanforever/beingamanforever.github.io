@@ -1,31 +1,27 @@
     <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <div class="nav-left">
-                <a href="$ROOT$index.html" class="nav-logo" aria-label="Home">$SITE_NAME$</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-                    <span id="theme-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                    </span>
+            <a href="$ROOT$index.html" class="nav-logo" aria-label="Home">$SITE_NAME$</a>
+            <div class="nav-links">
+                <a href="$ROOT$blog.html">writing</a>
+                <a href="$ROOT$work.html">projects</a>
+                <a href="$ROOT$now.html">now</a>
+                <a href="$ROOT$contact.html">contact</a>
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <line x1="12" y1="2" x2="12" y2="5"></line>
+                        <line x1="12" y1="19" x2="12" y2="22"></line>
+                        <line x1="2" y1="12" x2="5" y2="12"></line>
+                        <line x1="19" y1="12" x2="22" y2="12"></line>
+                        <line x1="4.9" y1="4.9" x2="7" y2="7"></line>
+                        <line x1="17" y1="17" x2="19.1" y2="19.1"></line>
+                        <line x1="4.9" y1="19.1" x2="7" y2="17"></line>
+                        <line x1="17" y1="7" x2="19.1" y2="4.9"></line>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+                    </svg>
                 </button>
-            </div>
-            <div class="nav-right">
-                <div class="nav-links">
-                    <a href="$ROOT$index.html">Home</a>
-                    <a href="$ROOT$work.html">Work</a>
-                    <a href="$ROOT$blog.html">Blog</a>
-                    <a href="$ROOT$now.html">Now</a>
-                    <a href="$ROOT$contact.html">Contact</a>
-                </div>
             </div>
         </div>
     </nav>

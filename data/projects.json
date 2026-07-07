@@ -2,7 +2,11 @@
   {
     "title": "Zero-copy CSV Ingestion Engine",
     "description": "Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.",
-    "tags": ["C++", "SIMD", "parsing"],
+    "tags": [
+      "C++",
+      "SIMD",
+      "parsing"
+    ],
     "category": "systems",
     "status": "building",
     "signal": "WIP",
@@ -12,7 +16,11 @@
   {
     "title": "ZeroShred",
     "description": "High-throughput file transfer hitting 780 MB/s via kernel-level zero-copy (sendfile), pipelined SHA-256 on dedicated threads, and hardware crypto acceleration.",
-    "tags": ["C", "systems", "networking"],
+    "tags": [
+      "C",
+      "systems",
+      "networking"
+    ],
     "category": "systems",
     "status": "shipped",
     "signal": "780 MB/s",
@@ -22,7 +30,11 @@
   {
     "title": "GNU Octave (GSoC 2026)",
     "description": "Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.",
-    "tags": ["Octave", "numerics", "GSoC"],
+    "tags": [
+      "Octave",
+      "numerics",
+      "GSoC"
+    ],
     "category": "systems",
     "status": "building",
     "signal": "GSoC '26",
@@ -32,7 +44,11 @@
   {
     "title": "Drishti: ISRO Geospatial VLM",
     "description": "Vision-language model for geospatial reasoning; 1st runner-up at Inter-IIT Tech Meet 14.0 across 24 IITs.",
-    "tags": ["VLM", "geospatial", "Inter-IIT"],
+    "tags": [
+      "VLM",
+      "geospatial",
+      "Inter-IIT"
+    ],
     "category": "ml",
     "status": "shipped",
     "signal": "Silver",
@@ -42,7 +58,10 @@
   {
     "title": "HiLabs AIQuest",
     "description": "Winning entry for the HiLabs AIQuest hackathon held at IIT Roorkee.",
-    "tags": ["ML", "hackathon"],
+    "tags": [
+      "ML",
+      "hackathon"
+    ],
     "category": "hackathon",
     "status": "shipped",
     "signal": "Winner",
@@ -52,7 +71,11 @@
   {
     "title": "Binary protocol (C++)",
     "description": "Minimal byte-level binary wire protocol with explicit layout, endian-safe serialization, XOR checksum, and offset-based encoding.",
-    "tags": ["C++", "protocols", "systems"],
+    "tags": [
+      "C++",
+      "protocols",
+      "systems"
+    ],
     "category": "systems",
     "status": "shipped",
     "signal": "library",
@@ -62,7 +85,11 @@
   {
     "title": "LLM Text Detection",
     "description": "BERT-based classifier distinguishing AI-generated text from human-authored text using semantic, statistical, and stylistic features.",
-    "tags": ["ML", "NLP", "BERT"],
+    "tags": [
+      "ML",
+      "NLP",
+      "BERT"
+    ],
     "category": "ml",
     "status": "shipped",
     "signal": "BERT",
@@ -72,7 +99,11 @@
   {
     "title": "Monte Carlo Portfolio Optimization",
     "description": "Monte Carlo simulation for portfolio optimization; computes asset weights for maximum expected return at minimal risk via Sharpe ratio.",
-    "tags": ["simulation", "finance", "Python"],
+    "tags": [
+      "simulation",
+      "finance",
+      "Python"
+    ],
     "category": "ml",
     "status": "dormant",
     "signal": "exploration",
@@ -82,7 +113,11 @@
   {
     "title": "AI Interview Learning Platform",
     "description": "AI-driven interview chatbot built for Tech GC at IIT Roorkee.",
-    "tags": ["ML", "NLP", "Tech GC"],
+    "tags": [
+      "ML",
+      "NLP",
+      "Tech GC"
+    ],
     "category": "hackathon",
     "status": "shipped",
     "signal": "Silver",

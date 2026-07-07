@@ -164,75 +164,6 @@ substitute_list() {
 }
 
 # ----------------------------------------------------------------------------
-# Cache the GitHub contribution heatmap locally (no third-party request at runtime).
-# Skip if upstream is unreachable and we already have a cached copy.
-# ----------------------------------------------------------------------------
-HEATMAP="$IMG_DIR/github-heatmap.svg"
-if curl -fsSL --max-time 5 "https://ghchart.rshah.org/4a6bd6/$SITE_GITHUB" -o "$HEATMAP.tmp" 2>/dev/null; then
-  mv "$HEATMAP.tmp" "$HEATMAP"
-  echo "✓ Heatmap cached → $HEATMAP"
-elif [ ! -f "$HEATMAP" ]; then
-  cat > "$HEATMAP" <<'EOF'
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="120" viewBox="0 0 800 120">
-  <rect width="800" height="120" fill="#1e1e1e"/>
-  <text x="400" y="64" font-family="ui-monospace,monospace" font-size="14" fill="#888" text-anchor="middle">heatmap unavailable</text>
-</svg>
-EOF
-  echo "⚠ Heatmap fetch failed; placeholder written → $HEATMAP"
-else
-  rm -f "$HEATMAP.tmp"
-  echo "⚠ Heatmap fetch failed; using cached copy → $HEATMAP"
-fi
-
-# ----------------------------------------------------------------------------
-# Cache the user's most recent merged PRs from GitHub. Best-effort: skip on
-# failure and reuse last cached payload (or write a tiny placeholder).
-# ----------------------------------------------------------------------------
-mkdir -p assets/data
-PRS_CACHE="assets/data/recent-prs.json"
-PRS_QUERY="is:pr+author:$SITE_GITHUB+is:merged"
-PRS_URL="https://api.github.com/search/issues?q=${PRS_QUERY}&sort=updated&order=desc&per_page=5"
-if [ -n "${GH_TOKEN:-}" ]; then
-  pr_curl_ok=$(curl -fsSL --max-time 6 \
-    -H 'Accept: application/vnd.github+json' \
-    -H 'X-GitHub-Api-Version: 2022-11-28' \
-    -H "Authorization: Bearer $GH_TOKEN" \
-    "$PRS_URL" -o "$PRS_CACHE.tmp" 2>/dev/null && echo y || echo n)
-else
-  pr_curl_ok=$(curl -fsSL --max-time 6 \
-    -H 'Accept: application/vnd.github+json' \
-    -H 'X-GitHub-Api-Version: 2022-11-28' \
-    "$PRS_URL" -o "$PRS_CACHE.tmp" 2>/dev/null && echo y || echo n)
-fi
-if [ "$pr_curl_ok" = "y" ]; then
-  # Slim the payload to just the fields we render.
-  python3 -c "
-import json, sys
-data = json.load(open('$PRS_CACHE.tmp'))
-items = data.get('items', [])[:5]
-out = [
-  {
-    'title': it['title'],
-    'url': it['html_url'],
-    'repo': '/'.join(it['repository_url'].split('/')[-2:]),
-    'merged_at': it.get('closed_at') or it.get('updated_at'),
-    'number': it['number'],
-  }
-  for it in items
-]
-json.dump(out, open('$PRS_CACHE', 'w'), ensure_ascii=False)
-"
-  rm -f "$PRS_CACHE.tmp"
-  echo "✓ Recent PRs cached → $PRS_CACHE"
-elif [ ! -f "$PRS_CACHE" ]; then
-  echo "[]" > "$PRS_CACHE"
-  echo "⚠ PR fetch failed; empty placeholder → $PRS_CACHE"
-else
-  rm -f "$PRS_CACHE.tmp"
-  echo "⚠ PR fetch failed; using cached copy → $PRS_CACHE"
-fi
-
-# ----------------------------------------------------------------------------
 # 1. Build per-post HTML and gather post metadata; generate per-post OG images.
 # ----------------------------------------------------------------------------
 
@@ -266,6 +197,7 @@ for file in $(ls "$CONTENT_DIR"/*.md 2>/dev/null | sort -r); do
   pandoc "$body_md" \
     -o "$output" \
     --wrap=none \
+    --mathml \
     --template="$BUILD_DIR/post_template.html" \
     --metadata=title:"$title" \
     --metadata=desc:"$desc" \
@@ -319,7 +251,7 @@ while IFS=$'\t' read -r slug title date desc tags rt; do
 EOF
 )
   printf '%s\n' "$card" >> "$BUILD_DIR/blog_list.html"
-  if [ $count -lt 3 ]; then
+  if [ $count -lt 4 ]; then
     printf '%s\n' "$card" >> "$BUILD_DIR/blog_list_home.html"
   fi
   count=$((count + 1))
@@ -362,30 +294,10 @@ python3 scripts/render_projects.py \
   --all-out "$BUILD_DIR/projects_all.html" \
   --category-filter-out "$BUILD_DIR/projects_category_filter.html"
 
-# Render the recent-PRs widget (read from the cached JSON).
-python3 - <<'PYEOF' > "$BUILD_DIR/recent_prs.html"
-import json, html, os
-try:
-    items = json.load(open('assets/data/recent-prs.json'))
-except Exception:
-    items = []
-if not items:
-    print('                <p class="recent-prs-empty">No recent PRs yet.</p>')
-else:
-    print('                <ul class="recent-prs-list">')
-    for it in items[:5]:
-        date = (it.get('merged_at') or '')[:10]
-        title = html.escape(it.get('title', '')[:90])
-        repo  = html.escape(it.get('repo', ''))
-        url   = html.escape(it.get('url', '#'), quote=True)
-        num   = html.escape(str(it.get('number', '')))
-        print(f'                    <li class="recent-pr">'
-              f'<a class="recent-pr-link" href="{url}" target="_blank" rel="noopener noreferrer">'
-              f'<span class="recent-pr-repo">{repo}</span>'
-              f'<span class="recent-pr-title">{title}</span>'
-              f'<span class="recent-pr-meta">#{num} · {date}</span></a></li>')
-    print('                </ul>')
-PYEOF
+# Homepage news list from data/news.json.
+python3 scripts/render_news.py \
+  --input data/news.json \
+  --out "$BUILD_DIR/news_list.html"
 
 # ----------------------------------------------------------------------------
 # 4. Tag index
@@ -444,9 +356,9 @@ substitute_list "<!-- BLOG_LIST_HOME -->" "$BUILD_DIR/blog_list_home.html" "$BUI
 substitute_list "<!-- BLOG_LIST -->"      "$BUILD_DIR/blog_list.html"      "$BUILD_DIR/blog.html"
 substitute_list "<!-- TAGS_FILTER -->"    "$BUILD_DIR/tags_filter.html"    "$BUILD_DIR/blog.html"
 substitute_list "<!-- PROJECTS_FEATURED -->" "$BUILD_DIR/projects_featured.html" "$BUILD_DIR/index.html"
+substitute_list "<!-- NEWS_LIST -->"         "$BUILD_DIR/news_list.html"         "$BUILD_DIR/index.html"
 substitute_list "<!-- PROJECTS_ALL -->"      "$BUILD_DIR/projects_all.html"      "$BUILD_DIR/work.html"
 substitute_list "<!-- PROJECT_CATEGORY_FILTER -->" "$BUILD_DIR/projects_category_filter.html" "$BUILD_DIR/work.html"
-substitute_list "<!-- RECENT_PRS -->"        "$BUILD_DIR/recent_prs.html"        "$BUILD_DIR/work.html"
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
   substitute_list "<!-- TAGS_INDEX -->"        "$BUILD_DIR/tags_index.html"        "$BUILD_DIR/tags.html"
   substitute_list "<!-- TAGS_CLOUD -->"        "$BUILD_DIR/tags_cloud.html"        "$BUILD_DIR/tags.html"

@@ -1,7 +1,7 @@
 # Blogging Playbook
 
 Posts are plain Markdown. The build script regenerates everything
-deterministic — page HTML, blog index, sitemap, and feed.
+deterministic: page HTML, blog index, sitemap, and feed.
 
 ## Add a post
 
@@ -21,6 +21,10 @@ Tags: systems, performance
 ---
 
 Write Markdown here. Pandoc converts it to HTML.
+
+Drafting in hackmd.io works as-is: write there, then paste the
+Markdown below the `---` line. Standard Markdown, tables, and fenced
+code blocks all render the same way.
 
 ```c
 // Code blocks get syntax highlighting via Prism.

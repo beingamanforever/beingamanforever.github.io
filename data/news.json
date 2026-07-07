@@ -1,0 +1,34 @@
+[
+  {
+    "date": "2026-07",
+    "html": "Setting up the first LLM-inference GPU infrastructure at <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a>, serving fine-tuned SLMs for downstream tasks to cut token spend and speed up inference."
+  },
+  {
+    "date": "2026-06",
+    "html": "Graduated from IIT Roorkee and joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a> as a Data Scientist."
+  },
+  {
+    "date": "2026-05",
+    "html": "Started <a href=\"https://summerofcode.withgoogle.com/\" target=\"_blank\" rel=\"noopener noreferrer\">Google Summer of Code 2026</a> with GNU Octave: rewriting the ANOVA stack as an object-oriented framework."
+  },
+  {
+    "date": "2026-01",
+    "html": "Joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a> as a Data Science intern, building LLM-as-a-judge evaluation pipelines."
+  },
+  {
+    "date": "2025-12",
+    "html": "Silver at Inter-IIT Tech Meet 14.0: 1st runner-up on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs."
+  },
+  {
+    "date": "2025-09",
+    "html": "Received a pre-placement offer from HiLabs after winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee."
+  },
+  {
+    "date": "2025-05",
+    "html": "Data science internship at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>."
+  },
+  {
+    "date": "2024-12",
+    "html": "Silver in Tech GC, IIT Roorkee, for an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>."
+  }
+]
