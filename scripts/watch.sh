@@ -22,7 +22,6 @@ WATCH=(
   contact_template.html
   blog_template.html
   tags_template.html
-  now_template.html
   404_template.html
   scripts/build.sh
   scripts/render_projects.py

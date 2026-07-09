@@ -11,7 +11,7 @@
 #   - _partials/{nav,footer,head_common}.html
 #
 # Outputs (do not edit by hand; regenerate with this script):
-#   index.html, work.html, contact.html, blog.html, tags.html, now.html, 404.html
+#   index.html, work.html, contact.html, blog.html, tags.html, 404.html
 #   posts/*.html, assets/og/*.svg, assets/img/github-heatmap.svg
 #   sitemap.xml, feed.xml
 #
@@ -350,7 +350,7 @@ if [ "$POST_COUNT" -ge "$TAGS_THRESHOLD" ]; then
 fi
 
 PAGE_TEMPLATES=(index_template.html work_template.html contact_template.html
-                blog_template.html now_template.html 404_template.html
+                blog_template.html 404_template.html
                 research_template.html)
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
   PAGE_TEMPLATES+=(tags_template.html)
@@ -402,7 +402,7 @@ sys.stdout.write(panel.replace('GRAPH_DATA_PLACEHOLDER', data))
   substitute_list "<!-- GRAPH_PANEL -->"     "$BUILD_DIR/graph_panel.final.html" "$BUILD_DIR/blog.html"
 fi
 
-OUT_PAGES=(index.html work.html contact.html blog.html now.html 404.html research.html)
+OUT_PAGES=(index.html work.html contact.html blog.html 404.html research.html)
 if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
   OUT_PAGES+=(tags.html)
 else
@@ -478,7 +478,7 @@ fi
 {
   printf '<?xml version="1.0" encoding="UTF-8"?>\n'
   printf '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-  SITEMAP_PATHS=("" research.html work.html blog.html now.html contact.html)
+  SITEMAP_PATHS=("" research.html work.html blog.html contact.html)
   if [ "$TAGS_PAGE_ENABLED" = "1" ]; then
     SITEMAP_PATHS+=(tags.html)
   fi

@@ -16,7 +16,7 @@ function flashToast(message) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme toggle: theme.js applied the initial html.dark class pre-paint;
+    // Theme toggle: theme.js applies only an explicit saved dark preference;
     // this button flips it and persists the explicit choice.
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn) {

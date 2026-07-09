@@ -2656,6 +2656,23 @@ body::before {
     padding: 0 1.5rem 3rem;
 }
 
+/* Standalone list pages (e.g. /research) that reuse .page: give the heading
+   room to clear the static nav, matching the homepage masthead's top rhythm. */
+.page-head {
+    padding: 2.8rem 0 0;
+    margin-bottom: 1.8rem;
+}
+
+.page-head .page-title {
+    margin-bottom: 0.6rem;
+}
+
+.page-head .page-subtitle {
+    margin-bottom: 0;
+    font-size: 0.98rem;
+    max-width: 60ch;
+}
+
 /* Masthead: squared photo on the left, identity block on the right. */
 .masthead {
     display: flex;
