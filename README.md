@@ -27,9 +27,11 @@ Then open `http://localhost:3456`.
 - `_partials/` contains the shared header, metadata, and footer.
 - `assets/css/style.css` contains the site styles.
 - `assets/fonts/` contains the local Font Awesome brand icon font.
+- `assets/icons/` contains the cache-safe browser and touch icons.
 - `assets/images/projects/` contains the Selected Projects figures.
 - `assets/images/research/` contains Research figures.
 - `assets/images/athletics/` contains the Athletics photo.
+- `assets/og-home-v2.png` is the current social preview card.
 - `data/projects.json` drives Selected Projects.
 - `data/news.json` drives News and supports optional grouped `details`.
 - `data/research.json` drives every research entry.

@@ -79,7 +79,7 @@ if [[ "$OUTPUT_DIR" != "$ROOT_DIR/_site" ]]; then
 fi
 
 rm -rf "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/images"
+mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/icons" "$OUTPUT_DIR/assets/images"
 
 python3 scripts/render_projects.py \
     --input data/projects.json \
@@ -102,8 +102,9 @@ inject_fragment "<!-- RESEARCH_ALL -->" "$TEMP_DIR/research.html" "$OUTPUT_DIR/r
 
 cp assets/css/style.css "$OUTPUT_DIR/assets/css/style.css"
 cp -R assets/fonts/. "$OUTPUT_DIR/assets/fonts/"
+cp -R assets/icons/. "$OUTPUT_DIR/assets/icons/"
 cp -R assets/images/. "$OUTPUT_DIR/assets/images/"
-cp assets/og-home.png "$OUTPUT_DIR/assets/og-home.png"
+cp assets/og-home-v2.png "$OUTPUT_DIR/assets/og-home-v2.png"
 cp favicon.svg "$OUTPUT_DIR/favicon.svg"
 cp robots.txt "$OUTPUT_DIR/robots.txt"
 

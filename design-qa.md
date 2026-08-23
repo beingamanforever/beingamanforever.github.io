@@ -43,3 +43,44 @@
 - Desktop and mobile document widths equal their viewport widths.
 
 final result: passed
+
+## Metadata card and favicon refresh
+
+### Comparison target
+
+- Source visual truth: `assets/og-home.png` and `/var/folders/41/6plwxd5n1ns1dsn1gvvp5wph0000gp/T/codex-clipboard-e9e74748-d35c-4486-b6fd-97785e8f99f8.png`.
+- Rendered implementation: `assets/og-home-v2.png`, `assets/icons/apple-touch-icon.png`, and the metadata rendered at `http://localhost:3456/`.
+- Full comparison evidence: `.design-qa/metadata-card-comparison.png`.
+- Focused favicon evidence: `.design-qa/favicon-comparison.png`.
+
+### Dimensions and state
+
+- Social-card source and implementation: 1200 x 630 pixels at native density.
+- Browser screenshot source: 398 x 158 pixels.
+- Touch-icon implementation: 180 x 180 pixels with a 32 x 32 browser fallback.
+- Browser-rendered metadata check: light theme at a 1280 x 720 CSS viewport.
+
+### Findings and fixes
+
+- Earlier P2: the social card contained outdated copy about systems, C++, and performance engineering.
+- Fix: replaced it with a white minimal card reading `Agents, RL, and large language models` and retained the name and domain hierarchy.
+- Post-fix evidence: `.design-qa/metadata-card-comparison.png` shows the old and new cards at identical dimensions.
+- Earlier P2: the browser displayed the cached black favicon.
+- Fix: introduced new cache-safe SVG and PNG filenames, a 32 x 32 shortcut icon, a 180 x 180 Apple touch icon, and pink theme metadata.
+- Post-fix evidence: `.design-qa/favicon-comparison.png` shows the old black mark and the new pink rounded-square asset.
+
+### Required fidelity surfaces
+
+- Fonts and typography: the card keeps a strong name hierarchy, readable research line, and compact domain label.
+- Spacing and layout rhythm: the new card preserves generous negative space and separates all three text levels clearly.
+- Colors and visual tokens: white, black, accessible blue, muted gray, and `#ec4899` match the current portfolio.
+- Image quality and asset fidelity: the social card is a native 1200 x 630 PNG; browser icons are sharp SVG and PNG assets with transparent corners.
+- Copy and content: no references to systems, C++, performance, notes, or projects remain in the active card or metadata.
+
+### Browser verification
+
+- The homepage resolves the new description, Open Graph image, Twitter image, theme color, SVG favicon, PNG shortcut icon, and Apple touch icon.
+- All four new image resources load from the local preview at their expected intrinsic dimensions.
+- Homepage images load without failures, no horizontal overflow is present, and browser console logs are empty.
+
+final result: passed
