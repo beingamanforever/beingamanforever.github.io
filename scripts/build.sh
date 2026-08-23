@@ -79,7 +79,7 @@ if [[ "$OUTPUT_DIR" != "$ROOT_DIR/_site" ]]; then
 fi
 
 rm -rf "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/images"
+mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/images"
 
 python3 scripts/render_projects.py \
     --input data/projects.json \
@@ -101,6 +101,7 @@ inject_fragment "<!-- NEWS_LIST -->" "$TEMP_DIR/news.html" "$OUTPUT_DIR/index.ht
 inject_fragment "<!-- RESEARCH_ALL -->" "$TEMP_DIR/research.html" "$OUTPUT_DIR/research.html"
 
 cp assets/css/style.css "$OUTPUT_DIR/assets/css/style.css"
+cp -R assets/fonts/. "$OUTPUT_DIR/assets/fonts/"
 cp -R assets/images/. "$OUTPUT_DIR/assets/images/"
 cp assets/og-home.png "$OUTPUT_DIR/assets/og-home.png"
 cp favicon.svg "$OUTPUT_DIR/favicon.svg"
@@ -114,5 +115,11 @@ cat > "$OUTPUT_DIR/sitemap.xml" <<EOF
   <url><loc>$SITE_URL/athletics.html</loc></url>
 </urlset>
 EOF
+
+touch "$OUTPUT_DIR/.nojekyll"
+
+for page in index.html research.html athletics.html 404.html sitemap.xml; do
+    cp "$OUTPUT_DIR/$page" "$ROOT_DIR/$page"
+done
 
 printf 'Built portfolio in %s\n' "$OUTPUT_DIR"

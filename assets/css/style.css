@@ -8,6 +8,14 @@
     --font: "Fira Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+@font-face {
+    font-family: "FontAwesome";
+    src: url("../fonts/fontawesome-webfont.woff2") format("woff2");
+    font-style: normal;
+    font-weight: normal;
+    font-display: block;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -414,13 +422,85 @@ a.research-media:hover {
     margin: 1rem auto 0;
     padding: 1.75rem 1.25rem 2.5rem;
     border-top: 1px solid var(--rule);
-    color: var(--muted);
-    font-size: 0.85rem;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    color: var(--text);
+    font-size: 0.95rem;
 }
 
-.site-footer p {
-    margin: 0;
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    min-height: 1.5rem;
+}
+
+.footer-social .fa {
+    display: inline-flex;
+    flex: 0 0 1.35rem;
+    width: 1.35rem;
+    height: 1.35rem;
+    align-items: center;
+    justify-content: center;
+    font: normal normal normal 1.3rem/1 FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+.fa-twitter::before {
+    content: "\f099";
+}
+
+.fa-github::before {
+    content: "\f09b";
+}
+
+.fa-linkedin::before {
+    content: "\f0e1";
+}
+
+.footer-social .social-twitter .fa {
+    color: #00acee;
+}
+
+.footer-social .social-github,
+.footer-social .social-github span {
+    color: #211f1f;
+}
+
+.footer-social .social-linkedin .fa {
+    color: #0e76a8;
+}
+
+.footer-email {
+    color: var(--text);
+}
+
+.footer-social a:hover {
+    text-decoration: none;
+}
+
+.footer-social a:hover .fa {
+    opacity: 0.72;
+}
+
+.footer-email:hover {
+    color: var(--link-hover);
+}
+
+.footer-email {
+    margin-left: auto;
+    overflow-wrap: anywhere;
+    text-align: right;
 }
 
 @media (max-width: 720px) {
@@ -500,6 +580,24 @@ a.research-media:hover {
     .athletics-page .page-heading {
         grid-column: auto;
         margin-bottom: 1.5rem;
+    }
+
+    .site-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.9rem;
+        text-align: center;
+    }
+
+    .footer-social {
+        justify-content: center;
+        gap: 1.15rem;
+        flex-wrap: wrap;
+    }
+
+    .footer-email {
+        margin-left: 0;
+        text-align: center;
     }
 }
 
