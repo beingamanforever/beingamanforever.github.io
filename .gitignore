@@ -15,5 +15,9 @@ package-lock.json
 # Logs
 *.log
 
+# Generated site and local design captures
+_site/
+.design-qa/
+
 # Claude Code worktrees
 .claude/worktrees/

@@ -1,42 +1,52 @@
 [
   {
-    "date": "2026-06",
+    "date": "Aug 2026",
+    "title": "Two papers under review in NeurIPS 2026"
+  },
+  {
+    "date": "Jul 2026",
+    "title": "One paper under review in EMNLP 2026"
+  },
+  {
+    "date": "Jun 2026",
     "title": "Joined HiLabs as a Data Scientist",
-    "detail": "Graduated from IIT Roorkee and joined <a href=\"https://www.hilabs.com/\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs</a>. Building our first LLM-inference GPU infrastructure: a serving framework with GPU-aware request routing, autoscaling, and KV-cache sharing to cut token spend and speed up inference for fine-tuned SLMs."
+    "details": [
+      "Developed RL methods for 4B-scale SLMs and scalable agentic-memory management systems.",
+      "Built HiLabs' first LLM-serving infrastructure with GPU-aware routing, autoscaling, and KV-cache sharing for faster, cost-efficient inference.",
+      "Working on OCR pipelines for downstream clinical chart extraction."
+    ]
   },
   {
-    "date": "2026-05",
-    "title": "Won the Predictive AI Evaluation Challenge",
-    "detail": "\"Trust the Subject, Cap the Item\" (<a href=\"https://github.com/beingamanforever/capped-irt\" target=\"_blank\" rel=\"noopener noreferrer\">capped amortized IRT</a>); write-up submitted to the AIMS workshop at COLM 2026."
-  },
-  {
-    "date": "2026-05",
+    "date": "May 2026",
     "title": "GSoC 2026 @ GNU Octave",
-    "detail": "With <a href=\"https://octave.org/\" target=\"_blank\" rel=\"noopener noreferrer\">GNU Octave</a>, rewriting the ANOVA stack as an object-oriented framework."
+    "detail": "Contributed to the <a href=\"https://octave.org/\" target=\"_blank\" rel=\"noopener noreferrer\">open-source scientific computing framework</a>."
   },
   {
-    "date": "2026-01",
-    "title": "HiLabs internship",
-    "detail": "Improved the OCR pipeline and the webpage-classifier model, built agentic memory for an internal agent framework, and prototyped parallel document splitting."
+    "date": "Jan 2026",
+    "title": "Joined HiLabs as a Data Science Intern",
+    "details": [
+      "Improved OCR pipelines and upgraded an entity-conditioned webpage classifier.",
+      "Built long-term agentic memory for an internal agent framework."
+    ]
   },
   {
-    "date": "2025-12",
+    "date": "Dec 2025",
     "title": "Silver at Inter-IIT Tech Meet 14.0",
-    "detail": "Led a team of 6 to a 1st runner-up finish on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs."
+    "detail": "Led a team of six to a first runner-up finish on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs."
   },
   {
-    "date": "2025-09",
+    "date": "Sep 2025",
     "title": "Pre-placement offer from HiLabs",
-    "detail": "After winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee."
+    "detail": "Received after winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee."
   },
   {
-    "date": "2025-05",
-    "title": "Info Edge · data science intern",
-    "detail": "Working on generative engine optimisation (GEO) at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>."
+    "date": "May 2025",
+    "title": "Info Edge · Data Science Intern",
+    "detail": "Worked on generative engine optimisation (GEO) at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>."
   },
   {
-    "date": "2024-12",
-    "title": "Silver in Tech GC, IIT Roorkee",
-    "detail": "For an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>."
+    "date": "Dec 2024",
+    "title": "Silver at Inter-IIT Tech Meet 2025",
+    "detail": "Built an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>."
   }
 ]

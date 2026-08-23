@@ -1,127 +1,47 @@
 [
   {
-    "title": "Zero-copy CSV Ingestion Engine",
-    "description": "Single binary, zero-copy, SIMD-accelerated ingestion engine for very large CSV data. Streams directly into typed columns.",
-    "tags": [
-      "C++",
-      "SIMD",
-      "parsing"
-    ],
-    "category": "systems",
-    "status": "building",
-    "signal": "WIP",
-    "url": "https://github.com/beingamanforever/CSV-Parsing-Engine",
+    "title": "Position Bias in Mamba and Hybrid Language Models",
+    "description": "Investigated position bias in long-context retrieval across Transformer, Mamba state-space, and hybrid architectures. Found that Transformers favor evidence near both context boundaries, while state-space models mainly favor evidence near the end. Controlled experiments showed that effective context use depends jointly on architecture, model capability, task, and prompt design.",
+    "url": "https://beingamanforever.github.io/Mixing-Matters/",
+    "image": "assets/images/projects/position-bias.png",
+    "image_alt": "Line chart comparing position bias in Pythia, Mamba, and Mamba-2 models",
+    "image_width": 2220,
+    "image_height": 1184,
     "featured": true
   },
   {
-    "title": "ZeroShred",
-    "description": "High-throughput file transfer hitting 780 MB/s via kernel-level zero-copy (sendfile), pipelined SHA-256 on dedicated threads, and hardware crypto acceleration.",
-    "tags": [
-      "C",
-      "systems",
-      "networking"
-    ],
-    "category": "systems",
-    "status": "shipped",
-    "signal": "780 MB/s",
-    "url": "https://github.com/beingamanforever/zeroshred",
+    "title": "RDAN-GRPO",
+    "description": "Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.",
+    "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO",
+    "image": "assets/images/projects/rdan-grpo.png",
+    "image_alt": "RDAN-GRPO response-level advantage computation diagram",
+    "image_width": 4423,
+    "image_height": 1161,
+    "model": {
+      "label": "Hugging Face",
+      "name": "Qwen3-4B-RDAN-GRPO",
+      "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO"
+    },
     "featured": true
   },
   {
-    "title": "GNU Octave (GSoC 2026)",
-    "description": "Selected for Google Summer of Code 2026 contributing to GNU Octave; working on numerical infrastructure. See merged PRs.",
-    "tags": [
-      "Octave",
-      "numerics",
-      "GSoC"
-    ],
-    "category": "systems",
-    "status": "building",
-    "signal": "GSoC '26",
-    "url": "https://github.com/gnu-octave/statistics/pulls?q=is%3Apr+is%3Aclosed+author%3Abeingamanforever",
-    "featured": true
-  },
-  {
-    "title": "Drishti: ISRO Geospatial VLM",
-    "description": "Vision-language model for geospatial reasoning; 1st runner-up at Inter-IIT Tech Meet 14.0 across 24 IITs.",
-    "tags": [
-      "VLM",
-      "geospatial",
-      "Inter-IIT"
-    ],
-    "category": "ml",
-    "status": "shipped",
-    "signal": "Silver",
+    "title": "Drishti",
+    "description": "A scalable remote-sensing pipeline integrating EarthMind-4B, RemoteSAM, and a BERT classifier for unified satellite-image analysis. DRISHTI stands for Deep Remote-sensing Intelligence System for Holistic Task Integration. Awarded a silver medal at Inter IIT Tech Meet 14.0.",
     "url": "https://github.com/beingamanforever/Drishti",
-    "featured": false
+    "image": "assets/images/projects/drishti.png",
+    "image_alt": "DRISHTI remote-sensing analysis pipeline architecture",
+    "image_width": 1234,
+    "image_height": 497,
+    "featured": true
   },
   {
-    "title": "HiLabs AIQuest",
-    "description": "Winning entry for the HiLabs AIQuest hackathon held at IIT Roorkee.",
-    "tags": [
-      "ML",
-      "hackathon"
-    ],
-    "category": "hackathon",
-    "status": "shipped",
-    "signal": "Winner",
-    "url": "https://github.com/beingamanforever/hilabs",
-    "featured": false
-  },
-  {
-    "title": "Binary protocol (C++)",
-    "description": "Minimal byte-level binary wire protocol with explicit layout, endian-safe serialization, XOR checksum, and offset-based encoding.",
-    "tags": [
-      "C++",
-      "protocols",
-      "systems"
-    ],
-    "category": "systems",
-    "status": "shipped",
-    "signal": "library",
-    "url": "https://github.com/beingamanforever/binary-protocol-cpp",
-    "featured": false
-  },
-  {
-    "title": "LLM Text Detection",
-    "description": "BERT-based classifier distinguishing AI-generated text from human-authored text using semantic, statistical, and stylistic features.",
-    "tags": [
-      "ML",
-      "NLP",
-      "BERT"
-    ],
-    "category": "ml",
-    "status": "shipped",
-    "signal": "BERT",
-    "url": "https://github.com/beingamanforever/LLM-Text-Detection",
-    "featured": false
-  },
-  {
-    "title": "Monte Carlo Portfolio Optimization",
-    "description": "Monte Carlo simulation for portfolio optimization; computes asset weights for maximum expected return at minimal risk via Sharpe ratio.",
-    "tags": [
-      "simulation",
-      "finance",
-      "Python"
-    ],
-    "category": "ml",
-    "status": "dormant",
-    "signal": "exploration",
-    "url": "https://github.com/beingamanforever/Monte-Carlo-Simulation",
-    "featured": false
-  },
-  {
-    "title": "AI Interview Learning Platform",
-    "description": "AI-driven interview chatbot built for Tech GC at IIT Roorkee.",
-    "tags": [
-      "ML",
-      "NLP",
-      "Tech GC"
-    ],
-    "category": "hackathon",
-    "status": "shipped",
-    "signal": "Silver",
+    "title": "Tech-Enhanced AI Interview Learning Platform",
+    "description": "Developed an interview practice platform that generates diverse, topic-specific questions and uses NLP to analyse spoken responses, identify grammatical errors, and provide corrections after the interview.",
     "url": "https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform",
-    "featured": false
+    "image": "assets/images/projects/interview-platform.png",
+    "image_alt": "Flowchart of the Tech-Enhanced AI Interview Learning Platform",
+    "image_width": 2200,
+    "image_height": 990,
+    "featured": true
   }
 ]

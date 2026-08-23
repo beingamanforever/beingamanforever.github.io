@@ -1,4 +1,4 @@
-name: Build & deploy
+name: Build and deploy
 
 on:
   push:
@@ -21,23 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # build.sh stamps git short SHA into asset URLs
-      - name: Install pandoc
-        run: sudo apt-get update && sudo apt-get install -y pandoc
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install Python deps (Pillow for OG images)
-        run: pip install --upgrade Pillow
       - name: Build site
         run: ./scripts/build.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
-          # Exclude source-only directories from the deployed artifact.
-          # Pages will serve everything else as static assets.
+          path: _site
 
   deploy:
     if: github.ref == 'refs/heads/main'

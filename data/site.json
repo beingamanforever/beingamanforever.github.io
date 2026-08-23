@@ -1,11 +1,6 @@
 {
   "name": "Aman Behera",
-  "tagline": "Should they come looking for me? I intend to be found",
   "site_url": "https://beingamanforever.github.io",
-  "site_title": "aman behera",
-  "site_description": "Notes on systems programming, performance, and infrastructure",
-  "email": "aman.behera.systems@gmail.com",
-  "github": "beingamanforever",
-  "linkedin": "aman-behera-",
+  "site_description": "Aman Behera is a data scientist and independent researcher working on agents, reinforcement learning, LLMs, and inference systems.",
   "og_image": "https://beingamanforever.github.io/assets/og-home.png"
 }
