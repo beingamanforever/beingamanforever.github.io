@@ -1,11 +1,18 @@
 [
   {
-    "date": "Aug 2026",
-    "title": "Two papers under review in NeurIPS 2026"
+    "date": "Sep 2026",
+    "title": "Mixing Matters accepted at New in ML at NeurIPS 2026",
+    "detail": "Our study of position bias in Mamba, Transformer, and hybrid language models. <a href=\"https://beingamanforever.github.io/Mixing-Matters/\" target=\"_blank\" rel=\"noopener noreferrer\">Project and paper</a>."
   },
   {
-    "date": "Jul 2026",
-    "title": "One paper under review in EMNLP 2026"
+    "date": "Sep 2026",
+    "title": "MycoGate-VL accepted at SHROOM-Visions at EMNLP 2026",
+    "detail": "Multilingual hallucination detection in vision-language responses. <a href=\"https://openreview.net/pdf?id=DcCzoyXJgi\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a> and <a href=\"https://github.com/beingamanforever/MycoGate-VL\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>."
+  },
+  {
+    "date": "Aug 2026",
+    "title": "Built notSoSmartOCR",
+    "detail": "Document extraction with layout detection, OCR, selective LLM refinement, and visual evidence for review. <a href=\"https://github.com/beingamanforever/notSoSmartOCR\" target=\"_blank\" rel=\"noopener noreferrer\">Explore the project</a>."
   },
   {
     "date": "Jun 2026",

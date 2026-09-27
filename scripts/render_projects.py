@@ -31,6 +31,16 @@ def render_model(model: dict) -> str:
     )
 
 
+def render_links(links: list) -> str:
+    if not links:
+        return ""
+    return '<div class="resource-links">' + "".join(
+        f'<a href="{html.escape(link["url"], quote=True)}"'
+        f'{external_attributes(link["url"])}>{html.escape(link["label"])}</a>'
+        for link in links
+    ) + "</div>"
+
+
 def render_project(project: dict) -> str:
     title = html.escape(project.get("title", "Untitled"))
     url = (project.get("url") or "").strip()
@@ -44,6 +54,23 @@ def render_project(project: dict) -> str:
     image_link = url or image
     model = render_model(project.get("model", {}))
     model_line = f'\n                        {model}' if model else ""
+    links = render_links(project.get("links", []))
+    venue = project.get("venue", "")
+    venue_line = f'<p class="publication-status">{html.escape(venue)}</p>' if venue else ""
+    example = project.get("example")
+    example_html = ""
+    if example:
+        example_html = (
+            '<details class="project-example"><summary>View layout extraction example</summary>'
+            '<figure>'
+            f'<a href="{html.escape(example["image"], quote=True)}">'
+            f'<img src="{html.escape(example["image"], quote=True)}" '
+            f'alt="{html.escape(example["alt"], quote=True)}" '
+            f'width="{int(example["width"])}" height="{int(example["height"])}" '
+            'loading="lazy" decoding="async"></a>'
+            f'<figcaption>{html.escape(example["caption"])}</figcaption>'
+            '</figure></details>'
+        )
     media = ""
     if image:
         media = (
@@ -55,15 +82,19 @@ def render_project(project: dict) -> str:
             'loading="lazy" decoding="async"></a>'
         )
 
-    return f"""\
+    rendered = f"""\
                 <article class="project-item">
                     {media}
                     <div class="project-copy">
                         <h3 class="project-title">{title}</h3>
+                        {venue_line}
                         <p class="project-description">{html.escape(project.get("description", ""))}</p>{model_line}
+                        {links}
+                        {example_html}
                     </div>
                 </article>
 """
+    return "\n".join(line.rstrip() for line in rendered.splitlines()) + "\n"
 
 
 def main() -> None:

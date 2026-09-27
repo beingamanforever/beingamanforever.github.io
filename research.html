@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
         <a class="site-name" href="index.html">Aman Behera</a>
         <nav class="site-nav" aria-label="Main navigation">
@@ -53,6 +54,7 @@
                     </div>
                     <p class="research-desc">Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.</p>
                     <a class="model-link" href="https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO" target="_blank" rel="noopener noreferrer" aria-label="Hugging Face: Qwen3-4B-RDAN-GRPO"><span class="model-link-label">Hugging Face</span><span class="model-link-name">Qwen3-4B-RDAN-GRPO</span></a>
+
                 </div>
             </article>
             <article class="research-item">
@@ -60,19 +62,21 @@
                 <div class="research-copy">
                     <div class="research-header">
                         <h2 class="research-title"><a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Mixing Matters</a></h2>
-                        <span class="research-venue">NeurIPS 2026 · under review</span>
+                        <span class="research-venue">Accepted · New in ML at NeurIPS 2026</span>
                     </div>
-                    <p class="research-desc">Investigated position bias in long-context retrieval across Transformer, Mamba state-space, and hybrid architectures. Found that Transformers favor evidence near both context boundaries, while state-space models mainly favor evidence near the end. Controlled experiments showed that effective context use depends jointly on architecture, model capability, task, and prompt design.</p>
+                    <p class="research-desc">Mixing Matters studies how moving the same evidence through a long context changes retrieval across Transformer, Mamba, and hybrid models. The measured position-bias curves vary with the model, prompt, and task; the study does not isolate architecture as the cause.</p>
+                    <div class="resource-links"><a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Project</a><a href="https://beingamanforever.github.io/Mixing-Matters/paper.pdf" target="_blank" rel="noopener noreferrer">Paper</a><a href="https://github.com/beingamanforever/Mixing-Matters" target="_blank" rel="noopener noreferrer">Code</a></div>
                 </div>
             </article>
             <article class="research-item">
-                <a class="research-media" href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer"><img src="assets/images/research/mycogate-vl.png" alt="MycoGate-VL hallucination detection example" width="1599" height="279" loading="lazy" decoding="async"></a>
+                <a class="research-media" href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer"><img src="assets/images/research/mycogate-vl-example.png" alt="MycoGate-VL example: the claimed count of eight lights is annotated as a hallucinated span with miscounting and invention labels" width="1542" height="384" loading="lazy" decoding="async"></a>
                 <div class="research-copy">
                     <div class="research-header">
-                        <h2 class="research-title"><a href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer">MycoGate-VL</a></h2>
-                        <span class="research-venue">SHROOM-Visions | EMNLP 2026</span>
+                        <h2 class="research-title"><a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">MycoGate-VL</a></h2>
+                        <span class="research-venue">Accepted · SHROOM-Visions at EMNLP 2026</span>
                     </div>
-                    <p class="research-desc">Scorer-aware serialization for multilingual vision-language hallucination detection: per-character hallucination probabilities and categories in English, French, Italian, and Chinese. A deliberately text-centric detector ensemble with a clean-document gate; per-language bests clear the baseline on both official metrics.</p>
+                    <p class="research-desc">Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization.</p>
+                    <div class="resource-links"><a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">Paper</a><a href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer">Code</a></div>
                 </div>
             </article>
         </div>

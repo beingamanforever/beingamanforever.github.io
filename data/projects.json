@@ -1,7 +1,39 @@
 [
   {
+    "title": "notSoSmartOCR",
+    "description": "Built a document-intelligence product that turns complex scans into structured, reviewable outputs. It combines orientation correction, layout detection, Falcon OCR 1.5, and selective LLM refinement for handwriting and ambiguous regions, with page-level visual evidence, tables, and Markdown output.",
+    "url": "https://github.com/beingamanforever/notSoSmartOCR",
+    "image": "assets/images/projects/notsosmartocr-ui.png",
+    "image_alt": "notSoSmartOCR interface with document examples, page evidence, and structured output panels during parsing",
+    "image_width": 2110,
+    "image_height": 1378,
+    "links": [{"label": "Code", "url": "https://github.com/beingamanforever/notSoSmartOCR"}],
+    "example": {
+      "image": "assets/images/projects/notsosmartocr-layout.png",
+      "alt": "OCR layout output identifying headings, text, author blocks, and bounding boxes on Attention Is All You Need",
+      "width": 1020,
+      "height": 1280,
+      "caption": "Layout extraction example: detected text, headings, and table bounds on a research paper."
+    },
+    "featured": true
+  },
+  {
+    "title": "MycoGate-VL",
+    "venue": "Accepted · SHROOM-Visions at EMNLP 2026",
+    "description": "Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization.",
+    "url": "https://openreview.net/pdf?id=DcCzoyXJgi",
+    "image": "assets/images/research/mycogate-vl-example.png",
+    "image_alt": "MycoGate-VL example: the claimed count of eight lights is annotated as a hallucinated span with miscounting and invention labels",
+    "image_width": 1542,
+    "image_height": 384,
+    "links": [{"label": "Paper", "url": "https://openreview.net/pdf?id=DcCzoyXJgi"}, {"label": "Code", "url": "https://github.com/beingamanforever/MycoGate-VL"}],
+    "featured": true
+  },
+  {
     "title": "Position Bias in Mamba and Hybrid Language Models",
-    "description": "Investigated position bias in long-context retrieval across Transformer, Mamba state-space, and hybrid architectures. Found that Transformers favor evidence near both context boundaries, while state-space models mainly favor evidence near the end. Controlled experiments showed that effective context use depends jointly on architecture, model capability, task, and prompt design.",
+    "venue": "Accepted · New in ML at NeurIPS 2026",
+    "description": "Mixing Matters studies how moving the same evidence through a long context changes retrieval across Transformer, Mamba, and hybrid models. The measured position-bias curves vary with the model, prompt, and task; the study does not isolate architecture as the cause.",
+    "links": [{"label": "Project", "url": "https://beingamanforever.github.io/Mixing-Matters/"}, {"label": "Paper", "url": "https://beingamanforever.github.io/Mixing-Matters/paper.pdf"}, {"label": "Code", "url": "https://github.com/beingamanforever/Mixing-Matters"}],
     "url": "https://beingamanforever.github.io/Mixing-Matters/",
     "image": "assets/images/projects/position-bias.png",
     "image_alt": "Line chart comparing position bias in Pythia, Mamba, and Mamba-2 models",

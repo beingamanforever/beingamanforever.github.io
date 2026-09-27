@@ -5,6 +5,7 @@ import argparse
 import html
 import json
 from pathlib import Path
+from render_projects import render_links
 
 
 def external_attributes(url: str) -> str:
@@ -68,8 +69,9 @@ def render_entry(entry: dict) -> str:
     description = str(entry.get("description", entry.get("desc", "")) or "")
     model = render_model(entry.get("model", {}))
     model_line = f"\n                    {model}" if model else ""
+    links = render_links(entry.get("links", []))
 
-    return f"""\
+    rendered = f"""\
             <article class="research-item">
                 {media}
                 <div class="research-copy">
@@ -78,9 +80,11 @@ def render_entry(entry: dict) -> str:
                         <span class="research-venue">{html.escape(entry.get("venue", ""))}</span>
                     </div>
                     <p class="research-desc">{html.escape(description)}</p>{model_line}
+                    {links}
                 </div>
             </article>
 """
+    return "\n".join(line.rstrip() for line in rendered.splitlines()) + "\n"
 
 
 def main() -> None:

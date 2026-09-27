@@ -16,22 +16,24 @@
   },
   {
     "title": "Mixing Matters",
-    "venue": "NeurIPS 2026 · under review",
+    "venue": "Accepted · New in ML at NeurIPS 2026",
+    "links": [{"label": "Project", "url": "https://beingamanforever.github.io/Mixing-Matters/"}, {"label": "Paper", "url": "https://beingamanforever.github.io/Mixing-Matters/paper.pdf"}, {"label": "Code", "url": "https://github.com/beingamanforever/Mixing-Matters"}],
     "url": "https://beingamanforever.github.io/Mixing-Matters/",
     "image": "assets/images/projects/position-bias.png",
     "image_alt": "Position bias comparison across Pythia, Mamba, and Mamba-2",
     "image_width": 2220,
     "image_height": 1184,
-    "desc": "Investigated position bias in long-context retrieval across Transformer, Mamba state-space, and hybrid architectures. Found that Transformers favor evidence near both context boundaries, while state-space models mainly favor evidence near the end. Controlled experiments showed that effective context use depends jointly on architecture, model capability, task, and prompt design."
+    "desc": "Mixing Matters studies how moving the same evidence through a long context changes retrieval across Transformer, Mamba, and hybrid models. The measured position-bias curves vary with the model, prompt, and task; the study does not isolate architecture as the cause."
   },
   {
     "title": "MycoGate-VL",
-    "venue": "SHROOM-Visions | EMNLP 2026",
-    "url": "https://github.com/beingamanforever/MycoGate-VL",
-    "image": "assets/images/research/mycogate-vl.png",
-    "image_alt": "MycoGate-VL hallucination detection example",
-    "image_width": 1599,
-    "image_height": 279,
-    "desc": "Scorer-aware serialization for multilingual vision-language hallucination detection: per-character hallucination probabilities and categories in English, French, Italian, and Chinese. A deliberately text-centric detector ensemble with a clean-document gate; per-language bests clear the baseline on both official metrics."
+    "venue": "Accepted · SHROOM-Visions at EMNLP 2026",
+    "url": "https://openreview.net/pdf?id=DcCzoyXJgi",
+    "image": "assets/images/research/mycogate-vl-example.png",
+    "image_alt": "MycoGate-VL example: the claimed count of eight lights is annotated as a hallucinated span with miscounting and invention labels",
+    "image_width": 1542,
+    "image_height": 384,
+    "links": [{"label": "Paper", "url": "https://openreview.net/pdf?id=DcCzoyXJgi"}, {"label": "Code", "url": "https://github.com/beingamanforever/MycoGate-VL"}],
+    "desc": "Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization."
   }
 ]
