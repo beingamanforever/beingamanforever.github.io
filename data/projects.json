@@ -45,6 +45,11 @@
   },
   {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",
+    "authors": [
+      "Aman Behera",
+      "Namit Solanki",
+      "Mehul Anand"
+    ],
     "venue": "Accepted · New in ML Workshop at NeurIPS 2026",
     "description": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.",
     "links": [

@@ -41,6 +41,20 @@ def render_links(links: list) -> str:
     ) + "</div>"
 
 
+SELF = "Aman Behera"
+
+
+def render_authors(authors: list) -> str:
+    """Author line with the site owner in bold, as publication lists usually show it."""
+    if not authors:
+        return ""
+    names = ", ".join(
+        f"<strong>{html.escape(name)}</strong>" if name == SELF else html.escape(name)
+        for name in authors
+    )
+    return f'<p class="authors">{names}</p>'
+
+
 def render_project(project: dict) -> str:
     title = html.escape(project.get("title", "Untitled"))
     url = (project.get("url") or "").strip()
@@ -57,6 +71,7 @@ def render_project(project: dict) -> str:
     links = render_links(project.get("links", []))
     venue = project.get("venue", "")
     venue_line = f'<p class="publication-status">{html.escape(venue)}</p>' if venue else ""
+    authors = render_authors(project.get("authors", []))
     example = project.get("example")
     example_html = ""
     if example:
@@ -87,6 +102,7 @@ def render_project(project: dict) -> str:
                     {media}
                     <div class="project-copy">
                         <h3 class="project-title">{title}</h3>
+                        {authors}
                         {venue_line}
                         <p class="project-description">{html.escape(project.get("description", ""))}</p>{model_line}
                         {links}

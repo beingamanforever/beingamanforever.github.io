@@ -663,3 +663,5 @@ a.research-media:hover {
 }
 /* The section below draws its own top rule; avoid a doubled line after the last project. */
 .project-item:last-child { border-bottom: 0; }
+.authors { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.92rem; }
+.authors strong { color: var(--text); font-weight: 400; }

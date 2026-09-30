@@ -1,6 +1,11 @@
 [
   {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",
+    "authors": [
+      "Aman Behera",
+      "Namit Solanki",
+      "Mehul Anand"
+    ],
     "venue": "Accepted · New in ML Workshop at NeurIPS 2026",
     "links": [
       {

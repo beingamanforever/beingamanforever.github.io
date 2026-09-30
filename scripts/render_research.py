@@ -5,7 +5,7 @@ import argparse
 import html
 import json
 from pathlib import Path
-from render_projects import render_links
+from render_projects import render_authors, render_links
 
 
 def external_attributes(url: str) -> str:
@@ -77,6 +77,7 @@ def render_entry(entry: dict) -> str:
                 <div class="research-copy">
                     <div class="research-header">
                         <h2 class="research-title">{title}</h2>
+                        {render_authors(entry.get("authors", []))}
                         <span class="research-venue">{html.escape(entry.get("venue", ""))}</span>
                     </div>
                     <p class="research-desc">{html.escape(description)}</p>{model_line}
