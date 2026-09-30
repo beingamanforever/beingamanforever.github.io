@@ -1,8 +1,8 @@
 [
   {
     "date": "Sep 2026",
-    "title": "Mixing Matters accepted at New in ML at NeurIPS 2026",
-    "detail": "Our study of position bias in Mamba, Transformer, and hybrid language models. <a href=\"https://beingamanforever.github.io/Mixing-Matters/\" target=\"_blank\" rel=\"noopener noreferrer\">Project and paper</a>."
+    "title": "Mixing Matters accepted at the New in ML Workshop at NeurIPS 2026",
+    "detail": "A paired study of position bias across Transformer, Mamba, and hybrid language models. <a href=\"https://beingamanforever.github.io/Mixing-Matters/\" target=\"_blank\" rel=\"noopener noreferrer\">Project page</a>, <a href=\"https://beingamanforever.github.io/Mixing-Matters/paper.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">paper</a>, and <a href=\"https://github.com/beingamanforever/Mixing-Matters\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>."
   },
   {
     "date": "Sep 2026",

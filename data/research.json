@@ -1,5 +1,33 @@
 [
   {
+    "title": "Mixing Matters? Position Bias Across Sequence Mixers",
+    "venue": "Accepted · New in ML Workshop at NeurIPS 2026",
+    "links": [
+      {
+        "label": "Project page",
+        "url": "https://beingamanforever.github.io/Mixing-Matters/"
+      },
+      {
+        "label": "Paper",
+        "url": "https://beingamanforever.github.io/Mixing-Matters/paper.pdf"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Mixing-Matters"
+      },
+      {
+        "label": "Dataset",
+        "url": "https://github.com/beingamanforever/Mixing-Matters/tree/main/dataset"
+      }
+    ],
+    "url": "https://beingamanforever.github.io/Mixing-Matters/",
+    "image": "assets/images/projects/position-bias.png",
+    "image_alt": "Accuracy by evidence position for Pythia 2.8B, Mamba 2.8B, and Mamba-2 2.7B",
+    "image_width": 2136,
+    "image_height": 1536,
+    "desc": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect."
+  },
+  {
     "title": "RDAN-GRPO",
     "venue": "Reinforcement learning",
     "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO",
@@ -15,17 +43,6 @@
     "desc": "Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks."
   },
   {
-    "title": "Mixing Matters",
-    "venue": "Accepted · New in ML at NeurIPS 2026",
-    "links": [{"label": "Project", "url": "https://beingamanforever.github.io/Mixing-Matters/"}, {"label": "Paper", "url": "https://beingamanforever.github.io/Mixing-Matters/paper.pdf"}, {"label": "Code", "url": "https://github.com/beingamanforever/Mixing-Matters"}],
-    "url": "https://beingamanforever.github.io/Mixing-Matters/",
-    "image": "assets/images/projects/position-bias.png",
-    "image_alt": "Position bias comparison across Pythia, Mamba, and Mamba-2",
-    "image_width": 2220,
-    "image_height": 1184,
-    "desc": "Mixing Matters studies how moving the same evidence through a long context changes retrieval across Transformer, Mamba, and hybrid models. The measured position-bias curves vary with the model, prompt, and task; the study does not isolate architecture as the cause."
-  },
-  {
     "title": "MycoGate-VL",
     "venue": "Accepted · SHROOM-Visions at EMNLP 2026",
     "url": "https://openreview.net/pdf?id=DcCzoyXJgi",
@@ -33,7 +50,16 @@
     "image_alt": "MycoGate-VL example: the claimed count of eight lights is annotated as a hallucinated span with miscounting and invention labels",
     "image_width": 1542,
     "image_height": 384,
-    "links": [{"label": "Paper", "url": "https://openreview.net/pdf?id=DcCzoyXJgi"}, {"label": "Code", "url": "https://github.com/beingamanforever/MycoGate-VL"}],
+    "links": [
+      {
+        "label": "Paper",
+        "url": "https://openreview.net/pdf?id=DcCzoyXJgi"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/MycoGate-VL"
+      }
+    ],
     "desc": "Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization."
   }
 ]

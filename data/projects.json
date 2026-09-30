@@ -7,7 +7,12 @@
     "image_alt": "notSoSmartOCR interface with document examples, page evidence, and structured output panels during parsing",
     "image_width": 2110,
     "image_height": 1378,
-    "links": [{"label": "Code", "url": "https://github.com/beingamanforever/notSoSmartOCR"}],
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/notSoSmartOCR"
+      }
+    ],
     "example": {
       "image": "assets/images/projects/notsosmartocr-layout.png",
       "alt": "OCR layout output identifying headings, text, author blocks, and bounding boxes on Attention Is All You Need",
@@ -26,19 +31,45 @@
     "image_alt": "MycoGate-VL example: the claimed count of eight lights is annotated as a hallucinated span with miscounting and invention labels",
     "image_width": 1542,
     "image_height": 384,
-    "links": [{"label": "Paper", "url": "https://openreview.net/pdf?id=DcCzoyXJgi"}, {"label": "Code", "url": "https://github.com/beingamanforever/MycoGate-VL"}],
+    "links": [
+      {
+        "label": "Paper",
+        "url": "https://openreview.net/pdf?id=DcCzoyXJgi"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/MycoGate-VL"
+      }
+    ],
     "featured": true
   },
   {
-    "title": "Position Bias in Mamba and Hybrid Language Models",
-    "venue": "Accepted · New in ML at NeurIPS 2026",
-    "description": "Mixing Matters studies how moving the same evidence through a long context changes retrieval across Transformer, Mamba, and hybrid models. The measured position-bias curves vary with the model, prompt, and task; the study does not isolate architecture as the cause.",
-    "links": [{"label": "Project", "url": "https://beingamanforever.github.io/Mixing-Matters/"}, {"label": "Paper", "url": "https://beingamanforever.github.io/Mixing-Matters/paper.pdf"}, {"label": "Code", "url": "https://github.com/beingamanforever/Mixing-Matters"}],
+    "title": "Mixing Matters? Position Bias Across Sequence Mixers",
+    "venue": "Accepted · New in ML Workshop at NeurIPS 2026",
+    "description": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.",
+    "links": [
+      {
+        "label": "Project page",
+        "url": "https://beingamanforever.github.io/Mixing-Matters/"
+      },
+      {
+        "label": "Paper",
+        "url": "https://beingamanforever.github.io/Mixing-Matters/paper.pdf"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Mixing-Matters"
+      },
+      {
+        "label": "Dataset",
+        "url": "https://github.com/beingamanforever/Mixing-Matters/tree/main/dataset"
+      }
+    ],
     "url": "https://beingamanforever.github.io/Mixing-Matters/",
     "image": "assets/images/projects/position-bias.png",
-    "image_alt": "Line chart comparing position bias in Pythia, Mamba, and Mamba-2 models",
-    "image_width": 2220,
-    "image_height": 1184,
+    "image_alt": "Accuracy by evidence position for Pythia 2.8B, Mamba 2.8B, and Mamba-2 2.7B",
+    "image_width": 2136,
+    "image_height": 1536,
     "featured": true
   },
   {
