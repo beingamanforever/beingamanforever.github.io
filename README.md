@@ -31,7 +31,7 @@ Then open `http://localhost:3456`.
 - `assets/images/projects/` contains the Selected Projects figures.
 - `assets/images/research/` contains Research figures.
 - `assets/images/athletics/` contains the Athletics photo.
-- `assets/og-home-v2.png` is the current social preview card.
+- `assets/og-home-v3.png` is the social preview card, rendered from `scripts/og-card.html` with headless Chrome at 1200x630.
 - `data/projects.json` drives Selected Projects.
 - `data/news.json` drives News and supports optional grouped `details`.
 - `data/research.json` drives every research entry.

@@ -115,7 +115,7 @@ cp -R assets/fonts/. "$OUTPUT_DIR/assets/fonts/"
 cp -R assets/resume "$OUTPUT_DIR/assets/resume"
 cp -R assets/icons/. "$OUTPUT_DIR/assets/icons/"
 cp -R assets/images/. "$OUTPUT_DIR/assets/images/"
-cp assets/og-home-v2.png "$OUTPUT_DIR/assets/og-home-v2.png"
+cp assets/og-home-v3.png "$OUTPUT_DIR/assets/og-home-v3.png"
 cp favicon.svg "$OUTPUT_DIR/favicon.svg"
 cp robots.txt "$OUTPUT_DIR/robots.txt"
 
