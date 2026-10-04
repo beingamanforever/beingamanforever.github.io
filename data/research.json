@@ -1,12 +1,92 @@
 [
   {
+    "title": "LevelHead: Deskew Before You Classify",
+    "venue": "To be submitted · CVPR 2027",
+    "url": "https://beingamanforever.github.io/LevelHead/",
+    "links": [
+      {
+        "label": "Project page",
+        "url": "https://beingamanforever.github.io/LevelHead/"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/LevelHead"
+      }
+    ],
+    "desc": "A training-free method for page deskewing and orientation classification. LevelHead levels the page with a spectral deskewer first, then lets any frozen classifier or VLM vote over the four quarter turns of the level page. On pages at any angle it lifts four Qwen3-VL models from 41.9% to 84.6% and four orientation classifiers from 71.9% to 85.2%.",
+    "gallery": [
+      {
+        "label": "Overview",
+        "image": "assets/images/projects/levelhead-teaser.png",
+        "width": 1532,
+        "height": 420,
+        "alt": "Classify-first leaves a tilted page upside down while LevelHead levels it, votes over four quarter turns, and reads it correctly; per-backbone accuracy gains on the right",
+        "caption": "Classify-first misreads a tilted page; LevelHead levels it first, then votes."
+      },
+      {
+        "label": "Method",
+        "image": "assets/images/projects/levelhead-method.png",
+        "width": 1535,
+        "height": 441,
+        "alt": "LevelHead method: level the page, ask the frozen backbone four times, roll the answers back and combine them with a geometric mean",
+        "caption": "Level the page, ask the backbone four times, roll back and combine."
+      },
+      {
+        "label": "Live demo",
+        "image": "assets/images/projects/levelhead-demo.jpg",
+        "width": 2256,
+        "height": 1272,
+        "alt": "LevelHead live demo: a tilted phone photo of a screen on the left and the levelled page on the right, with a read tilt of +20.6 degrees",
+        "caption": "Step 1 reads a +20.6° tilt from the Fourier spectrum and levels a phone photo in the browser."
+      }
+    ]
+  },
+  {
+    "title": "Post-Audit Mirage: Identifiability Limits of Offline Agent Verification",
+    "authors": [
+      "Aman Behera",
+      "Payal Payal"
+    ],
+    "venue": "Accepted · Who Verifies the Agents? Workshop at NeurIPS 2026 (Poster)",
+    "url": "https://openreview.net/pdf?id=6cQdbUSme7",
+    "gallery": [
+      {
+        "label": "The mirage",
+        "image": "assets/images/research/pam-matched-worlds.png",
+        "width": 2000,
+        "height": 694,
+        "alt": "A safe world and a harmful world give an offline verifier the same evidence and the same result, but deployment reveals delayed harm in only one of them",
+        "caption": "Same offline evidence, different real truth."
+      },
+      {
+        "label": "Monitor",
+        "image": "assets/images/research/pam-monitor.png",
+        "width": 2000,
+        "height": 810,
+        "alt": "Fresh group-labelled outcomes pass through a group-aware monitor that can deploy, hold, request more evidence, or report unsupported",
+        "caption": "A fail-closed monitor that acts only on fresh post-update evidence."
+      }
+    ],
+    "links": [
+      {
+        "label": "Paper",
+        "url": "https://openreview.net/pdf?id=6cQdbUSme7"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Post-Audit-Mirage"
+      }
+    ],
+    "desc": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported."
+  },
+  {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",
     "authors": [
       "Aman Behera",
       "Namit Solanki",
       "Mehul Anand"
     ],
-    "venue": "Accepted · New in ML Workshop at NeurIPS 2026",
+    "venue": "Accepted · PriGM Workshop at NeurIPS 2026, Paris",
     "links": [
       {
         "label": "Project page",
@@ -45,7 +125,13 @@
       "name": "Qwen3-4B-RDAN-GRPO",
       "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO"
     },
-    "desc": "Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks."
+    "desc": "Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.",
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/RDAN-GRPO"
+      }
+    ]
   },
   {
     "title": "MycoGate-VL",

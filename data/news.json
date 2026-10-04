@@ -1,32 +1,57 @@
 [
   {
+    "date": "Oct 2026",
+    "title": "Post-Audit Mirage accepted at Who Verifies the Agents? @ NeurIPS 2026",
+    "detail": "Identifiability limits of offline agent verification, with Payal Payal. Poster. <a href=\"https://openreview.net/pdf?id=6cQdbUSme7\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a> and <a href=\"https://github.com/beingamanforever/Post-Audit-Mirage\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>.",
+    "category": "Paper",
+    "tag": "Verify Agents"
+  },
+  {
+    "date": "Oct 2026",
+    "title": "Released LevelHead",
+    "detail": "Training-free page deskewing and orientation classification for any model, to be submitted to CVPR 2027. <a href=\"https://beingamanforever.github.io/LevelHead/\" target=\"_blank\" rel=\"noopener noreferrer\">Project page</a> and <a href=\"https://github.com/beingamanforever/LevelHead\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>.",
+    "category": "Research",
+    "tag": "LevelHead"
+  },
+  {
     "date": "Sep 2026",
-    "title": "Mixing Matters accepted at the New in ML Workshop at NeurIPS 2026",
-    "detail": "A paired study of position bias across Transformer, Mamba, and hybrid language models. <a href=\"https://beingamanforever.github.io/Mixing-Matters/\" target=\"_blank\" rel=\"noopener noreferrer\">Project page</a>, <a href=\"https://beingamanforever.github.io/Mixing-Matters/paper.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">paper</a>, and <a href=\"https://github.com/beingamanforever/Mixing-Matters\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>."
+    "title": "Mixing Matters accepted at PriGM @ NeurIPS 2026, Paris",
+    "detail": "Accepted at the Workshop on Principles of Generative Modeling. A paired study of position bias across Transformer, Mamba, and hybrid language models. <a href=\"https://beingamanforever.github.io/Mixing-Matters/\" target=\"_blank\" rel=\"noopener noreferrer\">Project page</a>, <a href=\"https://beingamanforever.github.io/Mixing-Matters/paper.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">paper</a>, and <a href=\"https://github.com/beingamanforever/Mixing-Matters\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>.",
+    "category": "Paper",
+    "tag": "PriGM"
   },
   {
     "date": "Sep 2026",
     "title": "MycoGate-VL accepted at SHROOM-Visions at EMNLP 2026",
-    "detail": "Multilingual hallucination detection in vision-language responses. <a href=\"https://openreview.net/pdf?id=DcCzoyXJgi\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a> and <a href=\"https://github.com/beingamanforever/MycoGate-VL\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>."
+    "detail": "Multilingual hallucination detection in vision-language responses. <a href=\"https://openreview.net/pdf?id=DcCzoyXJgi\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a> and <a href=\"https://github.com/beingamanforever/MycoGate-VL\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>.",
+    "category": "Paper",
+    "tag": "EMNLP"
   },
   {
     "date": "Aug 2026",
     "title": "Built notSoSmartOCR",
-    "detail": "Document extraction with layout detection, OCR, selective LLM refinement, and visual evidence for review. <a href=\"https://github.com/beingamanforever/notSoSmartOCR\" target=\"_blank\" rel=\"noopener noreferrer\">Explore the project</a>."
+    "detail": "Document extraction with layout detection, OCR, selective LLM refinement, and visual evidence for review. <a href=\"https://github.com/beingamanforever/notSoSmartOCR\" target=\"_blank\" rel=\"noopener noreferrer\">Explore the project</a>.",
+    "category": "Launch",
+    "tag": "notSoSmartOCR"
   },
   {
     "date": "Jun 2026",
     "title": "Joined HiLabs as a Data Scientist",
     "details": [
-      "Developed RL methods for 4B-scale SLMs and scalable agentic-memory management systems.",
-      "Built HiLabs' first LLM-serving infrastructure with GPU-aware routing, autoscaling, and KV-cache sharing for faster, cost-efficient inference.",
-      "Working on OCR pipelines for downstream clinical chart extraction."
-    ]
+      "Developed <a href=\"https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO\" target=\"_blank\" rel=\"noopener noreferrer\">RDAN-GRPO</a>, rubric-based RL that improves Qwen3-4B by 15.42 on MulDimIF.",
+      "Built notSoSmartOCR end to end, structuring complex scans at 80% lower cost than the legacy pipeline.",
+      "Built a Kubernetes llm-d/vLLM serving platform with KV-cache-aware routing, cutting p95 TTFT from 26.9s to 0.19s.",
+      "Raised webpage-classification accuracy from 88.5% to 96.7% with TypeSafe Jev over a legacy XGBoost model."
+    ],
+    "category": "Career",
+    "tag": "HiLabs"
   },
   {
     "date": "May 2026",
     "title": "GSoC 2026 @ GNU Octave",
-    "detail": "Contributed to the <a href=\"https://octave.org/\" target=\"_blank\" rel=\"noopener noreferrer\">open-source scientific computing framework</a>."
+    "detail": "Contributed to the <a href=\"https://octave.org/\" target=\"_blank\" rel=\"noopener noreferrer\">open-source scientific computing framework</a>.",
+    "category": "Open source",
+    "tag": "GSoC"
   },
   {
     "date": "Jan 2026",
@@ -34,26 +59,36 @@
     "details": [
       "Improved OCR pipelines and upgraded an entity-conditioned webpage classifier.",
       "Built long-term agentic memory for an internal agent framework."
-    ]
+    ],
+    "category": "Career",
+    "tag": "Intern"
   },
   {
     "date": "Dec 2025",
     "title": "Silver at Inter-IIT Tech Meet 14.0",
-    "detail": "Led a team of six to a first runner-up finish on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs."
+    "detail": "Led a team of six to a first runner-up finish on the <a href=\"https://github.com/beingamanforever/Drishti\" target=\"_blank\" rel=\"noopener noreferrer\">ISRO geospatial VLM problem statement</a> among 24 IITs.",
+    "category": "Award",
+    "tag": "Silver"
   },
   {
     "date": "Sep 2025",
     "title": "Pre-placement offer from HiLabs",
-    "detail": "Received after winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee."
+    "detail": "Received after winning the <a href=\"https://github.com/beingamanforever/hilabs\" target=\"_blank\" rel=\"noopener noreferrer\">HiLabs AIQuest hackathon</a> at IIT Roorkee.",
+    "category": "Award",
+    "tag": "AIQuest"
   },
   {
     "date": "May 2025",
     "title": "Info Edge · Data Science Intern",
-    "detail": "Worked on generative engine optimisation (GEO) at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>."
+    "detail": "Worked on generative engine optimisation (GEO) at <a href=\"https://www.infoedge.in/\" target=\"_blank\" rel=\"noopener noreferrer\">Info Edge</a>.",
+    "category": "Career",
+    "tag": "Info Edge"
   },
   {
     "date": "Dec 2024",
     "title": "Silver at Inter-IIT Tech Meet 2025",
-    "detail": "Built an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>."
+    "detail": "Built an <a href=\"https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform\" target=\"_blank\" rel=\"noopener noreferrer\">AI interview platform</a>.",
+    "category": "Award",
+    "tag": "Silver"
   }
 ]

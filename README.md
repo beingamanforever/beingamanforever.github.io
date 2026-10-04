@@ -1,6 +1,6 @@
 # Aman Behera portfolio
 
-A small, data-driven static portfolio with About, Research, and Athletics pages.
+A small, data-driven static portfolio with About, Research, Blog, and Athletics pages.
 
 ## Build
 
@@ -9,7 +9,8 @@ A small, data-driven static portfolio with About, Research, and Athletics pages.
 ```
 
 The build writes the complete preview to `_site/` and refreshes the root HTML entry files used by GitHub Pages.
-It requires only Bash, Python 3, and standard Unix tools.
+It requires Bash, Python 3, standard Unix tools, and Pandoc 3.8+ for blog posts.
+See `BLOGGING.md` for publishing posts from HackMD.
 
 ## Preview
 
@@ -26,7 +27,6 @@ Then open `http://localhost:3456`.
 - `athletics_template.html` contains the Athletics page structure and personal records.
 - `_partials/` contains the shared header, metadata, and footer.
 - `assets/css/style.css` contains the site styles.
-- `assets/fonts/` contains the local Font Awesome brand icon font.
 - `assets/icons/` contains the cache-safe browser and touch icons.
 - `assets/images/projects/` contains the Selected Projects figures.
 - `assets/images/research/` contains Research figures.
@@ -35,6 +35,8 @@ Then open `http://localhost:3456`.
 - `data/projects.json` drives Selected Projects.
 - `data/news.json` drives News and supports optional grouped `details`.
 - `data/research.json` drives every research entry.
+- `blog/*.md` are blog posts (HackMD-style front matter); `blog_template.html` and `blog_post_template.html` wrap them.
+- `assets/fonts/` holds the self-hosted Geist font (OFL).
 - `scripts/build.sh` assembles the site.
 
 Edit source files and rerun the build.

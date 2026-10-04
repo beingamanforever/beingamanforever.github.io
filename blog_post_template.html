@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{TITLE}} | $SITE_NAME$</title>
+    <meta name="description" content="{{DESCRIPTION}}">
+    <meta property="og:title" content="{{TITLE}}">
+    <meta property="og:description" content="{{DESCRIPTION}}">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="$SITE_NAME$">
+    <meta property="og:image" content="$SITE_OG_IMAGE$">
+    <meta property="og:url" content="$SITE_URL$/blog/{{SLUG}}.html">
+    <meta property="article:published_time" content="{{DATE_ISO}}">
+    <link rel="canonical" href="$SITE_URL$/blog/{{SLUG}}.html">
+<!-- HEAD_COMMON -->
+</head>
+<body>
+<!-- NAV -->
+
+    <main id="main-content" class="page post-page">
+        <article class="post">
+            <header class="post-header">
+                <a class="post-back" href="$ROOT$blog.html">Blog</a>
+                <h1>{{TITLE}}</h1>
+                <p class="post-desc">{{DESCRIPTION}}</p>
+                <p class="card-meta"><time datetime="{{DATE_ISO}}">{{DATE}}</time><span>{{MINUTES}} min read</span></p>
+                <div class="post-tags">{{TAGS}}</div>
+            </header>
+            <div class="post-body">
+{{BODY}}
+            </div>
+        </article>
+    </main>
+
+<!-- FOOTER -->
+</body>
+</html>

@@ -79,7 +79,7 @@ if [[ "$OUTPUT_DIR" != "$ROOT_DIR/_site" ]]; then
 fi
 
 rm -rf "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/icons" "$OUTPUT_DIR/assets/images"
+mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/icons" "$OUTPUT_DIR/assets/images" "$OUTPUT_DIR/blog"
 
 python3 scripts/render_projects.py \
     --input data/projects.json \
@@ -90,18 +90,29 @@ python3 scripts/render_news.py \
 python3 scripts/render_research.py \
     --input data/research.json \
     --out "$TEMP_DIR/research.html"
+BLOG_SLUGS="$(python3 scripts/render_blog.py \
+    --src blog \
+    --template blog_post_template.html \
+    --index-out "$TEMP_DIR/blog.html" \
+    --posts-out "$TEMP_DIR/posts")"
 
 render_page index_template.html index.html
 render_page research_template.html research.html
 render_page athletics_template.html athletics.html
+render_page blog_template.html blog.html
+for slug in $BLOG_SLUGS; do
+    render_page "$TEMP_DIR/posts/$slug.html" "blog/$slug.html" "../"
+done
 render_page 404_template.html 404.html "/"
 
 inject_fragment "<!-- PROJECTS_FEATURED -->" "$TEMP_DIR/projects.html" "$OUTPUT_DIR/index.html"
 inject_fragment "<!-- NEWS_LIST -->" "$TEMP_DIR/news.html" "$OUTPUT_DIR/index.html"
 inject_fragment "<!-- RESEARCH_ALL -->" "$TEMP_DIR/research.html" "$OUTPUT_DIR/research.html"
+inject_fragment "<!-- BLOG_LIST -->" "$TEMP_DIR/blog.html" "$OUTPUT_DIR/blog.html"
 
 cp assets/css/style.css "$OUTPUT_DIR/assets/css/style.css"
 cp -R assets/fonts/. "$OUTPUT_DIR/assets/fonts/"
+cp -R assets/resume "$OUTPUT_DIR/assets/resume"
 cp -R assets/icons/. "$OUTPUT_DIR/assets/icons/"
 cp -R assets/images/. "$OUTPUT_DIR/assets/images/"
 cp assets/og-home-v2.png "$OUTPUT_DIR/assets/og-home-v2.png"
@@ -114,12 +125,14 @@ cat > "$OUTPUT_DIR/sitemap.xml" <<EOF
   <url><loc>$SITE_URL/</loc></url>
   <url><loc>$SITE_URL/research.html</loc></url>
   <url><loc>$SITE_URL/athletics.html</loc></url>
+  <url><loc>$SITE_URL/blog.html</loc></url>
+$(for slug in $BLOG_SLUGS; do printf '  <url><loc>%s/blog/%s.html</loc></url>\n' "$SITE_URL" "$slug"; done)
 </urlset>
 EOF
 
 touch "$OUTPUT_DIR/.nojekyll"
 
-for page in index.html research.html athletics.html 404.html sitemap.xml; do
+for page in index.html research.html athletics.html blog.html 404.html sitemap.xml; do
     cp "$OUTPUT_DIR/$page" "$ROOT_DIR/$page"
 done
 

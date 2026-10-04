@@ -1,26 +1,92 @@
 [
   {
     "title": "notSoSmartOCR",
-    "description": "Built a document-intelligence product that turns complex scans into structured, reviewable outputs. It combines orientation correction, layout detection, Falcon OCR 1.5, and selective LLM refinement for handwriting and ambiguous regions, with page-level visual evidence, tables, and Markdown output.",
+    "description": "Built a document-intelligence product that turns complex scans into structured, reviewable outputs. It combines orientation correction, layout detection, Falcon OCR 1.5, and selective LLM refinement for handwriting and ambiguous regions, and shows page-level evidence, per-block confidence, tables, and Markdown output.",
     "url": "https://github.com/beingamanforever/notSoSmartOCR",
-    "image": "assets/images/projects/notsosmartocr-ui.png",
-    "image_alt": "notSoSmartOCR interface with document examples, page evidence, and structured output panels during parsing",
-    "image_width": 2110,
-    "image_height": 1378,
     "links": [
       {
         "label": "Code",
         "url": "https://github.com/beingamanforever/notSoSmartOCR"
       }
     ],
-    "example": {
-      "image": "assets/images/projects/notsosmartocr-layout.png",
-      "alt": "OCR layout output identifying headings, text, author blocks, and bounding boxes on Attention Is All You Need",
-      "width": 1020,
-      "height": 1280,
-      "caption": "Layout extraction example: detected text, headings, and table bounds on a research paper."
-    },
-    "featured": true
+    "featured": true,
+    "gallery": [
+      {
+        "label": "Home",
+        "image": "assets/images/projects/notsosmartocr-home.jpg",
+        "width": 1920,
+        "height": 921,
+        "alt": "notSoSmartOCR home screen with a file drop zone and example documents",
+        "caption": "Drop a PDF or image, or start from an example."
+      },
+      {
+        "label": "Layout",
+        "image": "assets/images/projects/notsosmartocr-layout.png",
+        "width": 1020,
+        "height": 640,
+        "alt": "OCR layout output identifying headings, text, author blocks, and bounding boxes on Attention Is All You Need",
+        "caption": "Detected text, headings, author table bounds and page header on a research paper."
+      },
+      {
+        "label": "App",
+        "image": "assets/images/projects/notsosmartocr-app.jpg",
+        "width": 1920,
+        "height": 999,
+        "alt": "notSoSmartOCR parsing Attention Is All You Need: page evidence with layout boxes on the left, sections with confidence scores and a reconstructed table on the right",
+        "caption": "Page evidence beside the structured output, with a confidence score per block."
+      },
+      {
+        "label": "Examples",
+        "image": "assets/images/projects/notsosmartocr-examples.jpg",
+        "width": 2000,
+        "height": 548,
+        "alt": "Layout boxes on four hard documents: a handwritten provider roster, a research paper, a fax cover sheet, and a dense financial table",
+        "caption": "Handwritten tables, papers, faxes and dense financial layouts."
+      }
+    ]
+  },
+  {
+    "title": "LevelHead: Deskew Before You Classify",
+    "venue": "To be submitted · CVPR 2027",
+    "url": "https://beingamanforever.github.io/LevelHead/",
+    "links": [
+      {
+        "label": "Project page",
+        "url": "https://beingamanforever.github.io/LevelHead/"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/LevelHead"
+      }
+    ],
+    "description": "A training-free method for page deskewing and orientation classification. LevelHead levels the page with a spectral deskewer first, then lets any frozen classifier or VLM vote over the four quarter turns of the level page. On pages at any angle it lifts four Qwen3-VL models from 41.9% to 84.6% and four orientation classifiers from 71.9% to 85.2%.",
+    "featured": true,
+    "gallery": [
+      {
+        "label": "Overview",
+        "image": "assets/images/projects/levelhead-teaser.png",
+        "width": 1532,
+        "height": 420,
+        "alt": "Classify-first leaves a tilted page upside down while LevelHead levels it, votes over four quarter turns, and reads it correctly; per-backbone accuracy gains on the right",
+        "caption": "Classify-first misreads a tilted page; LevelHead levels it first, then votes."
+      },
+      {
+        "label": "Method",
+        "image": "assets/images/projects/levelhead-method.png",
+        "width": 1535,
+        "height": 441,
+        "alt": "LevelHead method: level the page, ask the frozen backbone four times, roll the answers back and combine them with a geometric mean",
+        "caption": "Level the page, ask the backbone four times, roll back and combine."
+      },
+      {
+        "label": "Live demo",
+        "image": "assets/images/projects/levelhead-demo.jpg",
+        "width": 2256,
+        "height": 1272,
+        "alt": "LevelHead live demo: a tilted phone photo of a screen on the left and the levelled page on the right, with a read tilt of +20.6 degrees",
+        "caption": "Step 1 reads a +20.6° tilt from the Fourier spectrum and levels a phone photo in the browser."
+      }
+    ]
   },
   {
     "title": "MycoGate-VL",
@@ -50,7 +116,7 @@
       "Namit Solanki",
       "Mehul Anand"
     ],
-    "venue": "Accepted · New in ML Workshop at NeurIPS 2026",
+    "venue": "Accepted · PriGM Workshop at NeurIPS 2026, Paris",
     "description": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.",
     "links": [
       {
@@ -78,6 +144,45 @@
     "featured": true
   },
   {
+    "title": "Post-Audit Mirage: Identifiability Limits of Offline Agent Verification",
+    "authors": [
+      "Aman Behera",
+      "Payal Payal"
+    ],
+    "venue": "Accepted · Who Verifies the Agents? Workshop at NeurIPS 2026 (Poster)",
+    "url": "https://openreview.net/pdf?id=6cQdbUSme7",
+    "gallery": [
+      {
+        "label": "The mirage",
+        "image": "assets/images/research/pam-matched-worlds.png",
+        "width": 2000,
+        "height": 694,
+        "alt": "A safe world and a harmful world give an offline verifier the same evidence and the same result, but deployment reveals delayed harm in only one of them",
+        "caption": "Same offline evidence, different real truth."
+      },
+      {
+        "label": "Monitor",
+        "image": "assets/images/research/pam-monitor.png",
+        "width": 2000,
+        "height": 810,
+        "alt": "Fresh group-labelled outcomes pass through a group-aware monitor that can deploy, hold, request more evidence, or report unsupported",
+        "caption": "A fail-closed monitor that acts only on fresh post-update evidence."
+      }
+    ],
+    "links": [
+      {
+        "label": "Paper",
+        "url": "https://openreview.net/pdf?id=6cQdbUSme7"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Post-Audit-Mirage"
+      }
+    ],
+    "description": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.",
+    "featured": true
+  },
+  {
     "title": "RDAN-GRPO",
     "description": "Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.",
     "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO",
@@ -90,7 +195,13 @@
       "name": "Qwen3-4B-RDAN-GRPO",
       "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO"
     },
-    "featured": true
+    "featured": true,
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/RDAN-GRPO"
+      }
+    ]
   },
   {
     "title": "Drishti",
@@ -100,7 +211,13 @@
     "image_alt": "DRISHTI remote-sensing analysis pipeline architecture",
     "image_width": 1234,
     "image_height": 497,
-    "featured": true
+    "featured": true,
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Drishti"
+      }
+    ]
   },
   {
     "title": "Tech-Enhanced AI Interview Learning Platform",
@@ -110,6 +227,12 @@
     "image_alt": "Flowchart of the Tech-Enhanced AI Interview Learning Platform",
     "image_width": 2200,
     "image_height": 990,
-    "featured": true
+    "featured": true,
+    "links": [
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform"
+      }
+    ]
   }
 ]
