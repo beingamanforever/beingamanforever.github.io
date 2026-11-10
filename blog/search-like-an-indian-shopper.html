@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>What Happens When You Search Like an Indian Shopper | Aman Behera</title>
+    <meta name="description" content="I typed हल्दी, &#x27;rice 1kg&#x27; and a pile of typos into Blinkit, Zepto and Instamart, then watched Zomato eat 400 MB of RAM. Findings, guesses, and fixes.">
+    <meta property="og:title" content="What Happens When You Search Like an Indian Shopper">
+    <meta property="og:description" content="I typed हल्दी, &#x27;rice 1kg&#x27; and a pile of typos into Blinkit, Zepto and Instamart, then watched Zomato eat 400 MB of RAM. Findings, guesses, and fixes.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Aman Behera">
+    <meta property="og:image" content="https://beingamanforever.github.io/assets/og-home-v3.png">
+    <meta property="og:url" content="https://beingamanforever.github.io/blog/search-like-an-indian-shopper.html">
+    <meta property="article:published_time" content="2026-11-11">
+    <link rel="canonical" href="https://beingamanforever.github.io/blog/search-like-an-indian-shopper.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' https:; style-src 'self'; font-src 'self'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="application-name" content="Aman Behera">
+    <meta name="apple-mobile-web-app-title" content="Aman Behera">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="../assets/icons/favicon.svg?v=4" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="../assets/icons/favicon-32.png?v=4" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png?v=4" sizes="180x180">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="announce" href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">
+        <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="announce-chip">New</span>
+        <span class="announce-text">LevelHead<span class="announce-tagline">: deskew before you classify</span></span>
+        <span class="announce-link">Project page</span>
+        <span class="sparkles sparkles-end" aria-hidden="true"><i></i><i></i><i></i></span>
+    </a>
+    <header class="site-header">
+        <a class="site-name" href="../index.html">Aman Behera</a>
+    </header>
+    <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">About</a>
+        <a href="../research.html">Research</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../athletics.html">Athletics</a>
+    </nav>
+
+    <main id="main-content" class="page post-page">
+        <article class="post">
+            <header class="post-header">
+                <a class="post-back" href="../blog.html">Blog</a>
+                <h1>What Happens When You Search Like an Indian Shopper</h1>
+                <p class="post-desc">I typed हल्दी, &#x27;rice 1kg&#x27; and a pile of typos into Blinkit, Zepto and Instamart, then watched Zomato eat 400 MB of RAM. Findings, guesses, and fixes.</p>
+                <p class="card-meta"><time datetime="2026-11-11">November 11, 2026</time><span>14 min read</span></p>
+                <div class="post-tags"><span class="post-tag">search</span><span class="post-tag">recsys</span><span class="post-tag">ios</span><span class="post-tag">memory</span></div>
+            </header>
+            <div class="post-body">
+<p>It started, like most bad decisions, with a post on X. Someone noticed that Zomato’s iOS app keeps eating memory the longer you scroll its home feed. I replied with my own numbers (smaller spike, different phone, 43% battery, iOS 26.6.1), and then, instead of going to sleep like a normal person, I wired my iPhone to my Mac and spent the evening making three grocery apps search for turmeric.</p>
+<p>This post is what came out of that evening. First the negatives, then the positives, then my theory about the memory thing (which turned out to be half right), and finally some fixes nobody asked me for.</p>
+<div class="info">
+<p>One phone, one account, one address in Bengaluru, one evening. Apps update every week, so treat this as a first look and not a verdict. If you work on any of these apps: hi, please don’t ban my account, I still need groceries.</p>
+</div>
+<h2 id="the-setup">The setup</h2>
+<p>Nothing fancy. <a href="https://github.com/appium/WebDriverAgent">WebDriverAgent</a> let the Mac tap, type and swipe on the phone, and <a href="https://github.com/doronz88/pymobiledevice3">pymobiledevice3</a> read each app’s memory, CPU and frame rate. No app was modified; I used them exactly the way a customer does, through their own search boxes.</p>
+<p>The idea is simple: <code>doodh</code> should find the same milk as <code>milk</code>. So I took 25 everyday grocery searches and typed each one four ways: as is, with a typo, in Hindi script, and in Hinglish or with a pack size. That’s 375 searches across Blinkit, Zepto and Instamart, each with a saved screenshot of what came first. If a rewritten search loses the product, something in the pipeline broke, and <em>which</em> rewrite broke it tells you <em>where</em>.</p>
+<p>Every search engine, from Google to your kirana app, roughly does the same four things:</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/search-pipeline.svg" alt="The search pipeline. Watch what Blinkit does to “rice 1kg”." /></p>
+<p><em>The four stages of a search, and where each problem most likely lives. The animated query is Blinkit’s handling of <code>rice 1kg</code>.</em></p>
+<p>Here’s the first thing a shopper actually sees, for three of those searches:</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/first-card-three-apps.jpg" alt="Top of the results screen for potato, rice 1kg and haldi on Blinkit, Zepto and Instamart" /></p>
+<h2 id="first-the-negatives">First, the negatives</h2>
+<h3 id="search-potato-get-chips">Search “potato”, get chips</h3>
+<p>On 10 of 18 everyday staples (eggs, curd, tomato, potato, bread and friends), the first card on Blinkit is an ad. Search <code>potato</code> and the first thing you see is a packet of Haldiram’s chips. Technically potato. Spiritually, not what I asked for.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/ads-first-slot.svg" alt="Staple searches where the first card is an ad" /></p>
+<p><em>One square per staple search. Hatched means the first card was sponsored.</em></p>
+<p>The funny part: Blinkit shows the <em>fewest</em> ads of the three overall. It just puts them first. That looks less like greed and more like plumbing: my guess is that slot 1 is filled by a separate ad auction that never checks whether the ad belongs to the category you searched. A potato-chips advertiser bids on “potato”, wins, and nobody downstream asks whether a person typing “potato” at 9 pm wants to make aloo sabzi or eat their feelings.</p>
+<h3 id="rice-1kg-becomes-rice">“rice 1kg” becomes “rice”</h3>
+<p>Ask Blinkit for <code>rice 1kg</code> and its banner says <em>Showing results for “rice”</em>. The first card is a 5 kg bag, in all four ways I phrased it (<code>rice 1kg</code>, <code>rice 1 kg</code>, <code>1000g rice</code>, you get the idea). Instamart keeps your words but still shows a 2 kg pack first when you ask for 5 kg of atta. Zepto got the size right 8 times out of 8.</p>
+<p>My guess is a spelling-correction step that sees <code>1kg</code> as noise and helpfully deletes it. It’s the search equivalent of a waiter who hears “one masala dosa, less oil” and writes down “dosa”.</p>
+<h3 id="हलद-and-a-download-prompt">हल्दी, and a download prompt</h3>
+<p>This one is my favourite. Type हल्दी (turmeric) into Instamart and iOS pops up a sheet saying <em>Required Downloads: Hindi, English</em>. No search runs. Close the sheet, wait, retry: nothing. That happened on 10 of my 11 Hindi-script searches.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/hindi-script-paths.svg" alt="Three ways of reading Hindi script" /></p>
+<p><em>The path from हल्दी to a product on each app, read off each app’s own “Showing results for” line.</em></p>
+<p>The irony: on 3 November, a week before my test, Swiggy <a href="https://x.com/WeAreSwiggy/status/2117089326228287750">announced</a> LLM-powered search for Instamart that “reads Hindi, Hinglish, Kannada and Telugu”. I believe them. The server probably can. The phone just never asks it, because the app seems to route Hindi-script queries through Apple’s on-device Translation feature first, which needs language packs, which most people have never downloaded.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Blinkit and Zepto both found turmeric every time, but they take very different roads. Blinkit spells हल्दी out in Latin letters (<code>haldi</code>) and then hopes its Hinglish word list knows the word. Zepto jumps straight to the catalogue name, <code>turmeric</code>. Both work for turmeric; Blinkit’s road just has one more place to fall off. You can see the difference in what each app <em>says</em> it searched for:</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/what-each-app-searched.svg" alt="What each app says it searched for" /></p>
+<p><em>Counts per app and query type, from each app’s “Showing results for” banner. Blinkit drops the size on all 8 pack-size searches.</em></p>
+<h3 id="silence-for-screen-readers">Silence, for screen readers</h3>
+<p>I turned on VoiceOver and searched <code>milk</code>.</p>
+<blockquote>
+<p><strong>Blinkit:</strong> <em>(silence)</em>. Zero of the 14 items on the results screen say anything.</p>
+<p><strong>Instamart:</strong> “Nandini Shubham Milk, 500 ml, MRP ₹32, 6% off, final price ₹30.”</p>
+</blockquote>
+<p>None of the product names or prices on Blinkit’s results screen reach the phone’s accessibility layer. On its home screen, the only element labelled “Search” opens the separate Bistro app. This matters beyond blind shoppers too: the AI shopping assistants everyone is building read the same accessibility layer, so they’re equally stuck.</p>
+<h2 id="then-the-positives">Then, the positives</h2>
+<p>In fairness, a lot works. All three apps were fast, and none of them <em>ever</em> returned an empty page, across all 375 searches. Zepto nailed every pack size and read Hindi script the clean way. Instamart never put an ad in slot 1 and reads every card out in full. Blinkit found the right product for all 11 Hindi-script searches, even if it took the scenic route.</p>
+<h2 id="the-memory-thing-a.k.a.-why-i-started">The memory thing (a.k.a. why I started)</h2>
+<p>Back to the post that started this. I opened each app fresh and scrolled its home feed for five minutes, recording memory and smoothness, with the phone cooling down between apps.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/memory-while-scrolling.svg" alt="Memory while scrolling the home feed" /></p>
+<p><em>One run each on an iPhone 16. Zomato scrolled by hand (memory reading ended at 3.6 min), Blinkit by script.</em></p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Zomato</th>
+<th>Blinkit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memory while scrolling</td>
+<td>176 MB, past 413 MB, still climbing</td>
+<td>161 MB, up to 338 MB, then flat</td>
+</tr>
+<tr>
+<td>Smoothness</td>
+<td>~31 frames per second</td>
+<td>~54 frames per second</td>
+</tr>
+<tr>
+<td>Data downloaded in 5 min</td>
+<td>131 MB</td>
+<td>9 MB</td>
+</tr>
+</tbody>
+</table>
+<p>Before anyone screenshots this and writes “Blinkit good, Zomato bad”: Blinkit’s line goes flat because its home feed <em>ends</em> after about 75 seconds. There’s nothing new to load, so of course memory stops growing. In my earlier runs, both apps kept climbing. Zomato’s feed is endless, so its line just keeps going. Flat versus climbing, on its own, proves nothing about a leak.</p>
+<h3 id="my-first-theory-its-the-clicks">My first theory: it’s the clicks</h3>
+<p>Here’s what I believed going in. Every recommendation engine runs on behaviour: what you tapped, how long you lingered, how far you scrolled. Those events form a time series, a sequence, and that sequence is exactly what neural networks are good at learning from. So the app has to store your clicks and scrolls somewhere to optimise what it shows you next. If it never throws the old ones away, that’s an eviction problem. Blinkit’s feed is short, so it barely matters there; Zomato’s is endless, hence the explosion.</p>
+<p>It’s a clean story. So I did the thing you should always do with a clean story: arithmetic.</p>
+<h3 id="the-arithmetic">The arithmetic</h3>
+<p>An analytics event is a small JSON blob: an event name, an item id, a timestamp, some context. Call it 0.5 to 1 KB. Even if you log a very generous 10 events a second for 5 minutes and <em>never</em> send any of them, that’s 3,000 events, about 3 MB. Zomato grew by 237 MB.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/memory-budget.svg" alt="What could fill 237 MB?" /></p>
+<p><em>Back of the envelope. The click log is the sliver at the top.</em></p>
+<p>And real apps don’t hoard events anyway. Segment’s iOS SDK, a typical example, sends a batch <a href="https://www.twilio.com/docs/segment/connections/sources/catalog/libraries/mobile/ios">every 20 events or every 30 seconds</a> and caps its queue at 1,000 events. The sequence that trains the recommender lives on a server, not in your phone’s RAM (more on that in a bit).</p>
+<p>Images, on the other hand, are enormous once decoded. A JPEG is compressed; to draw it, iOS unpacks it into raw pixels at <strong>width × height × 4 bytes</strong>, and that buffer lives as long as the image does. Apple’s own <a href="https://developer.apple.com/videos/play/wwdc2018/219/">WWDC18 talk</a> uses the example of a 590 KB photo that needs about 12 MB once decoded. A full-width card image on an iPhone 16 is roughly 1179 × 660 pixels: about 3 MB of pixels each. 237 MB is about 76 of those. Zomato’s restaurant cards each carry their own swipeable carousel, and the app pulled down 131 MB in five minutes, which is mostly images. Seventy-six decoded images after three and a half minutes of scrolling is not a stretch.</p>
+<p>So my eviction instinct was right. I just blamed the wrong tenant. The thing not getting evicted is most likely decoded images (and the views holding them), not the click log.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/image-cache-eviction.svg" alt="An uncapped image cache versus an LRU cap" /></p>
+<p><em>Left: every image you scroll past stays decoded in memory until iOS kills the app. Right: a least-recently-used cap keeps the last few screens and drops the oldest.</em></p>
+<p>Two more things fit this story. Memory rose in <em>steps</em>, each matching a burst of CPU as a new batch of cards loaded. And Zomato felt heavy in a way that memory alone doesn’t explain: scripted swipes took about 12 seconds to register, against under a second on Blinkit, which smells like carousels and videos still animating off screen and hogging the main thread.</p>
+<h3 id="has-this-happened-before-constantly.">Has this happened before? Constantly.</h3>
+<p>Once you go looking, “memory climbs while scrolling a feed of pictures” is one of the most re-discovered bugs in mobile development:</p>
+<ul>
+<li><strong>Facebook built a whole library because of it.</strong> In 2015 they released <a href="https://engineering.fb.com/2015/03/26/android/introducing-fresco-a-new-image-library-for-android">Fresco</a> for Android, largely to stop image-heavy feeds from crashing with out-of-memory errors. Its key trick: the moment an image view goes off screen, it releases the image.</li>
+<li><strong>SDWebImage, the most popular iOS image loader, has the issue on repeat.</strong> In <a href="https://github.com/SDWebImage/SDWebImage/issues/1544">#1544</a> (2016), memory climbs while scrolling a collection view of ~500 KB images; the advice is to cap <code>maxMemoryCost</code>. In <a href="https://github.com/SDWebImage/SDWebImageSwiftUI/issues/271">#271</a> of its SwiftUI port (2023), memory “will keep growing while scrolling the image list”.</li>
+<li><strong>Android got there too.</strong> Picasso <a href="https://github.com/square/picasso/issues/1685">#1685</a> is a RecyclerView crashing with OOM while scrolling, though that one turned out to be an 11 MB error placeholder.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li><strong>Meta automated the hunt.</strong> In 2016 they wrote about <a href="https://engineering.fb.com/2016/04/13/ios/automatic-memory-leak-detection-on-ios">automatic memory leak detection on iOS</a>, because retain cycles in view controllers kept sneaking into their apps.</li>
+</ul>
+<p>And to be fair to my original theory, unbounded event queues are real too. Segment’s Java library had <a href="https://github.com/segmentio/analytics-java/issues/161">an issue</a> asking for a maximum queue size precisely because its queues were unbounded and could run out of memory under heavy traffic. That’s a server under load, though, not a phone browsing biryani. On a phone, the image cache is the much bigger suspect.</p>
+<h3 id="how-to-actually-confirm-it">How to actually confirm it</h3>
+<p>I can’t see inside Zomato, so everything above is an informed guess. Here’s the test that would settle it: scroll down a fixed number of cards and back to the top, four times, on both apps, with the same script.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/cache-or-leak.svg" alt="Cache or leak?" /></p>
+<p><em>Expected shapes, not measurements. I haven’t run the matched test yet.</em></p>
+<p>If memory falls back each time you return to the top, it’s a cache that’s too big. If it keeps stepping up, something is never released, and that’s a leak. Zomato’s own engineers can go one better with Instruments: if the growth sits in image buffers, it’s images; if it sits in dictionaries of strings, my click theory gets its revenge.</p>
+<h2 id="where-the-time-series-actually-lives">Where the time series actually lives</h2>
+<p>The part of my theory that <em>was</em> right: modern recommenders really are sequence models over your behaviour. The big players are just very deliberate about where that sequence is stored.</p>
+<p><img src="../assets/images/posts/search-like-an-indian-shopper/where-the-sequence-lives.svg" alt="Where the action sequence lives" /></p>
+<p><em>The phone is a sensor. It queues a few events, ships them in batches, and forgets them. The sequence lives server-side.</em></p>
+<ul>
+<li><strong>Pinterest</strong> ranks its home feed with <a href="https://arxiv.org/abs/2306.00248">TransAct</a> (KDD 2023): a transformer over your <em>real-time</em> actions, combined with user embeddings computed offline in batch. Their <a href="https://medium.com/pinterest-engineering/next-level-personalization-how-16k-lifelong-user-actions-supercharge-pinterests-recommendations-bd5989f8f5d3">TransAct V2</a> goes up to 16,000+ lifelong actions per user, each stored as a compact token (timestamp, action type, surface, a quantised 32-number item embedding), and for each candidate pin it only pulls the most recent actions plus the ones most similar to that pin.</li>
+<li><strong>Alibaba</strong> published the <a href="https://arxiv.org/abs/1905.06874">Behavior Sequence Transformer</a> for Taobao back in 2019: feed the sequence of items a user clicked into a transformer, predict the next click.</li>
+<li><strong>Meta</strong> went all in with <a href="https://arxiv.org/abs/2402.17152">HSTU</a> (ICML 2024), treating user actions as their own “language” and training generative recommenders with up to 1.5 trillion parameters over sequences of thousands of actions. It reported a 12.4% lift in online A/B tests.</li>
+</ul>
+<p>Notice what none of them do: keep that sequence in the app’s memory. Your phone holds a few kilobytes of queued events. The terabytes live in a feature store next to the model.</p>
+<h3 id="what-this-could-look-like-for-quick-commerce">What this could look like for quick commerce</h3>
+<p>Grocery is almost unfairly well suited to sequences, because it’s so repetitive. If I were building it, each token would be something like <em>(what I typed, what I tapped, what I added, the time, what’s already in my cart)</em>, and a few things fall out almost for free:</p>
+<ul>
+<li><strong>Hindi script, fixed from logs.</strong> If people type हल्दी and then tap Tata Sampann turmeric, that pair <em>is</em> the mapping. No Hinglish detour needed.</li>
+<li><strong>Pack sizes that remember you.</strong> If I’ve bought 1 kg rice the last six times, rank 1 kg first even when I type just <code>rice</code>.</li>
+<li><strong>Relevance gates for ads.</strong> A session that goes <code>onion → tomato → potato</code> is cooking. Maybe don’t open with chips.</li>
+<li><strong>Basket completion.</strong> Maggi in the cart at 11 pm has a well-known next item, and it isn’t a salad.</li>
+</ul>
+<p>And if you really do want some of this on the device (for offline use, or for privacy), keep it in a ring buffer: the last few hundred events, oldest out first. That’s my original eviction idea, applied to the thing it actually fits.</p>
+<h2 id="what-id-fix">What I’d fix</h2>
+<p>Most of this is cheap.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>App</th>
+<th>Stage</th>
+<th>Fix</th>
+<th>How to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instamart</td>
+<td>Understanding</td>
+<td>Send the text as typed to the server; never wait on a language download.</td>
+<td>Hindi-script searches return results with no packs installed.</td>
+</tr>
+<tr>
+<td>Blinkit</td>
+<td>Ranking and ads</td>
+<td>Keep slot 1 for a matching product on staples, or allow only same-category ads there.</td>
+<td>A/B test on add-to-cart for the top card.</td>
+</tr>
+<tr>
+<td>Blinkit</td>
+<td>Understanding</td>
+<td>Read <code>1kg</code>, <code>1 kg</code> and <code>1000g</code> as a size before spell-correcting, and rank by it.</td>
+<td>The banner keeps the size; that size comes first.</td>
+</tr>
+<tr>
+<td>Blinkit</td>
+<td>Expansion</td>
+<td>Map Hindi script straight to catalogue names; keep Hinglish as a synonym.</td>
+<td>Grow the map from what people typed and then tapped.</td>
+</tr>
+<tr>
+<td>Blinkit</td>
+<td>On screen</td>
+<td>Give every product card a spoken label; label the real search bar “Search”.</td>
+<td>Apple’s accessibility audit in UI tests.</td>
+</tr>
+<tr>
+<td>Zomato</td>
+<td>Home feed</td>
+<td>If the matched test confirms it: recycle cards, cap and downscale images, pause off-screen carousels and video.</td>
+<td>Memory falls back after scrolling to the top.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="caveats">Caveats</h2>
+<p>One phone, one account, one address, one evening. The memory comparison is a single run per app with different scroll methods, and my numbers came out lower than the original post’s, which says as much about phones and battery levels as about apps. Next up: food search on Zomato and Swiggy, and the matched memory test, so I can find out whether this post ages well or becomes the thing I chuckle at in five years.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>My guess, from the outside. The prompt is iOS’s own Translation sheet, and it only appears for Hindi-script input, which is about as strong a hint as you get without the source code.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Jake Wharton’s reply, roughly: “This is not a Picasso problem.” Every library maintainer has typed that sentence at least a thousand times.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Knowing my track record, both.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <nav class="footer-social" aria-label="Social links">
+            <a class="social-twitter" href="https://twitter.com/beingamanFF" target="_blank" rel="noopener noreferrer" aria-label="Twitter: @beingamanFF"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg><span>@beingamanFF</span></a>
+            <a class="social-github" href="https://github.com/beingamanforever" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg><span>GitHub</span></a>
+            <a class="social-linkedin" href="https://www.linkedin.com/in/aman-behera-?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg><span>LinkedIn</span></a>
+        </nav>
+        <a class="footer-email" href="mailto:aman.behera.systems@gmail.com"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>aman.behera.systems@gmail.com</a>
+    </footer>
+    <div class="wordmark-band" aria-hidden="true">
+        <div class="wordmark">
+            <span class="wm scene-1">aman</span>
+            <span class="wm scene-2">aman</span>
+            <span class="wm scene-3">aman</span>
+            <span class="wm scene-4">aman</span>
+        </div>
+    </div>
+</body>
+</html>
