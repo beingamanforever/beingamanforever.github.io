@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>The Many Flavours of Constness in C++ | Aman Behera</title>
+    <meta name="description" content="const, const_cast, constexpr, consteval, constinit. What each one promises, how the compiler sees it, and when work moves from runtime to compile time.">
+    <meta property="og:title" content="The Many Flavours of Constness in C++">
+    <meta property="og:description" content="const, const_cast, constexpr, consteval, constinit. What each one promises, how the compiler sees it, and when work moves from runtime to compile time.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Aman Behera">
+    <meta property="og:image" content="https://beingamanforever.github.io/assets/og-home-v3.png">
+    <meta property="og:url" content="https://beingamanforever.github.io/blog/flavours-of-const-in-cpp.html">
+    <meta property="article:published_time" content="2026-06-28">
+    <link rel="canonical" href="https://beingamanforever.github.io/blog/flavours-of-const-in-cpp.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' https:; style-src 'self'; font-src 'self'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="application-name" content="Aman Behera">
+    <meta name="apple-mobile-web-app-title" content="Aman Behera">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="../assets/icons/favicon.svg?v=4" type="image/svg+xml" sizes="any">
+    <link rel="shortcut icon" href="../assets/icons/favicon-32.png?v=4" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png?v=4" sizes="180x180">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="announce" href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">
+        <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="announce-chip">New</span>
+        <span class="announce-text">LevelHead<span class="announce-tagline">: deskew before you classify</span></span>
+        <span class="announce-link">Project page</span>
+        <span class="sparkles sparkles-end" aria-hidden="true"><i></i><i></i><i></i></span>
+    </a>
+    <header class="site-header">
+        <a class="site-name" href="../index.html">Aman Behera</a>
+    </header>
+    <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">About</a>
+        <a href="../research.html">Research</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../athletics.html">Athletics</a>
+    </nav>
+
+    <main id="main-content" class="page post-page">
+        <article class="post">
+            <header class="post-header">
+                <a class="post-back" href="../blog.html">Blog</a>
+                <h1>The Many Flavours of Constness in C++</h1>
+                <p class="post-desc">const, const_cast, constexpr, consteval, constinit. What each one promises, how the compiler sees it, and when work moves from runtime to compile time.</p>
+                <p class="card-meta"><time datetime="2026-06-28">June 28, 2026</time><span>14 min read</span></p>
+                <div class="post-tags"><span class="post-tag">cpp</span><span class="post-tag">systems</span></div>
+            </header>
+            <div class="post-body">
+<p>C++ has collected a small vocabulary of words that all start with <em>const</em>: <code>const</code> and <code>const_cast</code> from C++98, <code>constexpr</code> from C++11, and <code>consteval</code>, <code>constinit</code>, and <code>is_constant_evaluated</code> from C++20. They are easy to confuse because they read alike, but each answers a different question: is this handle read-only, and does this run at compile time or at runtime? These notes work through all of them, from const-correctness up to compile-time evaluation, drawing on a few CppCon talks.</p>
+<h2 id="const-const_cast-and-the-const-keywords">Const, const_cast, and the const keywords</h2>
+<p><strong>Talks &amp; sources this draws on:</strong> 1. <a href="https://youtu.be/tA6LbPyYdcosi=tHeeNkQTmad3wEcH">Back to Basics: const and constexpr in C++ - CppCon 2021</a> (Rest in peace Rainer) 2. <a href="https://youtu.be/MdrfPSUtMVM?si=nAFzN2AWLx3aAzdG">Your new mental model for constexpr - CppCon 2021</a> 3. <a href="https://youtu.be/Y1KOuFYtTF4?si=8NJhbsMbnvHEeiVu">Importance of being const - Cpp 2015</a> ## Const 1. Flavours of Constness in C++</p>
+<p><img src="../assets/images/posts/cpp-notes/image1.png" alt="alt text" /></p>
+<pre><code>- `const`, `const_cast` -&gt; are part of C++ 98
+- `constexpr` -&gt; C++11
+- `consteval`, `constinit`, `is_constant_evaluated` -&gt; C++20</code></pre>
+<ol start="2" type="1">
+<li>const:
+<ul>
+<li>In C++, const is a type promise: “through this handle (pointer/reference), you won’t modify the object.”</li>
+<li>const is a quality attribute of our program</li>
+<li>const objects: must be initialized, cannot be modified, cannot be victims of data racs, can only invoke const member functions</li>
+<li>const member functions: cannot modify any member variables (unless mutable), cannot call non-const member functions.</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/image4.png" alt="alt text" /></p>
+<pre><code>- const only changes the `this` pointer, mutable allows the modification (ignores the const on `this`)
+- internally void f() const{} is treated as void f(const ClassName* this){}
+- objects are data, member functions are free functions, object is passed as a hidden argument to the member function</code></pre>
+<ol start="3" type="1">
+<li></li>
+</ol>
+<pre class="cpp"><code>#include &lt;iostream&gt;
+#include &lt;mutex&gt;
+#include &lt;thread&gt;
+#include &lt;vector&gt;
+
+class ThreadSafeCounter {
+    mutable std::mutex m; // as it&#39;s being locked and unlocked in const member function
+    int counter = 0;
+
+public:
+    int get() const {
+        std::lock_guard&lt;std::mutex&gt; lk(m); // RAII object, locks &amp; unlocks mutex at construction &amp; destruction
+        return counter;
+    }
+
+    void inc() {
+        std::lock_guard&lt;std::mutex&gt; lk(m);
+        ++counter;
+    }
+};
+
+int main() {
+    std::vector&lt;std::jthread&gt; vec; // RAII object, C++20,
+    ThreadSafeCounter counter;
+
+    for (int i = 0; i &lt; 20; ++i) {
+        vec.emplace_back([&amp;counter] {
+            counter.inc();
+            std::cout &lt;&lt; &quot;counter: &quot; &lt;&lt; counter.get() &lt;&lt; &#39;\n&#39;;
+            counter.inc();
+        });
+    }
+}</code></pre>
+<ol start="4" type="1">
+<li></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/image3.png" alt="alt text" /></p>
+<pre><code>- Use const on parameters when the function doesn’t need  to modify the caller’s object.
+- Don’t use const when the function’s job is to modify the caller’s object (output or in/out).</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/image4.png" alt="alt text" /></p>
+<pre><code>- “const pointer” vs “pointer to const”:
+    - Read from right to left.
+    - ` T* const p` -&gt; const pointer to T (pointer cannot be changed)
+    - `const T* p` or ` T const* p` -&gt; pointer to const T (value cannot be changed)</code></pre>
+<h2 id="const_cast">const_cast</h2>
+<p><img src="../assets/images/posts/cpp-notes/image5.png" alt="alt text" /></p>
+<pre class="cpp"><code>const int x = 5;
+int* p = const_cast&lt;int*&gt;(&amp;x);
+*p = 7;          // undefined behavior</code></pre>
+<pre><code>- Only when the original object is non-const, but you temporarily see it through a const view.</code></pre>
+<pre class="cpp"><code>void f(const int* p) {
+    int* q = const_cast&lt;int*&gt;(p);
+    *q = 10;      // OK only if caller actually passed pointer to non-const int
+}
+
+int a = 1;
+f(&amp;a);            // OK
+const int b = 2;
+f(&amp;b);            // UB inside f if it writes</code></pre>
+<ol start="4" type="1">
+<li><code>const_cast</code> demo (where it’s OK vs UB):</li>
+</ol>
+<pre class="cpp"><code>#include &lt;iostream&gt;
+
+void safe_mutate_through_const_view(const int *p)
+{
+    // Removing const is allowed; mutating is only defined if *p was originally non-const.
+    int* q = const_cast&lt;int*&gt;(p);
+    *q = 42;
+}
+
+void ub_mutate_const_object(const int* p) {
+    int* q = const_cast&lt;int*&gt;(p);
+    *q = 99; // undefined behavior if *p refers to a truly-const object
+}
+
+int main() {
+    {
+        int nonConstInt = 10;
+        const int* pToNonConstInt = &amp;nonConstInt; // const view of a non-const object
+        safe_mutate_through_const_view(pToNonConstInt);
+        std::cout &lt;&lt; &quot;SAFE nonConstInt: &quot; &lt;&lt; nonConstInt &lt;&lt; &#39;\n&#39;;
+    }
+
+#ifdef RUN_UB_DEMO
+    {
+        const int constInt = 10;
+        const int* pToConstInt = &amp;constInt;
+        ub_mutate_const_object(pToConstInt); // UB: may crash, may print 10, may print 99...
+        std::cout &lt;&lt; &quot;UB constInt: &quot; &lt;&lt; constInt &lt;&lt; &#39;\n&#39;;
+    }
+#endif
+}</code></pre>
+<ol start="5" type="1">
+<li><code>const_cast</code> (calling non-const vs const pointer APIs, and why C-cast is dangerous)</li>
+</ol>
+<pre class="cpp"><code>void func(int*) {}
+void funcConst(const int*) {}
+
+int main() {
+    // Invoking function taking non-const pointer with const variable
+    const int myInt{1988};
+    // func(&amp;myInt); // ERROR: cannot convert const int* to int*
+
+    int* myIntPtr = const_cast&lt;int*&gt;(&amp;myInt);
+    func(myIntPtr); // UB if func modifies *myIntPtr (because myInt is truly const)
+
+    // Invoking function taking const pointer with (const/non-const) pointer
+    const int* myConstIntPtr = const_cast&lt;const int*&gt;(myIntPtr);
+    funcConst(myConstIntPtr);
+    funcConst(myIntPtr);
+
+    // const_cast is safer than the C-cast
+    char myChar = &#39;A&#39;;
+    char* myCharPointer(&amp;myChar);
+
+    int* intPointer = (int*)(myCharPointer); // compiles, but it&#39;s a dangerous cast
+    *intPointer = &#39;A&#39;; // undefined behavior
+
+    // int* myIntPointer = static_cast&lt;int*&gt;(myCharPointer); // ERROR (good): static_cast won&#39;t do this
+}</code></pre>
+<ul>
+<li>Why the slide says “don’t use C-cast”</li>
+</ul>
+<p>A C-style cast (T)x is a “try a bunch of casts until something works” cast. It can silently perform combinations similar to: const_cast (remove const) static_cast (numeric/base conversions) sometimes even reinterpret_cast (bit-level reinterpretation) That makes code harder to audit: you can’t tell which dangerous conversion you just did.</p>
+<h2 id="constexpr">constexpr</h2>
+<p><img src="../assets/images/posts/cpp-notes/image6.png" alt="alt text" /></p>
+<ul>
+<li>we have two times, compile time and runtime</li>
+<li>1…<em>constexpr</em>…M…<em>runtime</em>….N</li>
+<li>constexpr is a promise that a function or object can be evaluated at compile time</li>
+<li>constexpr variables are implicitly const (you can’t assign to them later)</li>
+<li>const means read-only through this name/type at run time: you can’t modify it via that variable.</li>
+<li>const does not automatically mean “compile-time”. It might be initialized from run-time work.</li>
+</ul>
+<pre class="cpp"><code>const int x = someRuntimeFunction(); // OK: x is const, but initialized at runtime
+const int a = 5;        // often compile-time usable
+const int b = rand();   // NOT compile-time (run-time init)
+constexpr int y = 5;    // always compile-time usable
+constexpr int z = rand(); // ERROR: rand() is not a constant expression</code></pre>
+<ul>
+<li>const ⇒ maybe usable as a compile-time constant, but only in certain cases (classic: const int/enum with constant initialization). For non-integral types (like double, std::string), const is not enough to make it compile-time usable; you typically need constexpr and a constexpr-capable type/initializer.</li>
+</ul>
+<p><img src="../assets/images/posts/cpp-notes/image7.png" alt="alt text" /></p>
+<h3 id="static-static_cast-thread_local-and-why-not-in-constexpr"><code>static</code>, <code>static_cast</code>, <code>thread_local</code> (and why not in <code>constexpr</code>)</h3>
+<ul>
+<li>What <code>static</code> means (C++ has multiple meanings):
+<ul>
+<li>Static storage duration (lifetime = whole program):
+<ul>
+<li><code>static int g;</code> at namespace/global scope → one variable exists for entire program.</li>
+<li><code>static int x;</code> inside a function → still one variable for entire program, but visible only in that function.</li>
+</ul></li>
+<li>Static member (belongs to the class, not each object):
+<ul>
+<li><code>struct S { static int count; };</code> → shared by all <code>S</code> objects.</li>
+</ul></li>
+<li>Internal linkage (old “file-local” at namespace scope):
+<ul>
+<li><code>static int helper;</code> → only this translation unit can see it (today: prefer unnamed namespace).</li>
+</ul></li>
+</ul></li>
+<li><code>static</code> (local variable): <em>one</em> variable shared across all calls; lifetime = whole program.</li>
+<li><code>thread_local</code>: one variable <em>per thread</em>; lifetime = whole thread.</li>
+<li><code>static_cast&lt;T&gt;(x)</code>: compile-time checked conversion (numbers, related pointer/class conversions). It <strong>cannot</strong> remove <code>const</code>.</li>
+<li><code>constexpr</code> evaluation must be deterministic and cannot depend on hidden mutable state → no local <code>static</code> or <code>thread_local</code> inside a <code>constexpr</code> function.</li>
+</ul>
+<p>Example:</p>
+<pre class="cpp"><code>constexpr int bad(int x) {
+    // static int s = 0;        // ERROR in constexpr function (shared state across calls)
+    // thread_local int t = 0;  // ERROR in constexpr function (depends on runtime thread)
+    return x;
+}
+
+int main() {
+    double d = 3.14;
+    int i = static_cast&lt;int&gt;(d); // OK: explicit narrowing
+}</code></pre>
+<ul>
+<li>Pure functions -&gt; functions that always produce the same output for the same input and have no side effects. Easy to test &amp; refactor. Results can be cached (memoization) for performance.</li>
+</ul>
+<pre class="cpp"><code>constexpr int pure_function(int x) {
+    return x * x;
+}
+int main() {
+    constexpr int val = pure_function(5); // OK: evaluated at compile time
+    std::cout &lt;&lt; pure_function(10) &lt;&lt; &#39;\n&#39;; // OK: evaluated at runtime
+}</code></pre>
+<h3 id="constexpr-user-defined-types-idea"><code>constexpr</code> user-defined types (idea)</h3>
+<ul>
+<li>If you want objects of your type to exist at compile time, construction must be possible at compile time.</li>
+<li>That means: provide at least one <code>constexpr</code> constructor and keep it “constant-evaluation friendly”.</li>
+<li>Member functions can be <code>constexpr</code> (usable in constant evaluation) or non-<code>constexpr</code> (runtime-only).</li>
+<li>Key nuance: it’s not about the object, it’s about the <em>context</em>.</li>
+<li>In a constant-expression context (<code>static_assert</code>, template args, array bounds), you can only call operations valid for constant evaluation (typically <code>constexpr</code> functions).</li>
+<li>The same object can still be used at runtime; <code>constexpr</code> doesn’t forbid runtime calls.</li>
+</ul>
+<p>Example:</p>
+<pre class="cpp"><code>struct MyDouble { double v; constexpr MyDouble(double x): v(x) {} constexpr double get() const { return v; } void print() const; };
+constexpr MyDouble d(3.14);
+static_assert(d.get() &gt; 3.0); // compile-time</code></pre>
+<pre class="cpp"><code>struct S {
+  int v;
+  constexpr S(int x) : v(x) {}
+  constexpr int get() const { return v; }
+  void print() const { /* runtime-only (e.g., std::cout) */ }
+};
+
+constexpr S s(10);
+
+// OK: compile-time use
+static_assert(s.get() == 10);
+
+// Also OK: runtime use (even though s is constexpr)
+int main() {
+  s.print();          // fine at runtime
+  int x = s.get();    // also fine
+}</code></pre>
+<h3 id="constexpr-stl-containersalgorithms-c20"><code>constexpr</code> + STL containers/algorithms (C++20)</h3>
+<ul>
+<li>In C++20, many standard library operations became usable during constant evaluation (implementation support varies).</li>
+<li>Idea: you can build a container, run an algorithm, and return a value — and if used in a constant-expression context, it runs at compile time.</li>
+</ul>
+<pre class="cpp"><code>#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+constexpr int maxElement() {
+    std::vector&lt;int&gt; myVec = {1, 2, 45, 3};
+    std::sort(myVec.begin(), myVec.end());
+    return myVec.back();
+}
+
+int main() {
+    constexpr int maxValue = maxElement();
+    std::cout &lt;&lt; &quot;maxValue: &quot; &lt;&lt; maxValue &lt;&lt; &#39;\n&#39;;
+
+    constexpr int maxValue2 = [] {
+        std::vector&lt;int&gt; myVec = {1, 2, 4, 3};
+        std::sort(myVec.begin(), myVec.end());
+        return myVec.back();
+    }();
+
+    std::cout &lt;&lt; &quot;maxValue2: &quot; &lt;&lt; maxValue2 &lt;&lt; &#39;\n&#39;;
+}</code></pre>
+<h2 id="consteval-c20">consteval (C++20)</h2>
+<p><img src="../assets/images/posts/cpp-notes/image8.png" alt="alt text" /></p>
+<ul>
+<li><code>consteval</code> = “immediate function”: must be evaluated at compile time. can be evaluated at compile time (when needed)</li>
+<li><code>constexpr</code> = “can be evaluated at compile time or runtime”. Must be evaluated at compile time every time it is called</li>
+<li>If you try to call it at runtime, you get a compile-time error.</li>
+<li>Use constexpr when you want “compile-time when possible, runtime otherwise.”</li>
+<li>Use consteval when runtime evaluation would be meaningless or dangerous.</li>
+</ul>
+<h2 id="constinit-c20">constinit (C++20)</h2>
+<p><img src="../assets/images/posts/cpp-notes/image9.png" alt="alt text" /></p>
+<ul>
+<li><code>constinit</code> = “constant initialization”: variable must be initialized at compile time, but can be modified at runtime.</li>
+<li>Use <code>constinit</code> for non-const global or static variables that must be initialized at compile time (to avoid static initialization order fiasco).</li>
+<li><code>constinit</code> guarantees that the variable is initialized before any dynamic initialization occurs.</li>
+</ul>
+<p><img src="../assets/images/posts/cpp-notes/image10.png" alt="alt text" /></p>
+<p><img src="../assets/images/posts/cpp-notes/image11.png" alt="alt text" /></p>
+<ul>
+<li>sometimes it works and sometimes it doesn’t</li>
+</ul>
+<p><img src="../assets/images/posts/cpp-notes/image12.png" alt="alt text" /></p>
+<h2 id="is_constant_evaluated-c20">is_constant_evaluated (C++20)</h2>
+<p><img src="../assets/images/posts/cpp-notes/image13.png" alt="alt text" /></p>
+<ul>
+<li><code>std::is_constant_evaluated()</code> function: detects if the current evaluation context is compile-time or runtime.</li>
+<li>Use it to write functions that behave differently depending on whether they are evaluated at compile time or runtime.</li>
+</ul>
+<h1 id="function-execution-variable-initialization-examples">Function Execution &amp; Variable initialization examples</h1>
+<p><img src="../assets/images/posts/cpp-notes/image14.png" alt="alt text" /></p>
+<p><img src="../assets/images/posts/cpp-notes/image15.png" alt="alt text" /></p>
+<h2 id="a-mental-model-for-constexpr">A mental model for constexpr</h2>
+<p><em>The single most useful reframing: <code>constexpr</code> is not metaprogramming. It is ordinary code that happens to run during compilation.</em></p>
+<p><a href="https://youtu.be/MdrfPSUtMVM?si=nAFzN2AWLx3aAzdG">CppCon 2021</a></p>
+<hr />
+<ol type="1">
+<li>What is constexpr?
+<ul>
+<li>Moving computation from runtime to compile time</li>
+<li>constexpr is NOT metaprogramming
+<ul>
+<li>Metaprogramming: programs that manipulate other programs as data</li>
+<li>constexpr: regular code, just executed at compile time</li>
+</ul></li>
+</ul></li>
+<li>What can be done at compile time?
+<ul>
+<li>Anything that can be done at runtime can be done at compile time</li>
+<li>C++20 consteval: Turing complete at compile time</li>
+<li>C++11/14/17 constexpr: not Turing complete at compile time</li>
+</ul></li>
+<li>The constexpr continuum:
+<ul>
+<li>Deciding how much work you do at compile time vs runtime</li>
+<li>0% (all runtime) … constexpr … 100% (all compile time)</li>
+</ul></li>
+<li>Practical use cases for speed:
+<ul>
+<li>Precomputed lookup tables:
+<ul>
+<li>CRC32, hash functions, trigonometry tables</li>
+<li>Compute once at compile time, look up at runtime</li>
+</ul>
+<pre class="cpp"><code>constexpr std::array&lt;uint32_t, 256&gt; make_crc_table() {
+    std::array&lt;uint32_t, 256&gt; table{};
+    for (uint32_t i = 0; i &lt; 256; i++) {
+        uint32_t crc = i;
+        for (int j = 0; j &lt; 8; j++) {
+            crc = (crc &gt;&gt; 1) ^ ((crc &amp; 1) ? 0xEDB88320 : 0);
+        }
+        table[i] = crc;
+    }
+    return table;
+}
+constexpr auto CRC_TABLE = make_crc_table();</code></pre></li>
+<li>String processing:
+<ul>
+<li>Convert string encodings at compile time (ASCII to PETSCII, etc.)</li>
+<li>Useful for embedded systems, game dev on retro hardware</li>
+</ul>
+<pre class="cpp"><code>constexpr auto PETSCII(const char* str) {
+    // conversion logic
+}
+static constexpr auto greeting = PETSCII(&quot;Hello World&quot;);</code></pre></li>
+<li>String tables:
+<ul>
+<li>Store multiple strings in one contiguous memory block</li>
+<li>Better for cache, better for embedded systems with limited RAM</li>
+</ul>
+<pre class="cpp"><code>// instead of this (scattered memory)
+const char* s1 = &quot;Error&quot;; const char* s2 = &quot;Warning&quot;;
+
+// do this (one block, built at compile time)
+constexpr auto LOG_LEVELS = MAKE_STRING_TABLE(&quot;Error&quot;, &quot;Warning&quot;, &quot;Info&quot;);
+// memory layout: &quot;Error\0Warning\0Info\0&quot; + index array
+// access: LOG_LEVELS[1] returns &quot;Warning&quot;</code></pre></li>
+<li>Complex math at compile time:
+<ul>
+<li>Matrix operations, projection matrices for graphics</li>
+<li>All calculations done by compiler, executable has final values</li>
+</ul>
+<pre class="cpp"><code>constexpr Matrix4x4 computeProjectionMatrix(float fov, float aspect) {
+    // trig calculations
+    return {/* ... */};
+}
+constexpr auto PROJ_MATRIX = computeProjectionMatrix(90.0f, 16.0f/9.0f);</code></pre></li>
+</ul></li>
+<li>The three keywords:
+<ul>
+<li>constexpr: may evaluate at compile time
+<ul>
+<li>Compiler can choose to evaluate at compile time or runtime</li>
+</ul>
+<pre class="cpp"><code>constexpr int factorial(int n) {
+    return (n &lt;= 1) ? 1 : n * factorial(n - 1);
+}
+constexpr int fact5 = factorial(5);  // guaranteed compile time
+int x = 6;
+int factX = factorial(x);            // runtime (x is not constexpr)</code></pre></li>
+<li>consteval (C++20): must evaluate at compile time
+<ul>
+<li>Forces compile-time evaluation</li>
+<li>Compile error if called with runtime values</li>
+</ul>
+<pre class="cpp"><code>consteval int factorial(int n) {
+    return (n &lt;= 1) ? 1 : n * factorial(n - 1);
+}
+constexpr int x = factorial(5);  // OK
+int n = 5;
+int y = factorial(n);            // compile error</code></pre></li>
+<li>constinit (C++20): compile-time initialization, runtime mutability
+<ul>
+<li>For globals/statics that need zero-cost initialization but can change</li>
+</ul>
+<pre class="cpp"><code>constinit int counter = 0;  // initialized at compile time
+counter++;                  // can modify at runtime</code></pre></li>
+</ul></li>
+<li>When compiler evaluates at compile time:
+<ul>
+<li>Using in constexpr/consteval context: guaranteed compile time</li>
+<li>Using with static_assert: guaranteed compile time</li>
+<li>Using with const: maybe compile time (compiler decides)</li>
+<li>Using with non-const runtime variables: runtime</li>
+</ul>
+<pre class="cpp"><code>constexpr int factorial(int n) {
+    return (n &lt;= 1) ? 1 : n * factorial(n - 1);
+}
+constexpr int fact5 = factorial(5);     // compile time
+static_assert(factorial(4) == 24);      // compile time
+const int fact6 = factorial(6);         // maybe compile time
+int x = 7;
+int factX = factorial(x);               // runtime</code></pre></li>
+<li>Best practices:
+<ul>
+<li><p>When to use:</p>
+<ul>
+<li>Math constants: PI, E, conversion factors</li>
+<li>Lookup tables: CRC, trigonometry, color palettes</li>
+<li>Configuration data that doesn’t change</li>
+<li>Powers of 2: use bit shifts computed at compile time</li>
+</ul>
+<pre class="cpp"><code>constexpr int MAX_PLAYERS = 64;
+constexpr float PI = 3.14159265359f;
+constexpr int KB = 1 &lt;&lt; 10;  // instead of std::pow(2, 10)
+constexpr int MB = 1 &lt;&lt; 20;</code></pre></li>
+<li><p>Use std::array for constexpr containers: <code>cpp   constexpr std::array&lt;int, 5&gt; nums = {1, 2, 3, 4, 5};  // good   constexpr int nums[] = {1, 2, 3, 4, 5};               // old style</code></p></li>
+<li><p>Trade-offs:</p>
+<ul>
+<li>Compilation time increases with complex constexpr</li>
+<li>Binary size grows (precomputed data lives in executable)</li>
+<li>Debugging compile-time code is harder</li>
+<li>Sweet spot: things that truly don’t change and are expensive to compute</li>
+</ul></li>
+</ul></li>
+<li>Examples of runtime speed-ups:
+<ul>
+<li><p>Color parsing in games: ```cpp // runtime: parse hex color every frame Color parseHex(const char* hex) { /* parsing */ } draw(parseHex(“#FF5733”)); // wasteful</p>
+<p>// compile time: color ready to use constexpr auto FIRE_COLOR = parseHex(“#FF5733”); draw(FIRE_COLOR); // just loads the value ```</p></li>
+<li><p>Configuration baking: ```cpp // runtime: parse config file at startup Config loadConfig(“settings.json”);</p>
+<p>// compile time: config already in the binary constexpr auto CONFIG = parseConfigFile(“settings.json”); ```</p></li>
+</ul></li>
+</ol>
+<p>Key takeaways: - Compile time = prep work, Runtime = serving results - Move expensive work to compile time if value doesn’t change - Trade-off: slower compilation for faster execution - constexpr (flexible), consteval (strict), constinit (globals) - Best for: lookup tables, math constants, string processing, config data</p>
+<hr />
+<h2 id="the-importance-of-being-const">The importance of being const</h2>
+<p><strong>Talks &amp; sources this draws on:</strong> 1. <a href="https://youtu.be/Y1KOuFYtTF4?si=8NJhbsMbnvHEeiVu">Importance of being const - CppCon 2015</a></p>
+<ol type="1">
+<li>Taken from google style guide</li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/image16.png" alt="alt text" /></p>
+<ol start="2" type="1">
+<li>const T t (T const t) // same thing
+<ul>
+<li>const go to interview question</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/image17.png" alt="alt text" /></p>
+<pre><code>- Valid lines: 1, 2, 3, 6 (Read from right to left)</code></pre>
+<ol start="3" type="1">
+<li>Questions on const correctness:
+<ul>
+<li>Once objects are const, they stay const (except when using const_cast)</li>
+<li>compiler is free to add constness to objects but cannot take it away</li>
+</ul></li>
+</ol>
+<p><img src="../assets/images/posts/cpp-notes/image18.png" alt="alt text" /></p>
+<pre><code>- compiler cannot remove constness, it can only add constness</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/image19.png" alt="alt text" /></p>
+<pre><code>- Valid lines: 1, 5, 7, 8</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/image20.png" alt="alt text" /></p>
+<pre><code>-  Valid lines: 1, 3, 5, 7</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/image21.png" alt="alt text" /></p>
+<pre><code>- Valid lines: 1, 3, 4, 5, 6
+- Member functions can be marked const to promise not to modify the object
+- ```cpp
+    class T{
+        returnValue FunctionName(args) CV-qualifiers; // CV-qualifiers: const, volatile, const volatile
+    };
+    ```
+
+- How the compiler sees them?
+    - Step 1: Original member function
+    ```cpp
+    int Foo::GetValue() const
+    {
+        return mValue;
+    }
+    ```
+
+    - Step 2: `this` pointer added as first hidden argument
+    ```cpp
+    int Foo::GetValue(Foo const* const this)
+    {
+        return mValue;
+    }
+    ```
+
+    - Step 3: CV qualifiers on `this` pointer
+    ```cpp
+    // const member function → this is pointer to const
+    int Foo::GetValue(Foo const* const this)
+    {
+        return this-&gt;mValue;
+    }
+    ```
+
+    - Step 4: Non-const member function for comparison
+    ```cpp
+    // non-const member function → this is pointer to non-const
+    int Foo::GetValue(Foo* const this)
+    {
+        return this-&gt;mValue;
+    }
+    ```
+
+    - Step 5: Function invocation translated
+    ```cpp
+    // What you write:
+    Foo f;
+    auto v = f.GetValue();
+
+    // How compiler sees it:
+    Foo f;
+    auto v = GetValue(&amp;f);
+    ```
+
+    - Step 6: Name mangling (implementation-defined)
+    ```cpp
+    // Compiler generates mangled name
+    int __ZNK3Foo8GetValueEv(Foo const* const this)
+    {
+        return this-&gt;mValue;
+    }
+
+    // Function call becomes:
+    Foo f;
+    auto v = __ZNK3Foo8GetValueEv(&amp;f);
+    ```
+
+    - Key insight: const member functions take `Foo const*`, non-const take `Foo*`
+    - This is why you can&#39;t call non-const methods on const objects</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/image27.png" alt="alt text" /></p>
+<pre><code>- Function overloading on const:
+    - Non-const object: calls non-const version (exact match)
+    - Const object: calls const version (can only call const methods)
+    - Non-const object → can call const methods (safe, adds constness)
+    - Const object → cannot call non-const methods (unsafe, would remove constness)
+    - This is why const-correctness matters: const objects are restricted to const member functions only.</code></pre>
+<p><img src="../assets/images/posts/cpp-notes/image28.png" alt="alt text" /></p>
+
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <nav class="footer-social" aria-label="Social links">
+            <a class="social-twitter" href="https://twitter.com/beingamanFF" target="_blank" rel="noopener noreferrer" aria-label="Twitter: @beingamanFF"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg><span>@beingamanFF</span></a>
+            <a class="social-github" href="https://github.com/beingamanforever" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg><span>GitHub</span></a>
+            <a class="social-linkedin" href="https://www.linkedin.com/in/aman-behera-?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg><span>LinkedIn</span></a>
+        </nav>
+        <a class="footer-email" href="mailto:aman.behera.systems@gmail.com"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>aman.behera.systems@gmail.com</a>
+    </footer>
+    <div class="wordmark-band" aria-hidden="true">
+        <div class="wordmark">
+            <span class="wm scene-1">aman</span>
+            <span class="wm scene-2">aman</span>
+            <span class="wm scene-3">aman</span>
+            <span class="wm scene-4">aman</span>
+        </div>
+    </div>
+</body>
+</html>

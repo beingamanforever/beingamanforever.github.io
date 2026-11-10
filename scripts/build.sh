@@ -135,5 +135,9 @@ touch "$OUTPUT_DIR/.nojekyll"
 for page in index.html research.html athletics.html blog.html 404.html sitemap.xml; do
     cp "$OUTPUT_DIR/$page" "$ROOT_DIR/$page"
 done
+# Pages also serves the repo root, so keep post pages there too.
+for slug in $BLOG_SLUGS; do
+    cp "$OUTPUT_DIR/blog/$slug.html" "$ROOT_DIR/blog/$slug.html"
+done
 
 printf 'Built portfolio in %s\n' "$OUTPUT_DIR"
