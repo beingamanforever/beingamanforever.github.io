@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render data/news.json into the dated news list on the home page: date, headline, short detail."""
+"""Render data/news.json into the home page news list: [YYYY/MM], an emoji, then one line of trusted HTML."""
 
 import argparse
 import html
@@ -8,9 +8,8 @@ from pathlib import Path
 
 
 def item(entry: dict) -> str:
-    detail = f' <span class="news-links">{entry["detail"]}</span>' if entry.get("detail") else ""
-    return (f'                <li class="reveal"><span class="news-date">{html.escape(entry["date"])}</span>'
-            f'<p class="news-text">{html.escape(entry["title"])}.{detail}</p></li>\n')
+    return (f'                <li class="reveal"><span class="news-date">[{html.escape(entry["date"])}]</span> '
+            f'<span class="news-emoji" aria-hidden="true">{entry["emoji"]}</span> {entry["text"]}</li>\n')
 
 
 def main() -> None:

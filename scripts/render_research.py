@@ -6,6 +6,8 @@ import html
 import json
 from pathlib import Path
 
+from hover import hover_layer
+
 THEMES = [
     ("safety", "Safety and alignment",
      "Whether agents can be verified, whether defenses hold outside English, and how models are steered and checked."),
@@ -31,7 +33,8 @@ def pub(entry: dict, compact: bool) -> str:
     src, alt = image_of(entry)
     title = html.escape(entry["title"])
     url = html.escape(entry["url"], quote=True)
-    picture = (f'<a class="pub-thumb" href="{url}" tabindex="-1" aria-hidden="true"><img src="{src}" alt="" loading="lazy"></a>'
+    picture = (f'<a class="pub-thumb" href="{url}" tabindex="-1" aria-hidden="true"><img src="{src}" alt="" loading="lazy">'
+               f'{hover_layer(entry.get("hover", ""))}</a>'
                if src else "")
     links = "".join(
         f'<a href="{html.escape(link["url"], quote=True)}"'

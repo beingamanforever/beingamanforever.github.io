@@ -102,6 +102,19 @@
         });
     }
 
+    // Hovering a card shows its clip (CSS fades it in); the clip plays only while hovered or focused.
+    if (!reduceMotion) {
+        document.querySelectorAll("video.swap").forEach(function (clip) {
+            var card = clip.closest(".pub, .highlight, .project");
+            var play = function () { clip.play().catch(function () { /* still loading or blocked: the still stays */ }); };
+            var rest = function () { clip.pause(); clip.currentTime = 0; };
+            card.addEventListener("mouseenter", play);
+            card.addEventListener("focusin", play);
+            card.addEventListener("mouseleave", rest);
+            card.addEventListener("focusout", rest);
+        });
+    }
+
     // Top bar shadow, back-to-top button and reading progress share one scroll handler.
     var bar = document.querySelector(".topbar");
     var toTop = document.querySelector(".to-top");
@@ -136,10 +149,10 @@
         targets.forEach(function (t) { if (t) spy.observe(t); });
     });
 
-    // News: show the six latest, with a button for the rest.
+    // News: show the eight latest, with a button for the rest.
     var news = document.querySelector(".news-list");
     var newsButton = document.querySelector("[data-news-toggle]");
-    if (news && newsButton && news.children.length > 6) {
+    if (news && newsButton && news.children.length > 8) {
         news.classList.add("collapsed");
         newsButton.hidden = false;
         newsButton.addEventListener("click", function () {
