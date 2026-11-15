@@ -1,0 +1,548 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Fourier for Images</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+
+:root{
+  --frame:#F2F2F0; --canvas:#FFFFFF; --line:#E7E7E4; --line-strong:#D9D9D5;
+  --ink:#151515; --ink-2:#3C3C3A; --muted:#6E6E6A; --faint:#9A9A95;
+  --accent:#EE5A2F; --accent-soft:#FDEDE6;
+  --peach:#FCEBE3; --lav:#EDEBFA; --mint:#E3F3EA; --sky:#E4EFFA; --butter:#FAF2DA; --rose:#F9E6EC;
+  --ok:#1F8A4C; --ok-bg:#E3F3EA; --warn:#A86A00; --warn-bg:#FAF2DA; --bad:#C2412D; --bad-bg:#FBE7E2;
+  --chip:#F1F1EE; --shadow:0 1px 2px rgba(20,20,20,.04);
+  --plot-bg:#FAFAF8; --plot-grid:#ECECE8; --plot-line:#151515;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --frame:#0F0F0E; --canvas:#181817; --line:#2A2A28; --line-strong:#3A3A37;
+    --ink:#F1F1EE; --ink-2:#D2D2CE; --muted:#9B9B96; --faint:#73736F;
+    --accent:#FF7A50; --accent-soft:#3A2119;
+    --peach:#3A251D; --lav:#26243A; --mint:#1C2E24; --sky:#1C2733; --butter:#332C1A; --rose:#352027;
+    --ok:#5BC98A; --ok-bg:#1C2E24; --warn:#E3B04B; --warn-bg:#332C1A; --bad:#FF8A73; --bad-bg:#3A221C;
+    --chip:#232321; --shadow:none; --plot-bg:#141413; --plot-grid:#2A2A28; --plot-line:#F1F1EE;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --frame:#0F0F0E; --canvas:#181817; --line:#2A2A28; --line-strong:#3A3A37;
+  --ink:#F1F1EE; --ink-2:#D2D2CE; --muted:#9B9B96; --faint:#73736F;
+  --accent:#FF7A50; --accent-soft:#3A2119;
+  --peach:#3A251D; --lav:#26243A; --mint:#1C2E24; --sky:#1C2733; --butter:#332C1A; --rose:#352027;
+  --ok:#5BC98A; --ok-bg:#1C2E24; --warn:#E3B04B; --warn-bg:#332C1A; --bad:#FF8A73; --bad-bg:#3A221C;
+  --chip:#232321; --shadow:none; --plot-bg:#141413; --plot-grid:#2A2A28; --plot-line:#F1F1EE;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--frame)}
+body{margin:0;font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);font-size:14.5px;line-height:1.55;padding-inline:16px;padding-block:16px}
+a{color:inherit}
+.mono,.num{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0;letter-spacing:-.01em}
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:248px 1fr;gap:16px;align-items:start}
+/* sidebar */
+.side{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));background:var(--canvas);border:1px solid var(--line);border-radius:16px;padding:18px 14px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px}
+.mark{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
+.brand b{font-size:14px;font-weight:700}
+.brand span{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);padding:8px 8px 4px;font-weight:600}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;color:var(--ink-2);font-weight:500;font-size:13.5px}
+.nav button:hover{background:var(--chip)}
+.nav button[aria-current="true"]{background:var(--chip);color:var(--ink);font-weight:600}
+.nav button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.nav svg{width:17px;height:17px;flex:none;stroke:currentColor}
+.nav .count{margin-left:auto;font-size:11.5px;color:var(--muted);background:var(--canvas);border:1px solid var(--line);border-radius:999px;padding:0 7px}
+.progress{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.progress .row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+.progress .row b{color:var(--ink);font-weight:600}
+.bar{height:6px;background:var(--chip);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:999px;transition:width .35s ease}
+/* main */
+.main{background:var(--canvas);border:1px solid var(--line);border-radius:16px;min-width:0}
+.head{padding:26px 28px 0;display:flex;flex-direction:column;gap:10px}
+.crumbs{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.head h1{font-size:26px;font-weight:700}
+.head p{margin:0;color:var(--muted);max-width:68ch}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;text-decoration:none;border:1px solid var(--line-strong);background:var(--canvas);color:var(--ink);cursor:pointer}
+.pill.primary{background:var(--ink);color:var(--canvas);border-color:var(--ink)}
+.pill svg{width:15px;height:15px;stroke:currentColor}
+.pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);padding:0 28px;margin-top:18px;overflow-x:auto}
+.tabs button{all:unset;cursor:pointer;padding:12px 0;font-weight:600;font-size:13.5px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs .badge{font-size:11px;background:var(--chip);color:var(--muted);border-radius:999px;padding:1px 7px;font-weight:600}
+.panel{padding:24px 28px 32px;display:flex;flex-direction:column;gap:18px}
+.intro{color:var(--ink-2);max-width:72ch;margin:0}
+/* reading cards */
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;grid-template-columns:44px 1fr;gap:14px;box-shadow:var(--shadow);transition:border-color .2s}
+.card.done{border-color:var(--line-strong)}
+.card.done .ttl{color:var(--muted)}
+.tile{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--ink-2)}
+.tile svg{width:21px;height:21px;stroke:currentColor}
+.t-peach{background:var(--peach)} .t-lav{background:var(--lav)} .t-mint{background:var(--mint)} .t-sky{background:var(--sky)} .t-butter{background:var(--butter)} .t-rose{background:var(--rose)}
+.card-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.step{font-size:11.5px;color:var(--faint);font-weight:600;letter-spacing:.04em}
+.ttl{font-size:16px;font-weight:700}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--chip);color:var(--muted)}
+.chip.ok{background:var(--ok-bg);color:var(--ok)} .chip.warn{background:var(--warn-bg);color:var(--warn)} .chip.bad{background:var(--bad-bg);color:var(--bad)} .chip.acc{background:var(--accent-soft);color:var(--accent)}
+.card p{margin:6px 0 0;color:var(--ink-2);max-width:72ch}
+.take{margin-top:10px;border-left:2px solid var(--accent);padding:2px 0 2px 12px;color:var(--ink);font-weight:500;max-width:72ch}
+.why{font-size:13px;color:var(--muted);margin-top:8px;max-width:72ch}
+.why b{color:var(--ink-2);font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center}
+.links a{font-size:12.5px;text-decoration:none;border:1px solid var(--line-strong);border-radius:999px;padding:4px 11px;font-weight:500}
+.links a:hover{border-color:var(--ink)}
+.check{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none}
+.check input{accent-color:var(--accent);width:15px;height:15px}
+.sub{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);font-weight:600;margin-top:6px}
+/* explainers */
+.exp{border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.exp h2{font-size:17px;font-weight:700}
+.exp .lede{margin:0;color:var(--ink-2);max-width:74ch}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;padding:3px;gap:2px}
+.seg button{all:unset;cursor:pointer;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--canvas)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.ctl{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
+.slider{display:flex;align-items:center;gap:10px}
+.slider input{accent-color:var(--accent);width:200px;max-width:52vw}
+.viz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fig{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--plot-bg);min-width:0}
+.fig canvas{width:100%;height:auto;aspect-ratio:1;border-radius:8px;display:block;image-rendering:pixelated}
+.fig .cap{font-size:12px;color:var(--muted)}
+.fig .cap b{color:var(--ink);font-weight:600}
+.readout{display:flex;gap:10px;flex-wrap:wrap}
+.stat{border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:150px}
+.stat span{display:block;font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.stat b{font-size:20px;font-weight:600}
+.note{font-size:13px;color:var(--ink-2);background:var(--chip);border-radius:12px;padding:12px 14px;max-width:none}
+.note b{font-weight:600}
+.img-fig{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.img-fig img{display:block;width:100%}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;background:var(--plot-bg)}
+td.n,th.n{text-align:right;font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+td .m{color:var(--muted);font-size:12px;white-space:normal}
+.best{font-weight:600;color:var(--ink)}
+/* decisions */
+.dq{border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.dq h3{font-size:15.5px;font-weight:700}
+.dq p{margin:0;color:var(--ink-2);max-width:74ch}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.opt b{font-size:13.5px}
+.opt span{font-size:13px;color:var(--muted)}
+.opt.rec{border-color:var(--ink)}
+footer{padding:0 28px 26px;color:var(--faint);font-size:12px}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static}
+  .viz{grid-template-columns:1fr}
+  .two,.opts{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .head{padding:20px 18px 0}.tabs{padding:0 18px}.panel{padding:20px 18px 26px}footer{padding:0 18px 22px}
+  .card{grid-template-columns:1fr}.check{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.sec{border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.sec h2{font-size:16.5px;font-weight:700}
+.sec p{margin:0;color:var(--ink-2);max-width:74ch}
+.sec ul{margin:0;padding-left:18px;color:var(--ink-2);max-width:74ch;display:flex;flex-direction:column;gap:4px}
+.sec .num-h{font-size:11.5px;color:var(--faint);font-weight:600;letter-spacing:.04em}
+pre.code{margin:0;background:var(--plot-bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;overflow-x:auto;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px;line-height:1.6;color:var(--ink)}
+pre.code .c{color:var(--muted)}
+.eq{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:13px;background:var(--plot-bg);border:1px solid var(--line);border-radius:12px;padding:10px 14px;overflow-x:auto;white-space:pre;color:var(--ink)}
+.link-us{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--ink);max-width:none}
+.link-us svg{width:16px;height:16px;flex:none;margin-top:2px;stroke:var(--accent)}
+.link-us b{font-weight:600}
+.src{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.src .tile{width:40px;height:40px}
+.src .meta{display:flex;flex-direction:column;gap:2px;min-width:0}
+.src .meta b{font-size:14.5px}
+.src .meta span{font-size:12.5px;color:var(--muted)}
+.src a.pill{margin-left:auto}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.viz4{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#basisGrid{cursor:crosshair;image-rendering:auto}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fact{border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:40px 1fr;gap:12px}
+.fact b{font-size:14.5px;display:block;margin-bottom:4px}
+.fact span{color:var(--ink-2);font-size:13.5px}
+.fact .tile{width:40px;height:40px}
+.qa{display:flex;flex-direction:column;gap:10px}
+.ans{border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.ans .who{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ans .who b{font-size:14.5px}
+.ans p{margin:0;color:var(--ink-2);max-width:74ch}
+@media (max-width:900px){.grid2,.viz4,.facts{grid-template-columns:1fr}.src a.pill{margin-left:0}}
+</style>
+
+<div class="shell">
+  <aside class="side" aria-label="Guide navigation">
+    <div class="brand">
+      <div class="mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke="currentColor"><path d="M3 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg></div>
+      <div><b>Fourier for Images</b><span>Three readings, explained</span></div>
+    </div>
+    <nav class="nav">
+      <div class="lbl">Readings</div>
+      <button data-go="opencv" aria-current="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg>OpenCV tutorial<span class="count num">6</span></button>
+      <button data-go="hipr"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>HIPR2 page<span class="count num">10</span></button>
+      <button data-go="se"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M5 5h14v10H9l-4 4z"/></svg>StackExchange<span class="count num">5</span></button>
+      <div class="lbl">Summary</div>
+      <button data-go="facts"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M5 12l4 4 10-10"/></svg>Six facts to keep<span class="count num">6</span></button>
+    </nav>
+    <div class="progress">
+      <div class="row"><span>Builds on</span><b>3Blue1Brown</b></div>
+      <div class="row" style="flex-direction:column;gap:2px"><span>Winding a signal around a circle and taking its centre of mass.</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="head">
+      <div class="crumbs"><span>Seeing straight</span><span>/</span><span>Learn</span><span>/</span><span>Fourier</span></div>
+      <h1>What an image's spectrum means, and why it finds the tilt</h1>
+      <p>The OpenCV tutorial, the HIPR2 Fourier page and the DSP StackExchange thread, explained section by section, with the missing equations restored, three things to play with, and a note on how each idea shows up in jdeskew.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-controls="opencv" aria-selected="true">OpenCV tutorial <span class="badge num">6</span></button>
+      <button role="tab" aria-controls="hipr" aria-selected="false">HIPR2 page <span class="badge num">10</span></button>
+      <button role="tab" aria-controls="se" aria-selected="false">StackExchange <span class="badge num">5</span></button>
+      <button role="tab" aria-controls="facts" aria-selected="false">Six facts <span class="badge num">6</span></button>
+    </div>
+
+    <!-- OPENCV -->
+    <section class="panel" id="opencv" role="tabpanel">
+      <div class="src">
+        <div class="tile t-sky"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12h8M12 8v8"/></svg></div>
+        <div class="meta"><b>OpenCV-Python: Fourier Transform</b><span>How to compute an image's spectrum, filter it, and pad for speed</span></div>
+        <a class="pill" href="https://docs.opencv.org/4.x/de/dbc/tutorial_py_fourier_transform.html" target="_blank" rel="noopener">Open tutorial</a>
+      </div>
+
+      <div class="sec"><span class="num-h">SECTION 1</span><h2>Theory: an image is a signal in two directions</h2>
+        <ul>
+          <li>A sine wave <span class="mono">sin(2π f t)</span> has a spectrum with one spike at <span class="mono">f</span>, the winding frequency where the centre of mass jumps.</li>
+          <li>Once a signal is sampled into N values, its spectrum repeats every N bins, so the DFT shows one period of N frequencies.</li>
+          <li>An image is sampled along x and y, so the 2-D DFT winds it in both directions at once. Each point (u, v) asks how much of a stripe pattern with u cycles across and v cycles down the image contains.</li>
+          <li>Slow changes (sky, skin) are low frequencies near the centre. Fast changes (edges, fine text, noise) are high frequencies far from it.</li>
+        </ul>
+      </div>
+
+      <div class="sec"><span class="num-h">SECTION 2</span><h2>FFT in NumPy</h2>
+<pre class="code">f = np.fft.fft2(img)                 <span class="c"># complex array, one value per stripe pattern</span>
+fshift = np.fft.fftshift(f)          <span class="c"># move zero frequency (DC) from the corner to the centre</span>
+spectrum = 20*np.log(np.abs(fshift)) <span class="c"># magnitude only, on a log (dB) scale</span></pre>
+        <ul>
+          <li><b>Each complex value</b> is a centre of mass: its length says how much of that pattern is present, its angle (phase) where the pattern's crests sit.</li>
+          <li><b>fftshift</b> puts the average brightness (DC) in the middle so the picture is symmetric and readable.</li>
+          <li><b>abs</b> keeps the magnitude. Tilt is about which patterns exist, not where they sit, so jdeskew drops the phase.</li>
+          <li><b>log</b> because DC is millions of times larger than the rest.</li>
+          <li>A larger output size makes NumPy pad with zeros. Keep that in mind for section 5.</li>
+        </ul>
+      </div>
+
+      <div class="sec"><span class="num-h">SECTIONS 3 AND 4</span><h2>Filtering in the spectrum, and why hard masks ring</h2>
+        <p>Zero the centre (high-pass) and only edges survive. Keep only the centre (low-pass) and the image blurs. A hard-edged mask causes ripples (ringing), because a sharp box in one domain is a sinc in the other. A Gaussian mask has soft edges and does not ring. Try it below on a synthetic test image.</p>
+        <div class="exp" style="border:none;padding:0">
+          <div class="controls">
+            <div class="ctl">Filter<div class="seg" data-key="ftype"><button aria-pressed="true" data-v="lpf">Low-pass</button><button aria-pressed="false" data-v="hpf">High-pass</button><button aria-pressed="false" data-v="mag">Drop phase</button></div></div>
+            <div class="ctl">Mask edge<div class="seg" data-key="fshape"><button aria-pressed="true" data-v="square">Square</button><button aria-pressed="false" data-v="circle">Circle</button><button aria-pressed="false" data-v="gauss">Gaussian</button></div></div>
+            <div class="ctl">Radius<div class="slider"><input type="range" id="frad" min="4" max="40" value="14" aria-label="Mask radius"><span class="num" id="fradV">14</span></div></div>
+          </div>
+          <div class="viz4">
+            <div class="fig"><canvas id="fIn" width="128" height="128" aria-label="Input image"></canvas><div class="cap"><b>Input</b>, 128 × 128.</div></div>
+            <div class="fig"><canvas id="fSpec" width="128" height="128" aria-label="Spectrum with mask"></canvas><div class="cap"><b>log |FFT|</b>; the dimmed area is removed.</div></div>
+            <div class="fig"><canvas id="fOut" width="128" height="128" aria-label="Filtered image"></canvas><div class="cap" id="fCap"><b>After the inverse FFT.</b></div></div>
+          </div>
+        </div>
+        <div class="link-us"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M10 14 21 3M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg><span><b>In jdeskew:</b> the paper's W window skips the low-frequency centre, the same move as the high-pass mask, because the centre drowns the text streak. And the ringing lesson runs in reverse for us: a sharp box in the image (a photo's border drawn as ink) becomes sinc lines in the spectrum, the cross that broke photos.</span></div>
+      </div>
+
+      <div class="sec"><span class="num-h">SECTION 4</span><h2>The same in OpenCV</h2>
+<pre class="code">dft = cv.dft(np.float32(img), flags=cv.DFT_COMPLEX_OUTPUT)    <span class="c"># 2 channels: real, imaginary</span>
+mag = cv.magnitude(dft_shift[:,:,0], dft_shift[:,:,1])        <span class="c"># sqrt(re² + im²)</span></pre>
+        <p>Same maths. OpenCV wants float32, returns real and imaginary parts as two channels, and runs about 3× faster than NumPy here.</p>
+      </div>
+
+      <div class="sec"><span class="num-h">SECTION 5</span><h2>Padding to an optimal size</h2>
+<pre class="code">nrows = cv.getOptimalDFTSize(342)    <span class="c"># 360: a product of 2s, 3s and 5s</span>
+nimg = cv.copyMakeBorder(img, 0, bottom, 0, right, cv.BORDER_CONSTANT, value=0)   <span class="c"># about 4× faster</span></pre>
+        <div class="link-us"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span><b>This is jdeskew's padding step, and where the bug lived.</b> The tutorial pads with 0. jdeskew padded with 255 (white) and then thresholded, so a photo darker than white got a solid ink line along the padding. The merged fix thresholds first and pads the binary page with 0. Even zero padding can leave a jump where content touches the border, because the DFT treats the image as repeating; that is leakage, and why windows exist.</span></div>
+      </div>
+
+      <div class="sec"><span class="num-h">SECTION 6</span><h2>Why Laplacian and Sobel are high-pass filters</h2>
+        <p>Take the FFT of a small kernel and you see what it lets through. Mean and Gaussian are bright at the centre (low-pass, blur). Laplacian is dark at the centre (high-pass, edges). Sobel x and Sobel y pass frequencies along one axis (edges in one direction). The reason: <b>convolving an image with a kernel multiplies their spectra</b> (the convolution theorem). Our structure-tensor baseline is built from Sobel gradients.</p>
+      </div>
+    </section>
+
+    <!-- HIPR2 -->
+    <section class="panel" id="hipr" role="tabpanel" hidden>
+      <div class="src">
+        <div class="tile t-peach"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg></div>
+        <div class="meta"><b>HIPR2: Fourier Transform</b><span>Fisher, Perkins, Walker &amp; Wolfart, University of Edinburgh, 2003</span></div>
+        <a class="pill" href="https://homepages.inf.ed.ac.uk/rbf/HIPR2/fourier.htm" target="_blank" rel="noopener">Open page</a>
+      </div>
+
+      <div class="sec"><span class="num-h">1 · 2</span><h2>The DFT, with the equations restored</h2>
+<div class="eq">F(k,l) = Σ_a Σ_b  f(a,b) · e^(−i2π(k·a/N + l·b/N))          forward
+f(a,b) = (1/N²) Σ_k Σ_l  F(k,l) · e^(+i2π(k·a/N + l·b/N))   inverse</div>
+        <ul>
+          <li><b>Read the forward formula as winding:</b> multiply every pixel by a 2-D spinning arrow and add everything up. The result F(k, l) is one centre of mass: how much of the wave with k cycles down and l cycles across the image contains.</li>
+          <li><b>F(0, 0) is DC:</b> winding at frequency 0 means no spin, so it is the sum, the average brightness.</li>
+          <li><b>The inverse</b> adds every wave back, weighted by F(k, l), and recovers the image exactly. It is the unmixing notebook run backwards.</li>
+          <li><b>1/N²</b> goes on one of the two, never both. NumPy puts it on the inverse.</li>
+        </ul>
+      </div>
+
+      <div class="sec"><span class="num-h">3</span><h2>Separable, then fast</h2>
+        <p>A 2-D DFT is a 1-D DFT along every row, then along every column of the result: 2N one-dimensional transforms. A plain 1-D DFT costs N² operations; the FFT costs N·log N, about 10,000 instead of 1,000,000 per row at N = 1,024. Classic FFTs want N = 2ⁿ; modern ones accept sizes made of 2s, 3s and 5s, which is what <span class="mono">getOptimalDFTSize</span> picks.</p>
+      </div>
+
+      <div class="sec"><span class="num-h">4 · 5</span><h2>Magnitude, phase and the log scale</h2>
+        <ul>
+          <li><b>Magnitude</b> holds the geometry: orientations and spacings. That is all a deskewer needs.</li>
+          <li><b>Phase</b> looks like noise but places everything. Invert the magnitude alone and the image is "corrupted beyond recognition". Try <b>Drop phase</b> on the OpenCV tab.</li>
+          <li>DC dwarfs everything, so the spectrum is shown on a log scale. It then shows energy at all frequencies, falling as frequency rises, plus vertical and horizontal lines from regular patterns in the photo. Straight structures in our photos (page edges, bezels) do the same and compete with the text.</li>
+        </ul>
+      </div>
+
+      <div class="sec"><span class="num-h">6 · 9</span><h2>Stripes, harmonics, and finding the text orientation</h2>
+        <p>HIPR2 builds up from stripes to text. Set the stripes below and watch the spectrum: the peaks sit perpendicular to the stripes, at distance N / period from the centre, and rotate with them. Square-wave stripes (like lines of text) add harmonics at 3×, 5×, 7× the frequency along the same line. The frame option reproduces HIPR2's last example and our bug.</p>
+        <div class="controls">
+          <div class="ctl">Stripe angle<div class="slider"><input type="range" id="sAng" min="-45" max="45" value="20" aria-label="Stripe angle"><span class="num" id="sAngV">20°</span></div></div>
+          <div class="ctl">Period<div class="slider"><input type="range" id="sPer" min="4" max="32" value="16" aria-label="Stripe period in pixels"><span class="num" id="sPerV">16 px</span></div></div>
+          <div class="ctl">Profile<div class="seg" data-key="sprof"><button aria-pressed="false" data-v="sine">Sine</button><button aria-pressed="true" data-v="square">Square (text-like)</button></div></div>
+          <div class="ctl">Frame<div class="seg" data-key="sframe"><button aria-pressed="true" data-v="none">None</button><button aria-pressed="false" data-v="rot">Rotated page</button><button aria-pressed="false" data-v="box">Box border</button></div></div>
+        </div>
+        <div class="viz4">
+          <div class="fig"><canvas id="sIn" width="128" height="128" aria-label="Stripe image"></canvas><div class="cap"><b>Image</b>, 128 × 128.</div></div>
+          <div class="fig"><canvas id="sSpec" width="128" height="128" aria-label="Stripe spectrum"></canvas><div class="cap"><b>log |FFT|</b>, centred.</div></div>
+          <div class="fig" style="justify-content:center"><div class="readout" style="flex-direction:column">
+            <div class="stat"><span>Stripe angle</span><b class="num" id="sTrue">20°</b></div>
+            <div class="stat"><span>Read from strongest peak</span><b class="num" id="sMeas">-</b></div>
+            <div class="stat"><span>Peak distance</span><b class="num" id="sDist">-</b></div>
+          </div></div>
+        </div>
+        <ul>
+          <li><b>Two mirrored points</b> plus DC: the spectrum of a real image is always symmetric.</li>
+          <li><b>Direction:</b> the points lie along the direction in which brightness changes fastest, perpendicular to the stripes.</li>
+          <li><b>Distance:</b> 128 / period. The finest possible pattern, period 2 px (0.5 cycles per pixel), sits at the edge. HIPR2's 2-px-wide stripes have period 4, so they sit halfway out.</li>
+          <li><b>Harmonics:</b> a square wave of frequency f is a sum of sines at f, 3f, 5f, … with strengths 1, 1/3, 1/5, …. Lines of text are blocky and periodic too, so a page's streak is a row of harmonics, which is what jdeskew's radial projection sums.</li>
+          <li><b>Rotated page:</b> HIPR2's rotated text had "a second line … from the black corners". Here the rotated page's edges add their own lines. <b>Box border:</b> an axis-aligned frame adds a cross on the axes: jdeskew's padding bug.</li>
+        </ul>
+        <div class="link-us"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M10 14 21 3M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg><span><b>HIPR2's text-orientation example is jdeskew's idea, about 20 years earlier.</b> It also suggests merging letters into solid line blocks with morphology to reduce letter noise. We saw the same effect: at a lower working resolution (512-768 px), where letters merge, photo results held or improved; at 1,536-2,048 px they got much worse.</span></div>
+      </div>
+
+      <div class="sec"><span class="num-h">7 · 8</span><h2>Linearity, and why multiplying images blurs spectra</h2>
+        <ul>
+          <li><b>Addition:</b> FT(A + B) = FT(A) + FT(B). Add two spectra, invert, and you get the two images added. This is why unmixing works.</li>
+          <li><b>Multiplication</b> does not distribute (exercise 6). Multiplying two images <b>convolves</b> their spectra. A Hann window convolves the page's spectrum with a small smooth bump: a slight blur, no cross. A hard border convolves it with a sinc: long ripples along the axes, the cross.</li>
+        </ul>
+      </div>
+
+      <div class="sec"><span class="num-h">10</span><h2>The DCT, and why we never use it for tilt</h2>
+        <p>The discrete cosine transform uses cosines only, gives real numbers and powers JPEG, where high-frequency coefficients are dropped. But it behaves like a DFT of the image mirrored at its edges, and a mirrored page contains the text at both +θ and −θ. The spectrum then cannot tell clockwise from counterclockwise, which is why mirror padding is ruled out in our plan (Moisan 2011).</p>
+      </div>
+    </section>
+
+    <!-- STACKEXCHANGE -->
+    <section class="panel" id="se" role="tabpanel" hidden>
+      <div class="src">
+        <div class="tile t-lav"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M5 5h14v10H9l-4 4z"/></svg></div>
+        <div class="meta"><b>What does frequency domain denote in case of images?</b><span>DSP StackExchange, question 1637, 2012</span></div>
+        <a class="pill" href="https://dsp.stackexchange.com/questions/1637/what-does-frequency-domain-denote-in-case-of-images" target="_blank" rel="noopener">Open thread</a>
+      </div>
+
+      <div class="sec"><h2>The top answer, made interactive: one spectrum point is one stripe pattern</h2>
+        <p>Click points in the frequency grid (left) to light them up. The image (right) is the inverse FFT: each point is a rotated cosine stripe pattern, and several points add up. Click a lit point to turn it off. This is the EPFL basis demo linked in the comments.</p>
+        <div class="grid2">
+          <div class="fig"><canvas id="basisGrid" width="340" height="340" aria-label="Frequency grid, click to toggle points"></canvas><div class="cap"><b>Frequency grid</b>, −8 to 8 cycles across (k) and down (l). The centre is DC.</div></div>
+          <div class="fig"><canvas id="basisImg" width="128" height="128" aria-label="Resulting stripe pattern"></canvas><div class="cap" id="basisCap"><b>Image</b></div></div>
+        </div>
+      </div>
+
+      <div class="qa">
+        <div class="ans"><div class="who"><b>Niki Estner</b><span class="chip">top answer</span></div>
+          <p>One lit pixel in the frequency domain gives a rotated cosine pattern in the image. Its position sets the stripes' direction and spacing, and any image is a weighted sum of such patterns. His pictures put the lowest frequency top-left because he did not <span class="mono">fftshift</span>.</p>
+          <div class="link-us"><span><b>For us:</b> lines of text are close to one such pattern, so they light a few points on a line through the centre, at 90° to the text.</span></div></div>
+        <div class="ans"><div class="who"><b>MSalters</b></div>
+          <p><span class="mono">cos(ωx + ψy)</span> is a 2-D wave with one frequency per direction; its FFT gives (ω, ψ), just as the FFT of <span class="mono">cos(ωx)</span> gives ω.</p>
+          <div class="link-us"><span><b>For us:</b> the wave's direction is atan2(ψ, ω), so a peak's angle from the centre is the direction of change. That is the tilt, plus 90°.</span></div></div>
+        <div class="ans"><div class="who"><b>waldyrious</b><span class="chip">quoting the DSP Guide, ch. 24</span></div>
+          <p>For audio the spectrum is easier to read than the waveform. For images it is the reverse: the spectrum scrambles the picture, and most of what you see lives in the phase.</p>
+          <div class="link-us"><span><b>For us:</b> true for recognising things, but orientation is the exception. It lives in the magnitude, which is why spectral deskewing works at all.</span></div></div>
+        <div class="ans"><div class="who"><b>Hilmar</b></div>
+          <p>Fourier is one choice of orthogonal basis. A signal is broken into simple pieces, and orthogonality means each piece's amount is found independently by projection: multiply and sum. Wavelets and PCA are other bases.</p>
+          <div class="link-us"><span><b>For us:</b> "multiply and sum" is the centre of mass. Orthogonality is why the D, F, A and C peaks in the unmixing notebook do not interfere.</span></div></div>
+        <div class="ans"><div class="who"><b>Emre</b></div>
+          <p>High frequency means abrupt changes; noise is mostly high frequency, so low-pass filtering removes it.</p>
+          <div class="link-us"><span><b>For us:</b> photo clutter and sensor noise sit at high frequencies, while text lines sit in a middle band set by the line spacing. That is the case for weighting frequency rings instead of summing everything.</span></div></div>
+      </div>
+      <div class="links"><a href="http://bigwww.epfl.ch/demo/basisfft/index.html" target="_blank" rel="noopener">EPFL basis demo</a><a href="https://blogs.mathworks.com/steve/2009/12/04/fourier-transform-visualization-using-windowing/" target="_blank" rel="noopener">Steve Eddins on windowing</a><a href="https://www.dspguide.com/ch24/5.htm" target="_blank" rel="noopener">DSP Guide ch. 24.5</a></div>
+    </section>
+
+    <!-- FACTS -->
+    <section class="panel" id="facts" role="tabpanel" hidden>
+      <p class="intro">What to carry into the deskew experiments.</p>
+      <div class="facts">
+        <div class="fact"><div class="tile t-sky"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div><div><b>A spectrum point is a stripe pattern</b><span>Its direction from the centre is the direction of change; its distance is the frequency.</span></div></div>
+        <div class="fact"><div class="tile t-peach"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg></div><div><b>Text lines are blocky periodic stripes</b><span>They give a row of harmonic peaks at 90° to the text. The row's angle is the tilt.</span></div></div>
+        <div class="fact"><div class="tile t-mint"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 18 10 6l4 8 2-4 4 8"/></svg></div><div><b>Magnitude is enough for tilt</b><span>Phase is needed to rebuild the image, not to read its orientation.</span></div></div>
+        <div class="fact"><div class="tile t-rose"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="1"/></svg></div><div><b>Every sharp straight edge adds a line</b><span>Filled corners, a photo's border, page edges and bezels each put their own line through the centre. HIPR2 saw it; it is our padding bug and part of the perspective problem.</span></div></div>
+        <div class="fact"><div class="tile t-butter"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M3 19c3 0 4-14 9-14s6 14 9 14"/></svg></div><div><b>Multiplying the image convolves the spectrum</b><span>A hard border gives sinc ripples (the cross); a soft window gives a slight blur.</span></div></div>
+        <div class="fact"><div class="tile t-lav"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M12 3v18M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg></div><div><b>No mirror or DCT tricks for orientation</b><span>A mirrored page holds the text at +θ and −θ, so the sign of the tilt is lost.</span></div></div>
+      </div>
+      <div class="note"><b>Exercise.</b> On the HIPR2 tab set a square profile at 20°, then switch the frame to <b>Box border</b> and watch a cross appear on the axes next to the stripe peaks. Here the full-page stripes still win; on a real photo, where text is sparse, that cross can win, which is the 0° failure.</div>
+    </section>
+    <footer>Sources: OpenCV 4.x Python tutorial, HIPR2 (©2003 R. Fisher, S. Perkins, A. Walker, E. Wolfart), DSP StackExchange question 1637. Explanations and demos are ours.</footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  const N = 128, css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  // ---- FFT (radix-2), 2-D forward and inverse ----
+  function fft1(re, im, n, inv){
+    for (let i = 1, j = 0; i < n; i++){ let b = n >> 1; for (; j & b; b >>= 1) j ^= b; j ^= b; if (i < j){ [re[i],re[j]] = [re[j],re[i]]; [im[i],im[j]] = [im[j],im[i]]; } }
+    for (let len = 2; len <= n; len <<= 1){ const a = (inv ? 2 : -2) * Math.PI / len, wr = Math.cos(a), wi = Math.sin(a);
+      for (let i = 0; i < n; i += len){ let cr = 1, ci = 0;
+        for (let k = 0; k < len / 2; k++){ const p = i + k, q = p + len / 2, xr = re[q]*cr - im[q]*ci, xi = re[q]*ci + im[q]*cr;
+          re[q] = re[p] - xr; im[q] = im[p] - xi; re[p] += xr; im[p] += xi; const t = cr*wr - ci*wi; ci = cr*wi + ci*wr; cr = t; } } }
+    if (inv) for (let i = 0; i < n; i++){ re[i] /= n; im[i] /= n; }
+  }
+  function fft2(re, im, inv){
+    const r = new Float64Array(N), i = new Float64Array(N);
+    for (let y = 0; y < N; y++){ for (let x = 0; x < N; x++){ r[x] = re[y*N+x]; i[x] = im[y*N+x]; } fft1(r, i, N, inv); for (let x = 0; x < N; x++){ re[y*N+x] = r[x]; im[y*N+x] = i[x]; } }
+    for (let x = 0; x < N; x++){ for (let y = 0; y < N; y++){ r[y] = re[y*N+x]; i[y] = im[y*N+x]; } fft1(r, i, N, inv); for (let y = 0; y < N; y++){ re[y*N+x] = r[y]; im[y*N+x] = i[y]; } }
+  }
+  const shiftIdx = (y, x) => ((y + N/2) % N) * N + ((x + N/2) % N);
+  function drawGray(id, v, lo, hi){
+    const g = document.getElementById(id).getContext("2d"), im = g.createImageData(N, N);
+    if (lo === undefined){ lo = Infinity; hi = -Infinity; for (const a of v){ lo = Math.min(lo, a); hi = Math.max(hi, a); } }
+    for (let i = 0; i < N*N; i++){ const t = Math.round(255 * Math.min(1, Math.max(0, (v[i] - lo) / ((hi - lo) || 1)))); im.data[4*i] = im.data[4*i+1] = im.data[4*i+2] = t; im.data[4*i+3] = 255; }
+    g.putImageData(im, 0, 0);
+  }
+  function drawSpec(id, re, im, dim){
+    // log magnitude, centred, warm ramp; dim(y,x) true where the mask removes the frequency
+    const g = document.getElementById(id).getContext("2d"), out = g.createImageData(N, N), lg = new Float64Array(N*N);
+    let mx = 0;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ const s = shiftIdx(y, x), v = Math.log1p(Math.hypot(re[s], im[s])); lg[y*N+x] = v; mx = Math.max(mx, v); }
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ const i = y*N+x, t = Math.pow(lg[i] / (mx || 1), 2); let a = dim && dim(y - N/2, x - N/2) ? .25 : 1;
+      out.data[4*i] = a * 255 * Math.min(1, t*1.6); out.data[4*i+1] = a * 255 * Math.min(1, Math.max(0, t*1.4 - .35)); out.data[4*i+2] = a * (255 * Math.min(1, Math.max(0, t*1.8 - 1.1)) + 30*(1 - t)); out.data[4*i+3] = 255; }
+    g.putImageData(out, 0, 0);
+  }
+  const segState = {};
+  document.querySelectorAll(".seg").forEach(seg => {
+    const on = seg.querySelector('[aria-pressed="true"]'); segState[seg.dataset.key] = on ? on.dataset.v : null;
+    seg.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+      seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); segState[seg.dataset.key] = b.dataset.v; redraw(); });
+  });
+
+  // ---- OpenCV tab: filtering ----
+  const testImg = (() => { const v = new Float64Array(N*N).fill(40);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+      if (x > 14 && x < 58 && y > 16 && y < 60) v[y*N+x] = 220;                                   // square
+      if ((x - 92)**2 + (y - 38)**2 < 22*22) v[y*N+x] = 170;                                        // disc
+      if (y > 76 && y < 114 && x > 14 && x < 114 && ((y - 76) % 8) < 3 && ((x * 7 + Math.floor((y - 76) / 8) * 13) % 23) < 17) v[y*N+x] = 235;   // text-like rows
+    } return v; })();
+  function drawFilter(){
+    const R = +document.getElementById("frad").value; document.getElementById("fradV").textContent = R;
+    const re = Float64Array.from(testImg), im = new Float64Array(N*N); fft2(re, im, false);
+    const type = segState.ftype, shape = segState.fshape;
+    const keepLow = (dy, dx) => shape === "square" ? (Math.abs(dx) <= R && Math.abs(dy) <= R ? 1 : 0) : shape === "circle" ? (dx*dx + dy*dy <= R*R ? 1 : 0) : Math.exp(-(dx*dx + dy*dy) / (2*R*R));
+    const gain = (dy, dx) => type === "lpf" ? keepLow(dy, dx) : type === "hpf" ? 1 - keepLow(dy, dx) : 1;
+    drawGray("fIn", testImg, 0, 255);
+    drawSpec("fSpec", re, im, type === "mag" ? null : (dy, dx) => gain(dy, dx) < .5);
+    const r2 = new Float64Array(N*N), i2 = new Float64Array(N*N);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+      const dy = ((y + N/2) % N) - N/2, dx = ((x + N/2) % N) - N/2, k = y*N+x;   // unshifted index -> signed frequency
+      if (type === "mag"){ r2[k] = Math.hypot(re[k], im[k]); i2[k] = 0; } else { const gk = gain(dy, dx); r2[k] = re[k]*gk; i2[k] = im[k]*gk; }
+    }
+    fft2(r2, i2, true);
+    const outv = type === "mag" ? (() => { const o = new Float64Array(N*N); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) o[y*N+x] = r2[shiftIdx(y, x)]; return o; })() : r2;   // centre the phase-free result
+    drawGray("fOut", outv);
+    document.getElementById("fCap").innerHTML = type === "lpf" ? "<b>Low-pass:</b> blurred" + (shape === "gauss" ? ", no ripples." : "; ripples along the edges are ringing.")
+      : type === "hpf" ? "<b>High-pass:</b> only edges survive" + (shape === "gauss" ? ", clean." : ", with ringing.") : "<b>Phase dropped:</b> same frequencies, nothing in the right place.";
+  }
+  document.getElementById("frad").addEventListener("input", drawFilter);
+
+  // ---- HIPR2 tab: stripes ----
+  function drawStripes(){
+    const ang = +document.getElementById("sAng").value, P = +document.getElementById("sPer").value;
+    document.getElementById("sAngV").textContent = ang + "°"; document.getElementById("sPerV").textContent = P + " px"; document.getElementById("sTrue").textContent = ang + "°";
+    const t = ang * Math.PI / 180, c = Math.cos(t), s = Math.sin(t), v = new Float64Array(N*N);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+      const X = x - N/2, Y = y - N/2, u = -X*s + Y*c, w = X*c + Y*s;      // u: across the stripes, w: along them
+      const ph = 2 * Math.PI * u / P;
+      let val = segState.sprof === "sine" ? .5 + .5 * Math.cos(ph) : (Math.cos(ph) > 0 ? 1 : 0);
+      if (segState.sframe === "rot" && (Math.abs(u) > 40 || Math.abs(w) > 46)) val = 0;              // a rotated page on black, as in HIPR2
+      if (segState.sframe === "box" && (x < 6 || x > N - 7 || y < 6 || y > N - 7)) val = 1;            // an axis-aligned frame, like ink along padding
+      v[y*N+x] = val;
+    }
+    drawGray("sIn", v, 0, 1);
+    const re = Float64Array.from(v), im = new Float64Array(N*N); fft2(re, im, false);
+    drawSpec("sSpec", re, im, null);
+    // strongest peak away from DC, reported as a stripe angle in (-90, 90]
+    let best = -1, bx = 0, by = 0;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ const dy = y - N/2, dx = x - N/2; if (dx*dx + dy*dy < 4) continue;
+      const m = Math.hypot(re[shiftIdx(y, x)], im[shiftIdx(y, x)]); if (m > best){ best = m; bx = dx; by = dy; } }
+    let meas = Math.atan2(-bx, by) * 180 / Math.PI; if (meas > 90) meas -= 180; if (meas <= -90) meas += 180;
+    const mEl = document.getElementById("sMeas"); mEl.textContent = meas.toFixed(1) + "°";
+    mEl.style.color = Math.abs(((meas - ang + 90) % 180 + 180) % 180 - 90) > 3 ? css("--bad") : css("--ok");
+    document.getElementById("sDist").textContent = Math.hypot(bx, by).toFixed(1) + " (128/" + P + " = " + (N / P).toFixed(1) + ")";
+  }
+  ["sAng", "sPer"].forEach(id => document.getElementById(id).addEventListener("input", drawStripes));
+
+  // ---- StackExchange tab: basis explorer ----
+  const K = 8, sel = new Set(["3,1"]), bg = document.getElementById("basisGrid");
+  function drawBasis(){
+    const g = bg.getContext("2d"), W = bg.width, cell = W / (2*K + 1);
+    g.clearRect(0, 0, W, W); g.fillStyle = css("--plot-bg"); g.fillRect(0, 0, W, W);
+    for (let l = -K; l <= K; l++) for (let k = -K; k <= K; k++){
+      const x = (k + K) * cell, y = (l + K) * cell, key = k + "," + l, mirror = (-k) + "," + (-l);
+      g.fillStyle = sel.has(key) ? css("--accent") : sel.has(mirror) ? css("--accent-soft") : (k === 0 && l === 0 ? css("--line-strong") : css("--canvas"));
+      g.fillRect(x + 1, y + 1, cell - 2, cell - 2);
+    }
+    g.strokeStyle = css("--muted"); g.lineWidth = 1; g.beginPath(); g.moveTo(W/2, 0); g.lineTo(W/2, W); g.moveTo(0, W/2); g.lineTo(W, W/2); g.stroke();
+    const v = new Float64Array(N*N);
+    sel.forEach(key => { const [k, l] = key.split(",").map(Number); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) v[y*N+x] += Math.cos(2 * Math.PI * (k*x + l*y) / N); });
+    drawGray("basisImg", v);
+    const items = [...sel].map(key => { const [k, l] = key.split(",").map(Number); const f = Math.hypot(k, l);
+      return f === 0 ? "(0, 0): DC, a flat image" : `(${k}, ${l}): period ${(N / f).toFixed(1)} px, changes along ${(Math.atan2(l, k) * 180 / Math.PI).toFixed(0)}°`; });
+    document.getElementById("basisCap").innerHTML = sel.size ? "<b>Image</b> = sum of " + sel.size + " pattern" + (sel.size > 1 ? "s" : "") + ". " + items.join("; ") + "." : "<b>Image</b>: click a grid point.";
+  }
+  bg.addEventListener("click", e => { const r = bg.getBoundingClientRect(), cell = r.width / (2*K + 1);
+    const k = Math.floor((e.clientX - r.left) / cell) - K, l = Math.floor((e.clientY - r.top) / cell) - K, key = k + "," + l;
+    sel.has(key) ? sel.delete(key) : sel.add(key); drawBasis(); });
+
+  // ---- tabs ----
+  const tabs = [...document.querySelectorAll('[role="tab"]')], navs = [...document.querySelectorAll(".nav button")];
+  function show(id){
+    tabs.forEach(t => { const on = t.getAttribute("aria-controls") === id; t.setAttribute("aria-selected", on); document.getElementById(t.getAttribute("aria-controls")).hidden = !on; });
+    navs.forEach(b => b.setAttribute("aria-current", b.dataset.go === id));
+    redraw();
+  }
+  function redraw(){ drawFilter(); drawStripes(); drawBasis(); }
+  tabs.forEach(t => t.addEventListener("click", () => { show(t.getAttribute("aria-controls")); history.replaceState(null, "", "#" + t.getAttribute("aria-controls")); }));
+  navs.forEach(b => b.addEventListener("click", () => { show(b.dataset.go); history.replaceState(null, "", "#" + b.dataset.go); }));
+  const h = location.hash.replace("#", "");
+  show(["opencv","hipr","se","facts"].includes(h) ? h : "opencv");
+})();
+</script>
+
+</body></html>

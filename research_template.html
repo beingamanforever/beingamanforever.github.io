@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <title>Research | $SITE_NAME$</title>
-    <meta name="description" content="Research on agents, reinforcement learning, and large language models.">
+    <meta name="description" content="Research on AI safety and alignment, agents, document intelligence and language models.">
     <meta property="og:title" content="Research | $SITE_NAME$">
-    <meta property="og:description" content="Research on agents, reinforcement learning, and large language models.">
+    <meta property="og:description" content="Research on AI safety and alignment, agents, document intelligence and language models.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="$SITE_NAME$">
     <meta property="og:image" content="$SITE_OG_IMAGE$">
@@ -12,7 +12,7 @@
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="$SITE_URL$/research.html">
     <meta name="twitter:title" content="Research | $SITE_NAME$">
-    <meta name="twitter:description" content="Research on agents, reinforcement learning, and large language models.">
+    <meta name="twitter:description" content="Research on AI safety and alignment, agents, document intelligence and language models.">
     <meta name="twitter:image" content="$SITE_OG_IMAGE$">
     <link rel="canonical" href="$SITE_URL$/research.html">
 <!-- HEAD_COMMON -->
@@ -20,14 +20,35 @@
 <body>
 <!-- NAV -->
 
-    <main id="main-content" class="page research-page">
-        <header class="page-heading">
-            <h1>Research</h1>
-            <p>Research on agents, reinforcement learning, and large language models.</p>
-        </header>
-        <div class="research-list">
+    <main id="main-content" class="layout with-aside">
+        <div class="content">
+            <header class="page-head">
+                <h1>Research</h1>
+                <p>AI safety and alignment, agents, document intelligence and language models. Papers, code and the projects around them.</p>
+            </header>
+
+            <section class="section" id="publications" aria-labelledby="pubs-title">
+                <div class="section-head"><h2 id="pubs-title">Publications and preprints</h2></div>
 <!-- RESEARCH_ALL -->
+            </section>
+
+            <section class="section" id="projects" aria-labelledby="projects-title">
+                <div class="section-head"><h2 id="projects-title">Projects</h2></div>
+                <div class="project-grid">
+<!-- PROJECTS_FEATURED -->
+                </div>
+            </section>
         </div>
+
+        <nav class="quicklinks" aria-label="Quick links" data-spy>
+            <h2>Quick Links</h2>
+            <ol>
+                <li><a href="#theme-safety">Safety and alignment</a></li>
+                <li><a href="#theme-documents">Document intelligence</a></li>
+                <li><a href="#theme-models">Language models</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ol>
+        </nav>
     </main>
 
 <!-- FOOTER -->

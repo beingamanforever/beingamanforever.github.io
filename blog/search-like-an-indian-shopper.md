@@ -4,6 +4,8 @@ date: 2026-11-11
 description: "I typed हल्दी, 'rice 1kg' and a pile of typos into Blinkit, Zepto and Instamart, then watched Zomato eat 400 MB of RAM. Findings, guesses, and fixes."
 tags: search, recsys, ios, memory
 tile: Blinkit
+cover: assets/images/posts/search-like-an-indian-shopper/first-card-three-apps.jpg
+hero: false
 ---
 
 It started, like most bad decisions, with a post on X.

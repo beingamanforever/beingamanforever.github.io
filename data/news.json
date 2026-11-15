@@ -1,5 +1,19 @@
 [
   {
+    "date": "Nov 2026",
+    "title": "New on the blog: how notSoSmartOCR learned to say \"I'm not sure\"",
+    "detail": "The story behind document extraction you can inspect, with the film and animations. <a href=\"blog/notsosmartocr-story.html\">Read it</a>.",
+    "category": "Writing",
+    "tag": "notSoSmartOCR"
+  },
+  {
+    "date": "Nov 2026",
+    "title": "Lost in Injection at the Lexsi AI Safety and Alignment Hackathon",
+    "detail": "A prompt-injection defense trained only in English holds in 11 languages, and low-resource training halves what still gets through. <a href=\"blog/lost-in-injection.html\">Blog post</a> and <a href=\"https://github.com/beingamanforever/Lost-in-injection\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>.",
+    "category": "Safety",
+    "tag": "Lost in Injection"
+  },
+  {
     "date": "Oct 2026",
     "title": "Post-Audit Mirage accepted at Who Verifies the Agents? @ NeurIPS 2026",
     "detail": "Identifiability limits of offline agent verification, with Payal Payal. Poster. <a href=\"https://openreview.net/pdf?id=6cQdbUSme7\" target=\"_blank\" rel=\"noopener noreferrer\">Paper</a> and <a href=\"https://github.com/beingamanforever/Post-Audit-Mirage\" target=\"_blank\" rel=\"noopener noreferrer\">code</a>.",

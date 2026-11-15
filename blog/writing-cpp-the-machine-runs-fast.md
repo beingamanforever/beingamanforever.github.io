@@ -4,6 +4,8 @@ date: 2026-07-02
 description: "Cache locality, branch prediction, why the stack is cheap, what optimization flags actually do, and why the size of a variable matters. Notes on the gap between source and silicon."
 tile: Source → silicon
 tags: cpp, performance, systems
+cover: assets/images/posts/cpp-notes/cachehierarchy.png
+hero: false
 ---
 Two functions with the same big-O can differ by an order of magnitude in wall-clock time. The reason is rarely the algorithm on paper, it is how the code meets the machine: whether data is where the cache expects it, whether branches are predictable, whether the compiler could prove enough to optimise. These notes collect what I learned poking at that gap, from cache lines and the stack up through compiler flags and why a variable's size is itself a performance decision.
 
