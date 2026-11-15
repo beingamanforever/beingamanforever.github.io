@@ -3,19 +3,18 @@
     var root = document.documentElement;
     var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // The browser tab tells the LevelHead and notSoSmartOCR story: an arrow spins from a random tilt, slows down
-    // and lands pointing up, then braille dots fill in as the upright page is read. The static <title> stays in
-    // the HTML for search engines; the tab itself shows only the animation.
+    // The browser tab shows one page-shaped glyph turning through LevelHead's four quarter turns: it starts at a
+    // random turn, slows down and settles upright (header block top left), rests, then turns again. Every frame is
+    // one glyph of the same width, so the tab stays centred. The static <title> stays in the HTML for search engines.
     if (!reduceMotion) {
-        var arrows = "↑↗→↘↓↙←↖", reading = ["⣀", "⣤", "⣶", "⣿"], steps = [];
+        var turns = "◰◳◲◱", steps = [];
         var plan = function () {
-            var start = Math.floor(Math.random() * 8), total = 16 - start;
+            var start = Math.floor(Math.random() * 4), total = 8 - start;
             for (var k = 1; k <= total; k++) {
                 var progress = k / total;
-                steps.push([arrows.charAt((start + k) % 8), 55 + 300 * progress * progress]);
+                steps.push([turns.charAt((start + k) % 4), 90 + 430 * progress * progress]);
             }
-            steps.push(["↑", 450]);
-            reading.forEach(function (dots, i) { steps.push(["↑ " + dots, i === reading.length - 1 ? 2400 : 230]); });
+            steps.push([turns.charAt(0), 2200]);
         };
         var play = function () {
             if (!steps.length) plan();
