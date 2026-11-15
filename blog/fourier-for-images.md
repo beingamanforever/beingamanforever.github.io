@@ -21,9 +21,9 @@ Things to try in the explainer below:
 - **Click points in the spectrum** to build a stripe pattern one frequency at a time.
 - **Add a hard border** and watch a cross appear on the axes. That cross is the villain of part two.
 
-<div class="embed"><iframe src="../viz/fourier-for-images/index.html" title="Interactive explainer: Fourier transforms of images" loading="lazy"></iframe><div class="embed-bar"><span>Interactive · runs entirely in your browser</span><a href="../viz/fourier-for-images/index.html" target="_blank" rel="noopener">Open full screen ↗</a></div></div>
+<div class="embed"><iframe src="../viz/fourier-for-images/" title="Interactive explainer: Fourier transforms of images" loading="lazy"></iframe><div class="embed-bar"><span>Interactive · runs entirely in your browser</span><a href="../viz/fourier-for-images/" target="_blank" rel="noopener">Open full screen ↗</a></div></div>
 
 It draws on the OpenCV Fourier tutorial, the HIPR2 notes on the Fourier transform and a DSP StackExchange thread on what "frequency" means for an image.
 Each tab keeps the six facts worth remembering on one page.
 
-Next, [part two](fourier-then-deskew.html) goes from a spinning arrow all the way to the line of code that reads a page's tilt.
+Next, [part two](fourier-then-deskew) goes from a spinning arrow all the way to the line of code that reads a page's tilt.
