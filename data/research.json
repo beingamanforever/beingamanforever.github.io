@@ -215,6 +215,6 @@
     "authors": [
       "Aman Behera"
     ],
-    "short": "Detects and categorises hallucinated spans in vision-language answers across English, French, Italian and Chinese, using multilingual detectors and a clean-document gate."
+    "short": "Detects and categorises hallucinated spans in vision-language answers across English, French, Italian and Chinese, with a learned clean-document gate."
   }
 ]
