@@ -33,7 +33,7 @@ Then open `http://localhost:3456`.
 - `assets/images/athletics/` contains the Athletics photo.
 - `assets/og-home-v3.png` is the social preview card, rendered from `scripts/og-card.html` with headless Chrome at 1200x630.
 - `data/projects.json` drives Selected Projects.
-- `data/news.json` drives News and supports optional grouped `details`.
+- `data/news.json` drives News: `date` (YYYY/MM), `emoji` and one line of `text` (HTML; bold names with `<b>`).
 - `data/research.json` drives every research entry.
 - `blog/*.md` are blog posts (HackMD-style front matter); `blog_template.html` and `blog_post_template.html` wrap them.
 - `assets/fonts/` holds the self-hosted Geist font (OFL).

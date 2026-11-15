@@ -6,6 +6,8 @@ import html
 import json
 from pathlib import Path
 
+from hover import hover_layer
+
 
 def image_of(entry: dict) -> str:
     if entry.get("image"):
@@ -17,7 +19,8 @@ def image_of(entry: dict) -> str:
 
 def card(entry: dict) -> str:
     src = image_of(entry)
-    picture = f'<div class="project-img"><img src="{src}" alt="" loading="lazy"></div>' if src else ""
+    picture = (f'<div class="project-img"><img src="{src}" alt="" loading="lazy">{hover_layer(entry.get("hover", ""))}</div>'
+               if src else "")
     return f"""\
                 <a class="project reveal" href="{html.escape(entry['url'], quote=True)}" target="_blank" rel="noopener noreferrer">
                     {picture}

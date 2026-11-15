@@ -34,7 +34,8 @@
         "url": "https://github.com/beingamanforever/Lost-in-injection"
       }
     ],
-    "short": "An English-only prompt-injection defense holds in 11 languages; low-resource training halves what still gets through."
+    "short": "An English-only prompt-injection defense holds in 11 languages; low-resource training halves what still gets through.",
+    "hover": "assets/media/lost-in-injection/hover.mp4"
   },
   {
     "title": "LevelHead: Deskew Before You Classify",
@@ -85,7 +86,8 @@
     "image": "assets/images/projects/levelhead-angle.png",
     "image_alt": "Accuracy by the angle a page was turned: classify-first dips at every diagonal while LevelHead stays flat, and its OCR error matches the true correction",
     "image_width": 1512,
-    "image_height": 506
+    "image_height": 506,
+    "hover": "assets/media/levelhead/hook.mp4"
   },
   {
     "title": "Post-Audit Mirage: Identifiability Limits of Offline Agent Verification",
@@ -125,7 +127,8 @@
     ],
     "desc": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.",
     "theme": "safety",
-    "short": "Safe and harmful agents can leave identical audit records, so offline verification alone cannot tell them apart."
+    "short": "Safe and harmful agents can leave identical audit records, so offline verification alone cannot tell them apart.",
+    "hover": "assets/images/research/pam-monitor.png"
   },
   {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",

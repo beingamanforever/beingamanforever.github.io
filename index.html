@@ -32,9 +32,9 @@
     <link rel="shortcut icon" href="./assets/icons/favicon-32.png?v=4" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png?v=4" sizes="180x180">
     <link rel="preload" href="./assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="./assets/css/style.css?v=12">
-    <script src="./assets/js/theme.js?v=12"></script>
-    <script src="./assets/js/site.js?v=12" defer></script>
+    <link rel="stylesheet" href="./assets/css/style.css?v=16">
+    <script src="./assets/js/theme.js?v=16"></script>
+    <script src="./assets/js/site.js?v=16" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -85,15 +85,15 @@
                 <div class="section-head"><h2 id="highlights-title">Recent work</h2></div>
                 <div class="highlights">
                     <a class="highlight reveal" href="blog/notsosmartocr-story">
-                        <div class="highlight-img logo"><img src="assets/images/projects/notsosmartocr-logo.svg" alt="" loading="lazy"></div>
+                        <div class="highlight-img logo"><img src="assets/images/projects/notsosmartocr-logo.svg" alt="" loading="lazy"><video class="swap" src="assets/media/notsosmartocr/hover.mp4" muted loop playsinline preload="none" aria-hidden="true"></video></div>
                         <div class="highlight-body"><span class="highlight-kind">Built</span><h3>notSoSmartOCR</h3><p>Document extraction you can inspect: every word scored and sourced.</p></div>
                     </a>
                     <a class="highlight reveal" href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">
-                        <div class="highlight-img fit"><img src="assets/images/projects/levelhead-angle.png" alt="" loading="lazy"></div>
+                        <div class="highlight-img fit"><img src="assets/images/projects/levelhead-angle.png" alt="" loading="lazy"><video class="swap" src="assets/media/levelhead/hook.mp4" muted loop playsinline preload="none" aria-hidden="true"></video></div>
                         <div class="highlight-body"><span class="highlight-kind">CVPR 2027 submission</span><h3>LevelHead</h3><p>Training-free page orientation for any model: deskew first, then vote.</p></div>
                     </a>
                     <a class="highlight reveal" href="blog/lost-in-injection">
-                        <div class="highlight-img"><img src="assets/images/posts/lost-in-injection/cover.jpg" alt="" loading="lazy"></div>
+                        <div class="highlight-img"><img src="assets/images/posts/lost-in-injection/cover.jpg" alt="" loading="lazy"><video class="swap" src="assets/media/lost-in-injection/hover.mp4" muted loop playsinline preload="none" aria-hidden="true"></video></div>
                         <div class="highlight-body"><span class="highlight-kind">AI safety</span><h3>Lost in Injection</h3><p>An English-only prompt-injection defense, attacked in eleven languages.</p></div>
                     </a>
                 </div>
@@ -109,30 +109,31 @@
             <section class="section" id="news" aria-labelledby="news-title">
                 <div class="section-head"><h2 id="news-title">News</h2><button class="more" type="button" data-news-toggle aria-expanded="false" aria-controls="news-list" hidden>More news</button></div>
                 <ul class="news-list" id="news-list">
-                <li class="reveal"><span class="news-date">Nov 2026</span><p class="news-text">New on the blog: how notSoSmartOCR learned to say &quot;I&#x27;m not sure&quot;. <span class="news-links">The story behind document extraction you can inspect, with the film and animations. <a href="blog/notsosmartocr-story">Read it</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Nov 2026</span><p class="news-text">Lost in Injection at the Lexsi AI Safety and Alignment Hackathon. <span class="news-links">A prompt-injection defense trained only in English holds in 11 languages, and low-resource training halves what still gets through. <a href="blog/lost-in-injection">Blog post</a> and <a href="https://github.com/beingamanforever/Lost-in-injection" target="_blank" rel="noopener noreferrer">code</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Oct 2026</span><p class="news-text">Post-Audit Mirage accepted at Who Verifies the Agents? @ NeurIPS 2026. <span class="news-links">Identifiability limits of offline agent verification, with Payal Payal. Poster. <a href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer">Paper</a> and <a href="https://github.com/beingamanforever/Post-Audit-Mirage" target="_blank" rel="noopener noreferrer">code</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Oct 2026</span><p class="news-text">Released LevelHead. <span class="news-links">Training-free page deskewing and orientation classification for any model, to be submitted to CVPR 2027. <a href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">Project page</a> and <a href="https://github.com/beingamanforever/LevelHead" target="_blank" rel="noopener noreferrer">code</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Sep 2026</span><p class="news-text">Mixing Matters accepted at PriGM @ NeurIPS 2026, Paris. <span class="news-links">Accepted at the Workshop on Principles of Generative Modeling. A paired study of position bias across Transformer, Mamba, and hybrid language models. <a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Project page</a>, <a href="https://beingamanforever.github.io/Mixing-Matters/paper.pdf" target="_blank" rel="noopener noreferrer">paper</a>, and <a href="https://github.com/beingamanforever/Mixing-Matters" target="_blank" rel="noopener noreferrer">code</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Sep 2026</span><p class="news-text">MycoGate-VL accepted at SHROOM-Visions at EMNLP 2026. <span class="news-links">Multilingual hallucination detection in vision-language responses. <a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">Paper</a> and <a href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer">code</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Aug 2026</span><p class="news-text">Built notSoSmartOCR. <span class="news-links">Document extraction with layout detection, OCR, selective LLM refinement, and visual evidence for review. <a href="https://github.com/beingamanforever/notSoSmartOCR" target="_blank" rel="noopener noreferrer">Explore the project</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Jun 2026</span><p class="news-text">Joined HiLabs as a Data Scientist.</p></li>
-                <li class="reveal"><span class="news-date">May 2026</span><p class="news-text">GSoC 2026 @ GNU Octave. <span class="news-links">Contributed to the <a href="https://octave.org/" target="_blank" rel="noopener noreferrer">open-source scientific computing framework</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Jan 2026</span><p class="news-text">Joined HiLabs as a Data Science Intern.</p></li>
-                <li class="reveal"><span class="news-date">Dec 2025</span><p class="news-text">Silver at Inter-IIT Tech Meet 14.0. <span class="news-links">Led a team of six to a first runner-up finish on the <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">ISRO geospatial VLM problem statement</a> among 24 IITs.</span></p></li>
-                <li class="reveal"><span class="news-date">Sep 2025</span><p class="news-text">Pre-placement offer from HiLabs. <span class="news-links">Received after winning the <a href="https://github.com/beingamanforever/hilabs" target="_blank" rel="noopener noreferrer">HiLabs AIQuest hackathon</a> at IIT Roorkee.</span></p></li>
-                <li class="reveal"><span class="news-date">May 2025</span><p class="news-text">Info Edge · Data Science Intern. <span class="news-links">Worked on generative engine optimisation (GEO) at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>.</span></p></li>
-                <li class="reveal"><span class="news-date">Dec 2024</span><p class="news-text">Silver at Inter-IIT Tech Meet 2025. <span class="news-links">Built an <a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank" rel="noopener noreferrer">AI interview platform</a>.</span></p></li>
+                <li class="reveal"><span class="news-date">[2026/11]</span> <span class="news-emoji" aria-hidden="true">📝</span> New blog post on how <b>notSoSmartOCR</b> learned to say "I'm not sure". <a href="blog/notsosmartocr-story">Read it</a></li>
+                <li class="reveal"><span class="news-date">[2026/11]</span> <span class="news-emoji" aria-hidden="true">🛡️</span> Built <b>Lost in Injection</b> at the <b>Lexsi AI Safety and Alignment Hackathon</b>. <a href="blog/lost-in-injection">Blog</a></li>
+                <li class="reveal"><span class="news-date">[2026/10]</span> <span class="news-emoji" aria-hidden="true">🎉</span> <b>Post-Audit Mirage</b> accepted at <b>Who Verifies the Agents? @ NeurIPS 2026</b>. <a href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer">Paper</a></li>
+                <li class="reveal"><span class="news-date">[2026/10]</span> <span class="news-emoji" aria-hidden="true">🚀</span> Released <b>LevelHead</b>, to be submitted to <b>CVPR 2027</b>. <a href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">Project</a></li>
+                <li class="reveal"><span class="news-date">[2026/09]</span> <span class="news-emoji" aria-hidden="true">🎉</span> <b>Mixing Matters</b> accepted at <b>PriGM @ NeurIPS 2026</b>, Paris. <a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Project</a></li>
+                <li class="reveal"><span class="news-date">[2026/09]</span> <span class="news-emoji" aria-hidden="true">🎉</span> <b>MycoGate-VL</b> accepted at <b>SHROOM-Visions @ EMNLP 2026</b>. <a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">Paper</a></li>
+                <li class="reveal"><span class="news-date">[2026/08]</span> <span class="news-emoji" aria-hidden="true">🛠️</span> Built <b>notSoSmartOCR</b>, document extraction you can inspect. <a href="https://github.com/beingamanforever/notSoSmartOCR" target="_blank" rel="noopener noreferrer">Code</a></li>
+                <li class="reveal"><span class="news-date">[2026/06]</span> <span class="news-emoji" aria-hidden="true">💼</span> Joined <b>HiLabs</b> as a Data Scientist.</li>
+                <li class="reveal"><span class="news-date">[2026/05]</span> <span class="news-emoji" aria-hidden="true">🌱</span> <b>GSoC 2026</b> with <a href="https://octave.org/" target="_blank" rel="noopener noreferrer">GNU Octave</a>.</li>
+                <li class="reveal"><span class="news-date">[2026/01]</span> <span class="news-emoji" aria-hidden="true">💼</span> Joined <b>HiLabs</b> as a Data Science Intern.</li>
+                <li class="reveal"><span class="news-date">[2025/12]</span> <span class="news-emoji" aria-hidden="true">🥈</span> Silver at <b>Inter-IIT Tech Meet 14.0</b>, leading a team of six on ISRO's geospatial VLM problem. <a href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">Code</a></li>
+                <li class="reveal"><span class="news-date">[2025/09]</span> <span class="news-emoji" aria-hidden="true">🏆</span> Won the <b>HiLabs AIQuest</b> hackathon at IIT Roorkee and received a pre-placement offer. <a href="https://github.com/beingamanforever/hilabs" target="_blank" rel="noopener noreferrer">Code</a></li>
+                <li class="reveal"><span class="news-date">[2025/05]</span> <span class="news-emoji" aria-hidden="true">💼</span> Data Science Intern at <a href="https://www.infoedge.in/" target="_blank" rel="noopener noreferrer">Info Edge</a>, working on generative engine optimisation.</li>
+                <li class="reveal"><span class="news-date">[2024/12]</span> <span class="news-emoji" aria-hidden="true">🥈</span> Silver at <b>Inter-IIT Tech Meet 2025</b> for an AI interview platform. <a href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank" rel="noopener noreferrer">Code</a></li>
                 </ul>
             </section>
 
             <section class="section" id="research" aria-labelledby="research-title">
                 <div class="section-head"><h2 id="research-title">Research</h2><a class="more" href="research">All research</a></div>
+                <p class="section-lead">My current research interests lie at the intersection of AI safety, post-training and document understanding, specifically models that stay reliable on adversarial, multilingual and messy real-world inputs, and that show the evidence behind their answers. Honestly, anything that involves finding where a model breaks and making it hold interests me.</p>
             <div class="theme-group" id="theme-safety">
                 <h3 class="theme-title">Safety and alignment</h3>
                 
                 <article class="pub reveal">
-                    <a class="pub-thumb" href="https://github.com/beingamanforever/Lost-in-injection" tabindex="-1" aria-hidden="true"><img src="assets/images/research/lost-in-injection.png" alt="" loading="lazy"></a>
+                    <a class="pub-thumb" href="https://github.com/beingamanforever/Lost-in-injection" tabindex="-1" aria-hidden="true"><img src="assets/images/research/lost-in-injection.png" alt="" loading="lazy"><video class="swap" src="assets/media/lost-in-injection/hover.mp4" muted loop playsinline preload="none" aria-hidden="true"></video></a>
                     <div class="pub-body">
                         <h4 class="pub-title"><a href="https://github.com/beingamanforever/Lost-in-injection" target="_blank" rel="noopener noreferrer">Lost in Injection: Do Prompt-Injection Defenses Survive Translation?</a></h4>
                         <p class="pub-authors"><b>Aman Behera</b></p>
@@ -142,7 +143,7 @@
                     </div>
                 </article>
                 <article class="pub reveal">
-                    <a class="pub-thumb" href="https://openreview.net/pdf?id=6cQdbUSme7" tabindex="-1" aria-hidden="true"><img src="assets/images/research/pam-matched-worlds.png" alt="" loading="lazy"></a>
+                    <a class="pub-thumb" href="https://openreview.net/pdf?id=6cQdbUSme7" tabindex="-1" aria-hidden="true"><img src="assets/images/research/pam-matched-worlds.png" alt="" loading="lazy"><img class="swap" src="assets/images/research/pam-monitor.png" alt="" loading="lazy"></a>
                     <div class="pub-body">
                         <h4 class="pub-title"><a href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer">Post-Audit Mirage: Identifiability Limits of Offline Agent Verification</a></h4>
                         <p class="pub-authors"><b>Aman Behera</b>, Payal Payal</p>
@@ -176,7 +177,7 @@
                 <h3 class="theme-title">Document intelligence</h3>
                 
                 <article class="pub reveal">
-                    <a class="pub-thumb" href="https://beingamanforever.github.io/LevelHead/" tabindex="-1" aria-hidden="true"><img src="assets/images/projects/levelhead-angle.png" alt="" loading="lazy"></a>
+                    <a class="pub-thumb" href="https://beingamanforever.github.io/LevelHead/" tabindex="-1" aria-hidden="true"><img src="assets/images/projects/levelhead-angle.png" alt="" loading="lazy"><video class="swap" src="assets/media/levelhead/hook.mp4" muted loop playsinline preload="none" aria-hidden="true"></video></a>
                     <div class="pub-body">
                         <h4 class="pub-title"><a href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">LevelHead: Deskew Before You Classify</a></h4>
                         <p class="pub-authors"><b>Aman Behera</b></p>
@@ -246,7 +247,7 @@
                 <div class="section-head"><h2 id="projects-title">Projects</h2></div>
                 <div class="project-grid">
                 <a class="project reveal" href="https://github.com/beingamanforever/notSoSmartOCR" target="_blank" rel="noopener noreferrer">
-                    <div class="project-img"><img src="assets/images/projects/notsosmartocr-logo.svg" alt="" loading="lazy"></div>
+                    <div class="project-img"><img src="assets/images/projects/notsosmartocr-logo.svg" alt="" loading="lazy"><video class="swap" src="assets/media/notsosmartocr/hover.mp4" muted loop playsinline preload="none" aria-hidden="true"></video></div>
                     <div class="project-body">
                         <h3>notSoSmartOCR</h3>
                         <p>Built a document-intelligence product that turns complex scans into structured, reviewable outputs. It combines orientation correction, layout detection, Falcon OCR 1.5, and selective LLM refinement for handwriting and ambiguous regions, and shows page-level evidence, per-block confidence, tables, and Markdown output.</p>
@@ -268,6 +269,11 @@
                 </a>
                 </div>
             </section>
+
+            <section class="section" id="misc" aria-labelledby="misc-title">
+                <div class="section-head"><h2 id="misc-title">Misc</h2></div>
+                <div class="prose"><p>When I'm not working, I 🏋️ powerlift, 🏃 run and 🏊 swim. My best so far is a 140 kg deadlift and a 1:57 half marathon; the rest is on the <a href="athletics">Athletics</a> page. I am always open to discussions or collaborations on agents, post-training, safety and document AI, so feel free to reach out by <a href="mailto:aman.behera.systems@gmail.com">email</a>.</p></div>
+            </section>
         </div>
 
         <nav class="quicklinks" aria-label="Quick links" data-spy>
@@ -279,6 +285,7 @@
                 <li><a href="#research">Research</a></li>
                 <li><a href="#writing">Writing</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li><a href="#misc">Misc</a></li>
             </ol>
         </nav>
     </main>

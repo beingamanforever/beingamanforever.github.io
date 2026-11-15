@@ -45,7 +45,8 @@
       }
     ],
     "image": "assets/images/projects/notsosmartocr-logo.svg",
-    "image_alt": "notSoSmartOCR logo"
+    "image_alt": "notSoSmartOCR logo",
+    "hover": "assets/media/notsosmartocr/hover.mp4"
   },
   {
     "title": "LevelHead: Deskew Before You Classify",
