@@ -38,7 +38,7 @@ def pub(entry: dict, compact: bool) -> str:
         + ("" if link["url"].startswith("blog/") else ' target="_blank" rel="noopener noreferrer"')
         + f'>{html.escape(link["label"])}</a>'
         for link in entry.get("links", []))
-    desc = "" if compact else f'<p class="pub-desc">{html.escape(entry["desc"])}</p>'
+    desc = f'<p class="pub-desc">{html.escape(entry.get("short") or entry["desc"])}</p>'
     return f"""\
                 <article class="pub reveal">
                     {picture}

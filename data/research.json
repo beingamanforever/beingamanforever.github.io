@@ -33,7 +33,8 @@
         "label": "Code",
         "url": "https://github.com/beingamanforever/Lost-in-injection"
       }
-    ]
+    ],
+    "short": "An English-only prompt-injection defense holds in 11 languages; adding low-resource languages to training halves what still gets through."
   },
   {
     "title": "LevelHead: Deskew Before You Classify",
@@ -79,7 +80,12 @@
     "theme": "documents",
     "authors": [
       "Aman Behera"
-    ]
+    ],
+    "short": "Training-free page orientation for any model: level the page first, then let a frozen model vote over its four quarter turns.",
+    "image": "assets/images/projects/levelhead-angle.png",
+    "image_alt": "Accuracy by the angle a page was turned: classify-first dips at every diagonal while LevelHead stays flat, and its OCR error matches the true correction",
+    "image_width": 1512,
+    "image_height": 506
   },
   {
     "title": "Post-Audit Mirage: Identifiability Limits of Offline Agent Verification",
@@ -118,7 +124,8 @@
       }
     ],
     "desc": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.",
-    "theme": "safety"
+    "theme": "safety",
+    "short": "Safe and harmful agent deployments can leave identical audit logs, so offline verification alone cannot tell them apart."
   },
   {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",
@@ -152,7 +159,8 @@
     "image_width": 2136,
     "image_height": 1536,
     "desc": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.",
-    "theme": "models"
+    "theme": "models",
+    "short": "Moving one answer passage through a long context: Pythia favours the opening, Mamba checkpoints do not."
   },
   {
     "title": "RDAN-GRPO",
@@ -170,6 +178,10 @@
     "desc": "Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.",
     "links": [
       {
+        "label": "Model",
+        "url": "https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO"
+      },
+      {
         "label": "Code",
         "url": "https://github.com/beingamanforever/RDAN-GRPO"
       }
@@ -177,7 +189,8 @@
     "theme": "safety",
     "authors": [
       "Aman Behera"
-    ]
+    ],
+    "short": "Rubric-based reinforcement learning for aligning LLMs with complex, open-ended instruction-following tasks."
   },
   {
     "title": "MycoGate-VL",
@@ -201,6 +214,7 @@
     "theme": "safety",
     "authors": [
       "Aman Behera"
-    ]
+    ],
+    "short": "Finds and labels hallucinated spans in vision-language answers across English, French, Italian and Chinese."
   }
 ]

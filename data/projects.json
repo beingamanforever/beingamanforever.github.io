@@ -43,7 +43,9 @@
         "alt": "Layout boxes on four hard documents: a handwritten provider roster, a research paper, a fax cover sheet, and a dense financial table",
         "caption": "Handwritten tables, papers, faxes and dense financial layouts."
       }
-    ]
+    ],
+    "image": "assets/images/projects/notsosmartocr-logo.svg",
+    "image_alt": "notSoSmartOCR logo"
   },
   {
     "title": "LevelHead: Deskew Before You Classify",
