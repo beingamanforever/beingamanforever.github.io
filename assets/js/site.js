@@ -12,11 +12,31 @@
             toggle.setAttribute("aria-pressed", String(dark));
         };
         label();
-        toggle.addEventListener("click", function () {
-            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        var apply = function (next) {
             root.setAttribute("data-theme", next);
             try { localStorage.setItem("theme", next); } catch (e) { /* private mode: keep it for this page only */ }
             label();
+        };
+        toggle.addEventListener("click", function () {
+            var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            if (reduceMotion) { apply(next); return; }
+            if (!document.startViewTransition || document.hidden) {
+                // Older browsers: cross-fade every colour together instead of letting them snap one by one.
+                root.classList.add("theme-fade");
+                apply(next);
+                setTimeout(function () { root.classList.remove("theme-fade"); }, 450);
+                return;
+            }
+            // The new theme grows out of the toggle as a circle.
+            var box = toggle.getBoundingClientRect();
+            var x = box.left + box.width / 2, y = box.top + box.height / 2;
+            var radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+            document.startViewTransition(function () { apply(next); }).ready.then(function () {
+                root.animate(
+                    { clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + radius + "px at " + x + "px " + y + "px)"] },
+                    { duration: 560, easing: "cubic-bezier(.2, .7, .2, 1)", pseudoElement: "::view-transition-new(root)" }
+                );
+            }).catch(function () { /* the browser skipped the animation; the theme has still switched */ });
         });
     }
 

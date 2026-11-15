@@ -34,7 +34,7 @@
         "url": "https://github.com/beingamanforever/Lost-in-injection"
       }
     ],
-    "short": "An English-only prompt-injection defense holds in 11 languages; adding low-resource languages to training halves what still gets through."
+    "short": "A prompt-injection defense trained only on English holds in 11 languages, scripts and code-mixes; adding low-resource languages halves what still gets through."
   },
   {
     "title": "LevelHead: Deskew Before You Classify",
@@ -81,7 +81,7 @@
     "authors": [
       "Aman Behera"
     ],
-    "short": "Training-free page orientation for any model: level the page first, then let a frozen model vote over its four quarter turns.",
+    "short": "Training-free page orientation for any model: level the page with a spectral deskewer first, then let a frozen classifier or VLM vote over its four quarter turns.",
     "image": "assets/images/projects/levelhead-angle.png",
     "image_alt": "Accuracy by the angle a page was turned: classify-first dips at every diagonal while LevelHead stays flat, and its OCR error matches the true correction",
     "image_width": 1512,
@@ -125,7 +125,7 @@
     ],
     "desc": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.",
     "theme": "safety",
-    "short": "Safe and harmful agent deployments can leave identical audit logs, so offline verification alone cannot tell them apart."
+    "short": "Safe and harmful agent deployments can leave byte-identical audit records, so no offline verifier can tell them apart; fresh post-update evidence restores the call."
   },
   {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",
@@ -160,7 +160,7 @@
     "image_height": 1536,
     "desc": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.",
     "theme": "models",
-    "short": "Moving one answer passage through a long context: Pythia favours the opening, Mamba checkpoints do not."
+    "short": "One answer passage moves through ten positions of a fixed long context: Pythia favours the opening while Mamba checkpoints do not, a model-family difference."
   },
   {
     "title": "RDAN-GRPO",
@@ -190,7 +190,7 @@
     "authors": [
       "Aman Behera"
     ],
-    "short": "Rubric-based reinforcement learning for aligning LLMs with complex, open-ended instruction-following tasks."
+    "short": "Rubric Decoupled Advantage Normalisation GRPO: rubric-based reinforcement learning for aligning LLMs with complex, open-domain instruction-following tasks."
   },
   {
     "title": "MycoGate-VL",
@@ -215,6 +215,6 @@
     "authors": [
       "Aman Behera"
     ],
-    "short": "Finds and labels hallucinated spans in vision-language answers across English, French, Italian and Chinese."
+    "short": "Detects and categorises hallucinated spans in vision-language answers across English, French, Italian and Chinese, using multilingual detectors and a clean-document gate."
   }
 ]
