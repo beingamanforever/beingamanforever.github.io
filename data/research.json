@@ -1,5 +1,41 @@
 [
   {
+    "title": "Lost in Injection: Do Prompt-Injection Defenses Survive Translation?",
+    "authors": [
+      "Aman Behera"
+    ],
+    "venue": "Lexsi AI Safety and Alignment Hackathon 2026 · Track 2a",
+    "theme": "safety",
+    "url": "https://github.com/beingamanforever/Lost-in-injection",
+    "image": "assets/images/research/lost-in-injection.png",
+    "image_alt": "Attack success and utility for the undefended model and three defenses trained on English, English plus high-resource, and English plus low-resource injections",
+    "image_width": 0,
+    "image_height": 0,
+    "desc": "Agents read text an attacker can write. I trained Meta-SecAlign's prompt-injection defense into Tiny Aya Global using English data only and attacked it in 11 languages, scripts and code-mixes. It holds in every one, including four never seen in training, but an attacker who tries every language still gets through about one time in five. Adding low-resource injections to training halves that, to 8.7%, with utility unchanged.",
+    "links": [
+      {
+        "label": "Report",
+        "url": "https://github.com/beingamanforever/Lost-in-injection/blob/main/REPORT.md"
+      },
+      {
+        "label": "Blog post",
+        "url": "blog/lost-in-injection.html"
+      },
+      {
+        "label": "Video",
+        "url": "https://huggingface.co/datasets/beingamanforever/lost-in-injection-model-outputs/blob/main/video/lost-in-injection-demo.mp4"
+      },
+      {
+        "label": "Models",
+        "url": "https://huggingface.co/collections/beingamanforever/tiny-aya-global-hardened-against-prompt-injection-6af83c90c9b6f21539a70475"
+      },
+      {
+        "label": "Code",
+        "url": "https://github.com/beingamanforever/Lost-in-injection"
+      }
+    ]
+  },
+  {
     "title": "LevelHead: Deskew Before You Classify",
     "venue": "To be submitted · CVPR 2027",
     "url": "https://beingamanforever.github.io/LevelHead/",
@@ -39,6 +75,10 @@
         "alt": "LevelHead live demo: a tilted phone photo of a screen on the left and the levelled page on the right, with a read tilt of +20.6 degrees",
         "caption": "Step 1 reads a +20.6° tilt from the Fourier spectrum and levels a phone photo in the browser."
       }
+    ],
+    "theme": "documents",
+    "authors": [
+      "Aman Behera"
     ]
   },
   {
@@ -77,7 +117,8 @@
         "url": "https://github.com/beingamanforever/Post-Audit-Mirage"
       }
     ],
-    "desc": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported."
+    "desc": "A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.",
+    "theme": "safety"
   },
   {
     "title": "Mixing Matters? Position Bias Across Sequence Mixers",
@@ -110,7 +151,8 @@
     "image_alt": "Accuracy by evidence position for Pythia 2.8B, Mamba 2.8B, and Mamba-2 2.7B",
     "image_width": 2136,
     "image_height": 1536,
-    "desc": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect."
+    "desc": "A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.",
+    "theme": "models"
   },
   {
     "title": "RDAN-GRPO",
@@ -131,6 +173,10 @@
         "label": "Code",
         "url": "https://github.com/beingamanforever/RDAN-GRPO"
       }
+    ],
+    "theme": "safety",
+    "authors": [
+      "Aman Behera"
     ]
   },
   {
@@ -151,6 +197,10 @@
         "url": "https://github.com/beingamanforever/MycoGate-VL"
       }
     ],
-    "desc": "Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization."
+    "desc": "Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization.",
+    "theme": "safety",
+    "authors": [
+      "Aman Behera"
+    ]
   }
 ]

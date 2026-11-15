@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <title>Research | Aman Behera</title>
-    <meta name="description" content="Research on agents, reinforcement learning, and large language models.">
+    <meta name="description" content="Research on AI safety and alignment, agents, document intelligence and language models.">
     <meta property="og:title" content="Research | Aman Behera">
-    <meta property="og:description" content="Research on agents, reinforcement learning, and large language models.">
+    <meta property="og:description" content="Research on AI safety and alignment, agents, document intelligence and language models.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Aman Behera">
     <meta property="og:image" content="https://beingamanforever.github.io/assets/og-home-v3.png">
@@ -12,122 +12,184 @@
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://beingamanforever.github.io/research.html">
     <meta name="twitter:title" content="Research | Aman Behera">
-    <meta name="twitter:description" content="Research on agents, reinforcement learning, and large language models.">
+    <meta name="twitter:description" content="Research on AI safety and alignment, agents, document intelligence and language models.">
     <meta name="twitter:image" content="https://beingamanforever.github.io/assets/og-home-v3.png">
     <link rel="canonical" href="https://beingamanforever.github.io/research.html">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' https:; style-src 'self'; font-src 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; img-src 'self' https: data:; style-src 'self'; font-src 'self'; script-src 'self'; media-src 'self'; frame-src 'self'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="application-name" content="Aman Behera">
     <meta name="apple-mobile-web-app-title" content="Aman Behera">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#f6f6f3" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#111215" media="(prefers-color-scheme: dark)">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="assets/icons/favicon.svg?v=4" type="image/svg+xml" sizes="any">
     <link rel="shortcut icon" href="assets/icons/favicon-32.png?v=4" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=4" sizes="180x180">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preload" href="assets/fonts/lora-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="assets/css/style.css?v=5">
+    <script src="assets/js/theme.js?v=5"></script>
+    <script src="assets/js/site.js?v=5" defer></script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <a class="announce" href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">
-        <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="announce-chip">New</span>
-        <span class="announce-text">LevelHead<span class="announce-tagline">: deskew before you classify</span></span>
-        <span class="announce-link">Project page</span>
-        <span class="sparkles sparkles-end" aria-hidden="true"><i></i><i></i><i></i></span>
-    </a>
-    <header class="site-header">
-        <a class="site-name" href="index.html">Aman Behera</a>
-    </header>
-    <nav class="site-nav" aria-label="Main navigation">
-        <a href="index.html">About</a>
-        <a href="research.html">Research</a>
-        <a href="blog.html">Blog</a>
-        <a href="athletics.html">Athletics</a>
-    </nav>
-
-    <main id="main-content" class="page research-page">
-        <header class="page-heading">
-            <h1>Research</h1>
-            <p>Research on agents, reinforcement learning, and large language models.</p>
-        </header>
-        <div class="research-list">
-            <article class="research-item">
-                <div class="research-media"><div class="media-gallery"><input class="media-radio" type="radio" name="r-levelhead-deskew-before-you-classify" id="r-levelhead-deskew-before-you-classify-0" checked aria-label="Overview"><input class="media-radio" type="radio" name="r-levelhead-deskew-before-you-classify" id="r-levelhead-deskew-before-you-classify-1" aria-label="Method"><input class="media-radio" type="radio" name="r-levelhead-deskew-before-you-classify" id="r-levelhead-deskew-before-you-classify-2" aria-label="Live demo"><div class="media-tabs"><label for="r-levelhead-deskew-before-you-classify-0">Overview</label><label for="r-levelhead-deskew-before-you-classify-1">Method</label><label for="r-levelhead-deskew-before-you-classify-2">Live demo</label></div><div class="media-slides"><figure class="media-slide"><div class="media-frame"><a href="assets/images/projects/levelhead-teaser.png"><img src="assets/images/projects/levelhead-teaser.png" alt="Classify-first leaves a tilted page upside down while LevelHead levels it, votes over four quarter turns, and reads it correctly; per-backbone accuracy gains on the right" width="1532" height="420" loading="lazy" decoding="async"></a></div><figcaption>Classify-first misreads a tilted page; LevelHead levels it first, then votes.</figcaption></figure><figure class="media-slide"><div class="media-frame"><a href="assets/images/projects/levelhead-method.png"><img src="assets/images/projects/levelhead-method.png" alt="LevelHead method: level the page, ask the frozen backbone four times, roll the answers back and combine them with a geometric mean" width="1535" height="441" loading="lazy" decoding="async"></a></div><figcaption>Level the page, ask the backbone four times, roll back and combine.</figcaption></figure><figure class="media-slide"><div class="media-frame"><a href="assets/images/projects/levelhead-demo.jpg"><img src="assets/images/projects/levelhead-demo.jpg" alt="LevelHead live demo: a tilted phone photo of a screen on the left and the levelled page on the right, with a read tilt of +20.6 degrees" width="2256" height="1272" loading="lazy" decoding="async"></a></div><figcaption>Step 1 reads a +20.6° tilt from the Fourier spectrum and levels a phone photo in the browser.</figcaption></figure></div></div></div>
-                <div class="research-copy">
-                    <div class="research-header">
-                        <h2 class="research-title"><a href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">LevelHead: Deskew Before You Classify</a></h2>
-                        <p class="venue-chip venue-pending"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>To be submitted · CVPR 2027</p>
-                    </div>
-                    <p class="research-desc">A training-free method for page deskewing and orientation classification. LevelHead levels the page with a spectral deskewer first, then lets any frozen classifier or VLM vote over the four quarter turns of the level page. On pages at any angle it lifts four Qwen3-VL models from 41.9% to 84.6% and four orientation classifiers from 71.9% to 85.2%.</p>
-                    <div class="resource-links"><a href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Project page</a><a href="https://github.com/beingamanforever/LevelHead" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Code</a></div>
-                </div>
-            </article>
-            <article class="research-item">
-                <div class="research-media"><div class="media-gallery"><input class="media-radio" type="radio" name="r-post-audit-mirage-identifiability-limits-of-offline-agent-verification" id="r-post-audit-mirage-identifiability-limits-of-offline-agent-verification-0" checked aria-label="The mirage"><input class="media-radio" type="radio" name="r-post-audit-mirage-identifiability-limits-of-offline-agent-verification" id="r-post-audit-mirage-identifiability-limits-of-offline-agent-verification-1" aria-label="Monitor"><div class="media-tabs"><label for="r-post-audit-mirage-identifiability-limits-of-offline-agent-verification-0">The mirage</label><label for="r-post-audit-mirage-identifiability-limits-of-offline-agent-verification-1">Monitor</label></div><div class="media-slides"><figure class="media-slide"><div class="media-frame"><a href="assets/images/research/pam-matched-worlds.png"><img src="assets/images/research/pam-matched-worlds.png" alt="A safe world and a harmful world give an offline verifier the same evidence and the same result, but deployment reveals delayed harm in only one of them" width="2000" height="694" loading="lazy" decoding="async"></a></div><figcaption>Same offline evidence, different real truth.</figcaption></figure><figure class="media-slide"><div class="media-frame"><a href="assets/images/research/pam-monitor.png"><img src="assets/images/research/pam-monitor.png" alt="Fresh group-labelled outcomes pass through a group-aware monitor that can deploy, hold, request more evidence, or report unsupported" width="2000" height="810" loading="lazy" decoding="async"></a></div><figcaption>A fail-closed monitor that acts only on fresh post-update evidence.</figcaption></figure></div></div></div>
-                <div class="research-copy">
-                    <div class="research-header">
-                        <h2 class="research-title"><a href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer">Post-Audit Mirage: Identifiability Limits of Offline Agent Verification</a></h2>
-                        <p class="authors"><strong>Aman Behera</strong>, Payal Payal</p>
-                        <p class="venue-chip venue-accepted"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>Accepted · Who Verifies the Agents? Workshop at NeurIPS 2026 (Poster)</p>
-                    </div>
-                    <p class="research-desc">A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.</p>
-                    <div class="resource-links"><a href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Paper</a><a href="https://github.com/beingamanforever/Post-Audit-Mirage" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Code</a></div>
-                </div>
-            </article>
-            <article class="research-item">
-                <div class="research-media"><div class="media-frame media-single"><a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer"><img src="assets/images/projects/position-bias.png" alt="Accuracy by evidence position for Pythia 2.8B, Mamba 2.8B, and Mamba-2 2.7B" width="2136" height="1536" loading="lazy" decoding="async"></a></div></div>
-                <div class="research-copy">
-                    <div class="research-header">
-                        <h2 class="research-title"><a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Mixing Matters? Position Bias Across Sequence Mixers</a></h2>
-                        <p class="authors"><strong>Aman Behera</strong>, Namit Solanki, Mehul Anand</p>
-                        <p class="venue-chip venue-accepted"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>Accepted · PriGM Workshop at NeurIPS 2026, Paris</p>
-                    </div>
-                    <p class="research-desc">A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.</p>
-                    <div class="resource-links"><a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Project page</a><a href="https://beingamanforever.github.io/Mixing-Matters/paper.pdf" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Paper</a><a href="https://github.com/beingamanforever/Mixing-Matters" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Code</a><a href="https://github.com/beingamanforever/Mixing-Matters/tree/main/dataset" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>Dataset</a></div>
-                </div>
-            </article>
-            <article class="research-item">
-                <div class="research-media"><div class="media-frame media-single"><a href="https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO" target="_blank" rel="noopener noreferrer"><img src="assets/images/projects/rdan-grpo.png" alt="RDAN-GRPO response-level advantage computation diagram" width="4423" height="1161" loading="lazy" decoding="async"></a></div></div>
-                <div class="research-copy">
-                    <div class="research-header">
-                        <h2 class="research-title"><a href="https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO" target="_blank" rel="noopener noreferrer">RDAN-GRPO</a></h2>
-                        <p class="venue-chip venue-topic"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 3 8 21"/><path d="M16 3l-2 18"/></svg>Reinforcement learning</p>
-                    </div>
-                    <p class="research-desc">Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.</p>
-                    <div class="resource-links"><a class="model-link model-hf" href="https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO" target="_blank" rel="noopener noreferrer" aria-label="Hugging Face: Qwen3-4B-RDAN-GRPO"><span class="model-link-label"><span class="hf-mark" aria-hidden="true">🤗</span>Hugging Face</span><span class="model-link-name">Qwen3-4B-RDAN-GRPO</span></a><a href="https://github.com/beingamanforever/RDAN-GRPO" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Code</a></div>
-                </div>
-            </article>
-            <article class="research-item">
-                <div class="research-media"><div class="media-frame media-single"><a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer"><img src="assets/images/research/mycogate-vl-example.png" alt="MycoGate-VL example: the claimed count of eight lights is annotated as a hallucinated span with miscounting and invention labels" width="1542" height="384" loading="lazy" decoding="async"></a></div></div>
-                <div class="research-copy">
-                    <div class="research-header">
-                        <h2 class="research-title"><a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">MycoGate-VL</a></h2>
-                        <p class="venue-chip venue-accepted"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>Accepted · SHROOM-Visions at EMNLP 2026</p>
-                    </div>
-                    <p class="research-desc">Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization.</p>
-                    <div class="resource-links"><a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Paper</a><a href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Code</a></div>
-                </div>
-            </article>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="index.html"><span class="brand-dot" aria-hidden="true"></span><span>Aman<span class="brand-name-long"> Behera</span></span></a>
+            <nav class="nav" aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="research.html" aria-current="page">Research</a>
+                <a href="blog.html">Writing</a>
+                <a href="athletics.html">Athletics</a>
+            </nav>
+            <button class="theme-toggle" type="button" aria-label="Switch colour theme">
+                <svg class="icon sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                <svg class="icon moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+            </button>
         </div>
+    </header>
+
+    <main id="main-content" class="layout with-aside">
+        <div class="content">
+            <header class="page-head">
+                <h1>Research</h1>
+                <p>AI safety and alignment, agents, document intelligence and language models. Papers, code and the projects around them.</p>
+            </header>
+
+            <section class="section" id="publications" aria-labelledby="pubs-title">
+                <div class="section-head"><h2 id="pubs-title">Publications and preprints</h2></div>
+            <div class="theme-group" id="theme-safety">
+                <h3 class="theme-title"><span class="theme-icon tone-pink" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>Safety and alignment</h3>
+                <p class="theme-blurb">Whether agents can be verified, whether defenses hold outside English, and how models are steered and checked.</p>
+                <article class="pub reveal">
+                    <a class="pub-thumb" href="https://github.com/beingamanforever/Lost-in-injection" tabindex="-1" aria-hidden="true"><img src="assets/images/research/lost-in-injection.png" alt="" loading="lazy"></a>
+                    <div class="pub-body">
+                        <h4 class="pub-title"><a href="https://github.com/beingamanforever/Lost-in-injection" target="_blank" rel="noopener noreferrer">Lost in Injection: Do Prompt-Injection Defenses Survive Translation?</a></h4>
+                        <p class="pub-authors"><b>Aman Behera</b></p>
+                        <span class="venue tone-yellow">Lexsi AI Safety and Alignment Hackathon 2026 · Track 2a</span>
+                        <p class="pub-desc">Agents read text an attacker can write. I trained Meta-SecAlign&#x27;s prompt-injection defense into Tiny Aya Global using English data only and attacked it in 11 languages, scripts and code-mixes. It holds in every one, including four never seen in training, but an attacker who tries every language still gets through about one time in five. Adding low-resource injections to training halves that, to 8.7%, with utility unchanged.</p>
+                        <div class="pub-links"><a class="pill small" href="https://github.com/beingamanforever/Lost-in-injection/blob/main/REPORT.md" target="_blank" rel="noopener noreferrer">Report</a><a class="pill small" href="blog/lost-in-injection.html">Blog post</a><a class="pill small" href="https://huggingface.co/datasets/beingamanforever/lost-in-injection-model-outputs/blob/main/video/lost-in-injection-demo.mp4" target="_blank" rel="noopener noreferrer">Video</a><a class="pill small" href="https://huggingface.co/collections/beingamanforever/tiny-aya-global-hardened-against-prompt-injection-6af83c90c9b6f21539a70475" target="_blank" rel="noopener noreferrer">Models</a><a class="pill small" href="https://github.com/beingamanforever/Lost-in-injection" target="_blank" rel="noopener noreferrer">Code</a></div>
+                    </div>
+                </article>
+                <article class="pub reveal">
+                    <a class="pub-thumb" href="https://openreview.net/pdf?id=6cQdbUSme7" tabindex="-1" aria-hidden="true"><img src="assets/images/research/pam-matched-worlds.png" alt="" loading="lazy"></a>
+                    <div class="pub-body">
+                        <h4 class="pub-title"><a href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer">Post-Audit Mirage: Identifiability Limits of Offline Agent Verification</a></h4>
+                        <p class="pub-authors"><b>Aman Behera</b>, Payal Payal</p>
+                        <span class="venue tone-green">Accepted · Who Verifies the Agents? Workshop at NeurIPS 2026 (Poster)</span>
+                        <p class="pub-desc">A matched-world benchmark for offline agent verification. A safe and a harmful deployment can leave byte-identical audit records while needing opposite decisions, so no offline verifier can tell them apart. Across authorization, scheduling, and shared-capacity environments, the paper shows when fresh post-update evidence restores the decision, and gives a fail-closed monitor that deploys, holds, asks for more evidence, or reports unsupported.</p>
+                        <div class="pub-links"><a class="pill small" href="https://openreview.net/pdf?id=6cQdbUSme7" target="_blank" rel="noopener noreferrer">Paper</a><a class="pill small" href="https://github.com/beingamanforever/Post-Audit-Mirage" target="_blank" rel="noopener noreferrer">Code</a></div>
+                    </div>
+                </article>
+                <article class="pub reveal">
+                    <a class="pub-thumb" href="https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO" tabindex="-1" aria-hidden="true"><img src="assets/images/projects/rdan-grpo.png" alt="" loading="lazy"></a>
+                    <div class="pub-body">
+                        <h4 class="pub-title"><a href="https://huggingface.co/beingamanforever/Qwen3-4B-RDAN-GRPO" target="_blank" rel="noopener noreferrer">RDAN-GRPO</a></h4>
+                        <p class="pub-authors"><b>Aman Behera</b></p>
+                        <span class="venue tone-lavender">Reinforcement learning</span>
+                        <p class="pub-desc">Rubric Decoupled Advantage Normalisation GRPO is a rubric-based reinforcement learning repository for aligning LLMs with complex, open-domain instruction-following tasks. It improves performance on public instruction-following benchmarks.</p>
+                        <div class="pub-links"><a class="pill small" href="https://github.com/beingamanforever/RDAN-GRPO" target="_blank" rel="noopener noreferrer">Code</a></div>
+                    </div>
+                </article>
+                <article class="pub reveal">
+                    <a class="pub-thumb" href="https://openreview.net/pdf?id=DcCzoyXJgi" tabindex="-1" aria-hidden="true"><img src="assets/images/research/mycogate-vl-example.png" alt="" loading="lazy"></a>
+                    <div class="pub-body">
+                        <h4 class="pub-title"><a href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">MycoGate-VL</a></h4>
+                        <p class="pub-authors"><b>Aman Behera</b></p>
+                        <span class="venue tone-green">Accepted · SHROOM-Visions at EMNLP 2026</span>
+                        <p class="pub-desc">Detects and categorizes hallucinated character spans in vision-language responses across English, French, Italian, and Chinese. Combines multilingual detectors, a learned clean-document gate, visual category supervision, and scorer-aware output serialization.</p>
+                        <div class="pub-links"><a class="pill small" href="https://openreview.net/pdf?id=DcCzoyXJgi" target="_blank" rel="noopener noreferrer">Paper</a><a class="pill small" href="https://github.com/beingamanforever/MycoGate-VL" target="_blank" rel="noopener noreferrer">Code</a></div>
+                    </div>
+                </article>
+            </div>
+            <div class="theme-group" id="theme-documents">
+                <h3 class="theme-title"><span class="theme-icon tone-sky" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>Document intelligence</h3>
+                <p class="theme-blurb">Reading real pages: orientation, layout and text you can check.</p>
+                <article class="pub reveal">
+                    <a class="pub-thumb" href="https://beingamanforever.github.io/LevelHead/" tabindex="-1" aria-hidden="true"><img src="assets/images/projects/levelhead-teaser.png" alt="" loading="lazy"></a>
+                    <div class="pub-body">
+                        <h4 class="pub-title"><a href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">LevelHead: Deskew Before You Classify</a></h4>
+                        <p class="pub-authors"><b>Aman Behera</b></p>
+                        <span class="venue tone-peach">To be submitted · CVPR 2027</span>
+                        <p class="pub-desc">A training-free method for page deskewing and orientation classification. LevelHead levels the page with a spectral deskewer first, then lets any frozen classifier or VLM vote over the four quarter turns of the level page. On pages at any angle it lifts four Qwen3-VL models from 41.9% to 84.6% and four orientation classifiers from 71.9% to 85.2%.</p>
+                        <div class="pub-links"><a class="pill small" href="https://beingamanforever.github.io/LevelHead/" target="_blank" rel="noopener noreferrer">Project page</a><a class="pill small" href="https://github.com/beingamanforever/LevelHead" target="_blank" rel="noopener noreferrer">Code</a></div>
+                    </div>
+                </article>
+            </div>
+            <div class="theme-group" id="theme-models">
+                <h3 class="theme-title"><span class="theme-icon tone-lavender" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="m8.2 11 7.6-3.8M8.2 13l7.6 3.8"/></svg></span>How language models behave</h3>
+                <p class="theme-blurb">Where sequence models look, and why the architecture matters.</p>
+                <article class="pub reveal">
+                    <a class="pub-thumb" href="https://beingamanforever.github.io/Mixing-Matters/" tabindex="-1" aria-hidden="true"><img src="assets/images/projects/position-bias.png" alt="" loading="lazy"></a>
+                    <div class="pub-body">
+                        <h4 class="pub-title"><a href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Mixing Matters? Position Bias Across Sequence Mixers</a></h4>
+                        <p class="pub-authors"><b>Aman Behera</b>, Namit Solanki, Mehul Anand</p>
+                        <span class="venue tone-green">Accepted · PriGM Workshop at NeurIPS 2026, Paris</span>
+                        <p class="pub-desc">A paired study of position bias across Transformer, Mamba, and hybrid language models. One answer-bearing passage moves through ten positions of a fixed long context while everything else stays the same. Pythia favours the opening and the Mamba checkpoints do not; the paper reports this as a model-family difference, not an isolated architecture effect.</p>
+                        <div class="pub-links"><a class="pill small" href="https://beingamanforever.github.io/Mixing-Matters/" target="_blank" rel="noopener noreferrer">Project page</a><a class="pill small" href="https://beingamanforever.github.io/Mixing-Matters/paper.pdf" target="_blank" rel="noopener noreferrer">Paper</a><a class="pill small" href="https://github.com/beingamanforever/Mixing-Matters" target="_blank" rel="noopener noreferrer">Code</a><a class="pill small" href="https://github.com/beingamanforever/Mixing-Matters/tree/main/dataset" target="_blank" rel="noopener noreferrer">Dataset</a></div>
+                    </div>
+                </article>
+            </div>
+            </section>
+
+            <section class="section" id="projects" aria-labelledby="projects-title">
+                <div class="section-head"><h2 id="projects-title">Projects</h2></div>
+                <div class="project-grid">
+                <a class="project reveal" href="https://github.com/beingamanforever/notSoSmartOCR" target="_blank" rel="noopener noreferrer">
+                    <div class="project-img"><img src="assets/images/projects/notsosmartocr-home.jpg" alt="" loading="lazy"></div>
+                    <div class="project-body">
+                        <h3>notSoSmartOCR</h3>
+                        <p>Built a document-intelligence product that turns complex scans into structured, reviewable outputs. It combines orientation correction, layout detection, Falcon OCR 1.5, and selective LLM refinement for handwriting and ambiguous regions, and shows page-level evidence, per-block confidence, tables, and Markdown output.</p>
+                    </div>
+                </a>
+                <a class="project reveal" href="https://github.com/beingamanforever/Drishti" target="_blank" rel="noopener noreferrer">
+                    <div class="project-img"><img src="assets/images/projects/drishti.png" alt="" loading="lazy"></div>
+                    <div class="project-body">
+                        <h3>Drishti</h3>
+                        <p>A scalable remote-sensing pipeline integrating EarthMind-4B, RemoteSAM, and a BERT classifier for unified satellite-image analysis. DRISHTI stands for Deep Remote-sensing Intelligence System for Holistic Task Integration. Awarded a silver medal at Inter IIT Tech Meet 14.0.</p>
+                    </div>
+                </a>
+                <a class="project reveal" href="https://github.com/beingamanforever/Tech-Enhanced-AI-Interview-Learning-Platform" target="_blank" rel="noopener noreferrer">
+                    <div class="project-img"><img src="assets/images/projects/interview-platform.png" alt="" loading="lazy"></div>
+                    <div class="project-body">
+                        <h3>Tech-Enhanced AI Interview Learning Platform</h3>
+                        <p>Developed an interview practice platform that generates diverse, topic-specific questions and uses NLP to analyse spoken responses, identify grammatical errors, and provide corrections after the interview.</p>
+                    </div>
+                </a>
+                </div>
+            </section>
+        </div>
+
+        <nav class="quicklinks" aria-label="Quick links" data-spy>
+            <h2>Quick Links</h2>
+            <ol>
+                <li><a href="#theme-safety">Safety and alignment</a></li>
+                <li><a href="#theme-documents">Document intelligence</a></li>
+                <li><a href="#theme-models">Language models</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ol>
+        </nav>
     </main>
 
-    <footer class="site-footer">
-        <nav class="footer-social" aria-label="Social links">
-            <a class="social-twitter" href="https://twitter.com/beingamanFF" target="_blank" rel="noopener noreferrer" aria-label="Twitter: @beingamanFF"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg><span>@beingamanFF</span></a>
-            <a class="social-github" href="https://github.com/beingamanforever" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg><span>GitHub</span></a>
-            <a class="social-linkedin" href="https://www.linkedin.com/in/aman-behera-?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg><span>LinkedIn</span></a>
-        </nav>
-        <a class="footer-email" href="mailto:aman.behera.systems@gmail.com"><svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>aman.behera.systems@gmail.com</a>
-    </footer>
-    <div class="wordmark-band" aria-hidden="true">
-        <div class="wordmark">
-            <span class="wm scene-1">aman</span>
-            <span class="wm scene-2">aman</span>
-            <span class="wm scene-3">aman</span>
-            <span class="wm scene-4">aman</span>
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>&copy; 2026 Aman Behera</span>
+            <a class="spacer" href="mailto:aman.behera.systems@gmail.com"><svg class="icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Email</a>
+            <a href="https://github.com/beingamanforever" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>GitHub</a>
+            <a href="https://www.linkedin.com/in/aman-behera-" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</a>
+            <a href="https://twitter.com/beingamanFF" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>Twitter</a>
+            <a href="https://huggingface.co/beingamanforever" target="_blank" rel="noopener noreferrer"><svg class="icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"/><path d="M9 10h.01M15 10h.01"/></svg>Hugging Face</a>
         </div>
-    </div>
+        <div class="wordmark-band" aria-hidden="true">
+            <div class="wordmark">
+                <span class="wm scene-1">aman</span>
+                <span class="wm scene-2">aman</span>
+                <span class="wm scene-3">aman</span>
+                <span class="wm scene-4">aman</span>
+            </div>
+        </div>
+    </footer>
+    <button class="to-top" type="button" aria-label="Back to top"><svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button>
 </body>
 </html>

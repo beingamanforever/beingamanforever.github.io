@@ -4,6 +4,8 @@ date: 2026-07-07
 description: "From modularity and Louvain's disconnected-communities bug to Leiden's refinement phase, and why GraphRAG bets on it."
 tile: Leiden
 tags: rag, graphs, algorithms
+cover: assets/images/posts/leiden/fig-01.jpg
+hero: false
 ---
 ## Introduction
 GraphRAG starts from a simple problem: normal RAG is good at finding nearby chunks of text, but it often struggles when the answer depends on a bigger pattern spread across many documents. Instead of treating the corpus as only a pile of chunks, GraphRAG turns the text into a knowledge graph.

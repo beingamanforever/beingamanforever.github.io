@@ -20,7 +20,9 @@ YEAR="$(date +%Y)"
 
 fill_vars() {
     local root="$1"
+    local page="${2:-}"
     awk -v root="$root" \
+        -v page="$page" \
         -v site_name="$SITE_NAME" \
         -v site_url="$SITE_URL" \
         -v site_desc="$SITE_DESC" \
@@ -33,6 +35,10 @@ fill_vars() {
             gsub(/\$SITE_DESC\$/, site_desc)
             gsub(/\$SITE_OG_IMAGE\$/, site_og_image)
             gsub(/\$YEAR\$/, year)
+            gsub(/\$CUR_index\$/, page == "index" ? " aria-current=\"page\"" : "")
+            gsub(/\$CUR_research\$/, page == "research" ? " aria-current=\"page\"" : "")
+            gsub(/\$CUR_blog\$/, page == "blog" ? " aria-current=\"page\"" : "")
+            gsub(/\$CUR_athletics\$/, page == "athletics" ? " aria-current=\"page\"" : "")
             print
         }
     '
@@ -70,7 +76,8 @@ render_page() {
     local template="$1"
     local output="$2"
     local root="${3:-}"
-    inject_partials < "$template" | fill_vars "$root" > "$OUTPUT_DIR/$output"
+    local page="${4:-}"
+    inject_partials < "$template" | fill_vars "$root" "$page" > "$OUTPUT_DIR/$output"
 }
 
 if [[ "$OUTPUT_DIR" != "$ROOT_DIR/_site" ]]; then
@@ -79,38 +86,48 @@ if [[ "$OUTPUT_DIR" != "$ROOT_DIR/_site" ]]; then
 fi
 
 rm -rf "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/icons" "$OUTPUT_DIR/assets/images" "$OUTPUT_DIR/blog"
+mkdir -p "$OUTPUT_DIR/assets/css" "$OUTPUT_DIR/assets/js" "$OUTPUT_DIR/assets/fonts" "$OUTPUT_DIR/assets/icons" "$OUTPUT_DIR/assets/images" "$OUTPUT_DIR/blog"
 
 python3 scripts/render_projects.py \
     --input data/projects.json \
+    --research data/research.json \
     --out "$TEMP_DIR/projects.html"
 python3 scripts/render_news.py \
     --input data/news.json \
     --out "$TEMP_DIR/news.html"
 python3 scripts/render_research.py \
     --input data/research.json \
-    --out "$TEMP_DIR/research.html"
+    --out "$TEMP_DIR/research.html" \
+    --home-out "$TEMP_DIR/research_home.html"
 BLOG_SLUGS="$(python3 scripts/render_blog.py \
     --src blog \
     --template blog_post_template.html \
     --index-out "$TEMP_DIR/blog.html" \
-    --posts-out "$TEMP_DIR/posts")"
+    --home-out "$TEMP_DIR/writing_home.html" \
+    --posts-out "$TEMP_DIR/posts" \
+    --site-url "$SITE_URL")"
 
-render_page index_template.html index.html
-render_page research_template.html research.html
-render_page athletics_template.html athletics.html
-render_page blog_template.html blog.html
+render_page index_template.html index.html "" index
+render_page research_template.html research.html "" research
+render_page athletics_template.html athletics.html "" athletics
+render_page blog_template.html blog.html "" blog
 for slug in $BLOG_SLUGS; do
-    render_page "$TEMP_DIR/posts/$slug.html" "blog/$slug.html" "../"
+    render_page "$TEMP_DIR/posts/$slug.html" "blog/$slug.html" "../" blog
 done
 render_page 404_template.html 404.html "/"
 
 inject_fragment "<!-- PROJECTS_FEATURED -->" "$TEMP_DIR/projects.html" "$OUTPUT_DIR/index.html"
 inject_fragment "<!-- NEWS_LIST -->" "$TEMP_DIR/news.html" "$OUTPUT_DIR/index.html"
+inject_fragment "<!-- RESEARCH_HOME -->" "$TEMP_DIR/research_home.html" "$OUTPUT_DIR/index.html"
+inject_fragment "<!-- WRITING_HOME -->" "$TEMP_DIR/writing_home.html" "$OUTPUT_DIR/index.html"
 inject_fragment "<!-- RESEARCH_ALL -->" "$TEMP_DIR/research.html" "$OUTPUT_DIR/research.html"
+inject_fragment "<!-- PROJECTS_FEATURED -->" "$TEMP_DIR/projects.html" "$OUTPUT_DIR/research.html"
 inject_fragment "<!-- BLOG_LIST -->" "$TEMP_DIR/blog.html" "$OUTPUT_DIR/blog.html"
 
 cp assets/css/style.css "$OUTPUT_DIR/assets/css/style.css"
+cp -R assets/js/. "$OUTPUT_DIR/assets/js/"
+cp -R assets/media "$OUTPUT_DIR/assets/media"
+cp -R viz "$OUTPUT_DIR/viz"
 cp -R assets/fonts/. "$OUTPUT_DIR/assets/fonts/"
 cp -R assets/resume "$OUTPUT_DIR/assets/resume"
 cp -R assets/icons/. "$OUTPUT_DIR/assets/icons/"

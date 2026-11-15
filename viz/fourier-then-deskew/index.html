@@ -1,0 +1,1478 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Fourier, Then Deskew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;1,400&display=swap">
+<style>
+:root{
+  --frame:#F5F5F4; --bg:#FFFFFF; --card:#FFFFFF; --card-2:#F2F2F0; --ink:#121212; --ink-2:#4A4A48; --muted:#83837F; --faint:#A9A9A5;
+  --line:#EAEAE8; --line-2:#DADAD7; --chip:#F0F0EE; --link:#2B59C3; --accent:#E8572A; --accent-soft:#FCEDE6;
+  --ok:#15803D; --ok-bg:#E6F4EB; --bad:#C2412D; --bad-bg:#FBE8E4; --warn:#A16207; --warn-bg:#FBF2D8;
+  --t-blue:#E6EEFB; --t-green:#E5F3EA; --t-orange:#FCEBE2; --t-purple:#EEEBFA; --t-yellow:#FBF3DA;
+  /* light figure stages with 3Blue1Brown hues, tuned for white */
+  --stage:#FFFFFF; --stage-2:#FAFAF8; --stage-line:#E9E9E5; --stage-text:#1A1A1A; --stage-muted:#7A7A75;
+  --m-blue:#2F7FC1; --m-yellow:#E08E00; --m-teal:#14998A; --m-red:#D9483B; --m-green:#3E9B4F; --m-purple:#7D5BA6; --m-white:#2A2A2A;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--frame)}
+body{margin:0;font-family:Geist,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink-2);font-size:14.5px;line-height:1.65;padding-inline:8px;padding-block:8px}
+a{color:var(--link);text-decoration:none} a:hover{text-decoration:underline}
+h1,h2,h3{color:var(--ink);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+.m{font-family:"STIX Two Text",Georgia,serif;font-style:italic;font-size:1.07em;color:var(--ink)}
+.mono,code{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;overflow-wrap:anywhere}
+/* app shell: icon rail + grouped sidebar + white canvas */
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);gap:8px;min-height:calc(100vh - 16px)}
+.side{position:sticky;top:calc(8px + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - 16px);overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding:14px 10px;font-size:13.5px}
+.side .brand{display:flex;align-items:center;gap:9px;padding:2px 8px 14px;color:var(--ink);font-weight:500;font-size:15px}
+.side .brand i{width:26px;height:26px;border-radius:8px;background:var(--accent-soft);display:grid;place-items:center;color:var(--accent)}
+.side .brand svg{width:15px;height:15px;stroke:currentColor}
+.side .grp{font-size:12px;color:var(--muted);padding:12px 10px 4px}
+.side a{display:flex;gap:9px;align-items:center;color:var(--ink-2);padding:6px 10px;border-radius:9px}
+.side a svg{width:15px;height:15px;stroke:currentColor;flex:none;opacity:.8}
+.side a:hover{background:var(--card-2);text-decoration:none;color:var(--ink)}
+.side a.on{background:var(--card-2);color:var(--ink);font-weight:500}
+.side a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.side .spacer{flex:1}
+.side .new{font-size:10.5px;background:var(--ok-bg);color:var(--ok);border-radius:999px;padding:0 7px;margin-left:auto}
+.canvas{background:var(--bg);border-radius:14px;min-width:0;border:1px solid var(--line)}
+.topbar{display:flex;gap:8px;align-items:center;padding:12px 22px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line)}
+.topbar span{color:var(--muted)}
+main{max-width:860px;margin:0 auto;padding:40px 24px 64px;display:flex;flex-direction:column;gap:64px}
+.hero{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+.hero .glyph{width:64px;height:64px;border-radius:18px;background:var(--card);display:grid;place-items:center;color:var(--muted)}
+.hero .glyph svg{width:30px;height:30px;stroke:currentColor}
+.hero h1{font-size:27px;line-height:1.25}
+.hero p{margin:0;max-width:620px;color:var(--ink-2)}
+.jump{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.jump a{font-size:12.5px;color:var(--ink-2);padding:4px 11px;border-radius:999px}
+.jump a.on,.jump a:hover{background:var(--card-2);color:var(--ink);text-decoration:none}
+.pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;font-weight:500;font-size:13px;border:1px solid var(--line-2);color:var(--ink);background:var(--bg)}
+.pill:hover{text-decoration:none;border-color:var(--ink)}
+.pill.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pill svg{width:14px;height:14px;stroke:currentColor}
+section{display:flex;flex-direction:column;gap:16px;scroll-margin-top:16px}
+.sh{display:flex;gap:12px;align-items:flex-start}
+.sh .no{font-family:"Geist Mono",monospace;font-size:11.5px;color:var(--accent);background:var(--accent-soft);border-radius:8px;padding:3px 8px;margin-top:4px;flex:none}
+.sh h2{font-size:21px;line-height:1.3}
+.prose{display:flex;flex-direction:column;gap:12px;max-width:720px}
+.lead{margin:-4px 0 0 46px;font-size:16.5px;line-height:1.5;color:var(--ink);max-width:680px;text-wrap:pretty}
+details.more{border-top:1px solid var(--line);padding-top:10px}
+details.more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink-2);padding:6px 12px;border-radius:999px;background:var(--card-2)}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"";width:7px;height:7px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(-45deg);transition:transform .2s}
+details.more[open]>summary::before{transform:rotate(45deg)}
+details.more>summary:hover{color:var(--ink)}
+details.more>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details.more>.prose{margin-top:12px}
+@media (max-width:760px){.lead{margin-left:0}}
+.prose p{margin:0}
+.prose ul,.prose ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.prose b{color:var(--ink);font-weight:600}
+.eq{font-family:"STIX Two Text",Georgia,serif;font-size:18px;color:var(--ink);text-align:center;padding:14px;border-radius:12px;background:var(--card-2);overflow-x:auto;white-space:nowrap}
+.eq small{display:block;font-family:Geist,sans-serif;font-size:12.5px;color:var(--muted);font-style:normal;margin-top:6px;white-space:normal}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;border-radius:999px;padding:2px 9px;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.chip.ok{background:var(--ok-bg);color:var(--ok);border-color:transparent} .chip.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent} .chip.warn{background:var(--warn-bg);color:var(--warn);border-color:transparent} .chip.acc{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+/* cards: soft grey, no heavy borders; a dark 3b1b stage inside */
+.card{background:var(--card);border-radius:14px;padding:6px;border:1px solid var(--line)}
+.card-head{display:flex;gap:10px;align-items:center;padding:8px 10px 10px;flex-wrap:wrap}
+.card-head b{color:var(--ink);font-weight:500;font-size:13.5px}
+.card-head .chip{margin-left:auto}
+.stage{background:var(--stage);padding:12px;display:grid;gap:12px;border-radius:10px;border:1px solid var(--line)}
+.stage canvas{width:100%;height:auto;display:block;border-radius:8px;background:var(--stage-2)}
+.stage .pix{image-rendering:pixelated;aspect-ratio:1}
+.stage .cap{font-size:12px;color:var(--stage-muted);margin-top:6px;line-height:1.5}
+.stage .cap b{color:var(--stage-text);font-weight:500}
+.g2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} .g3{grid-template-columns:repeat(3,minmax(0,1fr))} .g21{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;padding:12px 10px 6px}
+.ctl{display:flex;flex-direction:column;gap:6px;font-size:11.5px;color:var(--muted);font-weight:500}
+.slider{display:flex;align-items:center;gap:10px}
+.slider input{accent-color:var(--accent);width:180px;max-width:46vw}
+.slider output{font-family:"Geist Mono",monospace;font-size:12px;color:var(--ink);min-width:58px}
+.seg{display:inline-flex;background:var(--card-2);border-radius:999px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button,.btn{all:unset;cursor:pointer;font-size:12.5px;font-weight:500;padding:5px 12px;border-radius:999px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.btn{border:1px solid var(--line-2);color:var(--ink);background:var(--bg)}
+.btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg button:focus-visible,.btn:focus-visible,.notes button:focus-visible,.opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.readout{display:flex;gap:8px;flex-wrap:wrap;padding:6px 10px 10px}
+.stat{background:var(--card-2);border-radius:10px;padding:7px 12px;min-width:110px}
+.stat span{display:block;font-size:10.5px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.stat b{font-family:"Geist Mono",monospace;font-size:15px;font-weight:500;color:var(--ink);overflow-wrap:anywhere}
+.notes{display:flex;gap:6px;flex-wrap:wrap}
+.notes button{all:unset;cursor:pointer;font-family:"Geist Mono",monospace;font-size:12px;padding:4px 10px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.notes button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.jd{display:grid;grid-template-columns:30px 1fr;gap:10px;border-radius:12px;padding:12px 14px;background:var(--accent-soft)}
+.jd svg{width:18px;height:18px;stroke:var(--accent);margin-top:3px}
+.jd p{margin:0;font-size:14px;color:var(--ink)}
+.jd b{font-weight:600}
+.code{border-radius:12px;overflow:hidden;background:var(--card-2)}
+.code .bar{display:flex;gap:10px;align-items:center;padding:9px 14px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.code .bar b{color:var(--ink);font-weight:500;font-family:"Geist Mono",monospace;font-size:12.5px}
+.code .bar a{margin-left:auto}
+.code pre{margin:0 6px 6px;padding:12px 14px;overflow-x:auto;font-family:"Geist Mono",ui-monospace,monospace;font-size:12.5px;line-height:1.65;background:var(--bg);color:var(--ink);border-radius:9px}
+.code .c{color:var(--faint)} .code .k{color:var(--accent)} .code .del{background:var(--bad-bg);display:block} .code .add{background:var(--ok-bg);display:block}
+.table{overflow-x:auto;border-radius:12px;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:600px;background:var(--bg);border-radius:9px;overflow:hidden}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right;font-family:"Geist Mono",monospace;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:none}
+/* tiles grid */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.tile .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center}
+.tile .ic svg{width:16px;height:16px;stroke:var(--ink-2)}
+.ic.b{background:var(--t-blue)} .ic.g{background:var(--t-green)} .ic.o{background:var(--t-orange)} .ic.p{background:var(--t-purple)} .ic.y{background:var(--t-yellow)}
+.tile b{color:var(--ink);font-weight:500;font-size:14px}
+.tile span{font-size:13px;color:var(--ink-2)}
+.tile .stage{padding:8px}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.fact .no{font-family:"Geist Mono",monospace;font-size:11.5px;color:var(--accent)}
+.fact b{color:var(--ink);font-weight:500}
+.fact span{font-size:13px}
+.srcs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.srcs a{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;color:var(--ink);font-weight:500;font-size:13.5px}
+.srcs a:hover{border-color:var(--ink-2);text-decoration:none}
+.srcs a span{font-size:12px;color:var(--muted);font-weight:400}
+/* quiz */
+.quiz{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,2fr);gap:12px;align-items:start}
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.opt{all:unset;cursor:pointer;border-radius:10px;border:2px solid transparent;display:block}
+.opt canvas{width:100%;height:auto;display:block;border-radius:8px}
+.opt.right{border-color:var(--m-green)} .opt.wrong{border-color:var(--m-red)}
+footer{max-width:860px;margin:0 auto;padding:0 24px 28px;color:var(--faint);font-size:12px}
+@media (max-width:1000px){.app{grid-template-columns:1fr}.side{display:none}}
+@media (max-width:760px){.g2,.g3,.g21,.tiles,.facts,.srcs,.quiz{grid-template-columns:1fr}#dStage,#bStage{grid-template-columns:repeat(2,minmax(0,1fr))!important}#pStage{grid-template-columns:1fr!important}.hero h1{font-size:23px}main{padding:28px 16px 48px}body{padding-inline:0;padding-block:0}.canvas{border-radius:0;border:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <aside class="side" aria-label="Contents">
+    <div class="brand"><i><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M3 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg></i>Fourier, then deskew</div>
+    <a href="#top" class="on"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 11 12 4l8 7v9H4z"/></svg>Home</a>
+    <div class="grp">Foundations</div>
+    <a href="#circle"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 12l5-3"/></svg>The spinning arrow</a>
+    <a href="#wind"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 4a8 8 0 1 0 8 8"/><circle cx="12" cy="12" r="2"/></svg>Winding a signal</a>
+    <a href="#unmix"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 8h16M4 12h10M4 16h6"/></svg>Unmixing notes</a>
+    <div class="grp">Images</div>
+    <a href="#twod"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/></svg>What F(k, l) is</a>
+    <a href="#rules"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M5 12l4 4 10-10"/></svg>Four rules<span class="new">New</span></a>
+    <a href="#stripes"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M6 20 18 4M2 16 12 4M12 20 22 8"/></svg>Stripes and text</a>
+    <a href="#edit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg>Editing a spectrum</a>
+    <div class="grp">Deskew</div>
+    <a href="#jdeskew"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></svg>jdeskew, line by line</a>
+    <div class="spacer"></div>
+    <a href="#facts"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M6 4h12v16l-6-4-6 4z"/></svg>What to keep</a>
+    <a href="#sources"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg>Sources</a>
+  </aside>
+
+  <div class="canvas">
+    <div class="topbar">Learn <span>/</span> Fourier, then deskew</div>
+    <main>
+      <header class="hero" id="top">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg></div>
+        <h1>How does a page's spectrum give away its tilt?</h1>
+        <p>From one spinning arrow to the line of code in jdeskew that reads a tilt. Every step has something to play with. Built from 3Blue1Brown's video, the OpenCV and HIPR2 Fourier pages, a DSP StackExchange thread and a crossML post on editing spectra.</p>
+        <div class="jump" aria-label="Jump to a part">
+          <a href="#circle">Foundations</a><a href="#twod">Images</a><a href="#rules">Four rules</a><a href="#jdeskew">Deskew</a><a href="#facts">Summary</a>
+        </div>
+        <div class="pills">
+          <a class="pill dark" href="https://www.youtube.com/watch?v=spUNpyF58BY" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="m9 7 8 5-8 5z"/></svg>3Blue1Brown video</a>
+          <a class="pill" href="https://github.com/phamquiluan/jdeskew/blob/master/jdeskew/estimator.py" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></svg>jdeskew estimator.py</a>
+          <a class="pill" href="https://github.com/phamquiluan/jdeskew/pull/30/files" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><path d="M6 8v8M18 16V9a3 3 0 0 0-3-3h-4"/></svg>The merged fix</a>
+        </div>
+      </header>
+
+
+    <!-- 01 -->
+    <section id="circle">
+      <div class="sh"><span class="no">01</span><h2>The spinning arrow, <span class="m">e<sup>2πift</sup></span></h2></div>
+      <p class="lead">An arrow on a circle that spins f laps per second. Multiplying by it rotates things.</p>
+      <div class="prose">
+        <p>Euler's formula turns an exponent into a point on a circle:</p>
+      </div>
+      <div class="eq">e<sup>iθ</sup> = cos θ + i sin θ<small>The point at angle θ (radians) on the circle of radius 1. The exponent is an arc length walked around the circle.</small></div>
+      <div class="prose">
+        <ul>
+          <li><b>θ = π</b> is half a lap, which lands on −1. That is <span class="m">e<sup>πi</sup> = −1</span>.</li>
+          <li><b>θ = 2πt</b> completes a lap every time t grows by 1, so the arrow spins once per second.</li>
+          <li><b>θ = 2π·f·t</b> spins f times per second. A negative f spins clockwise; the Fourier transform uses <span class="m">e<sup>−2πift</sup></span>.</li>
+          <li><b>Multiplying by it rotates.</b> Its length is 1, and multiplying complex numbers adds their angles, so <span class="m">z · e<sup>iθ</sup></span> is z turned by θ.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Drag time, or press play</b><span class="chip">try f = 0.1, the video's slow spin</span></div>
+        <div class="stage g21">
+          <div><canvas id="cCircle" width="560" height="360" aria-label="Complex plane with the rotating arrow"></canvas><div class="cap"><b>Complex plane.</b> The tip traces the unit circle; its shadow on each axis is cos θ and sin θ.</div></div>
+          <div><canvas id="cTrig" width="360" height="360" aria-label="Real and imaginary parts over time"></canvas><div class="cap"><b>Its two shadows over time:</b> real part <span style="color:var(--m-blue)">cos</span>, imaginary part <span style="color:var(--m-yellow)">sin</span>.</div></div>
+        </div>
+        <div class="controls">
+          <div class="ctl">Frequency f (laps per second)<div class="slider"><input type="range" id="cf" min="-2" max="2" step="0.05" value="0.1" aria-label="Frequency"><output id="cfV">0.10</output></div></div>
+          <div class="ctl">Time t (seconds)<div class="slider"><input type="range" id="ct" min="0" max="10" step="0.01" value="4.39" aria-label="Time"><output id="ctV">4.39 s</output></div></div>
+          <button class="btn dark" id="cPlay" type="button">Play</button>
+        </div>
+        <div class="readout">
+          <div class="stat"><span>Angle θ = 2πft</span><b id="cTh">2.76 rad</b></div>
+          <div class="stat"><span>Point</span><b id="cPt">(-0.93, 0.37)</b></div>
+          <div class="stat"><span>Laps done</span><b id="cLaps">0.44</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section id="wind">
+      <div class="sh"><span class="no">02</span><h2>Winding a signal around the circle</h2></div>
+      <p class="lead">Wind a signal around the circle: its centre of mass leaves zero only at the signal's own frequency.</p>
+      <div class="prose">
+        <p>Take a sound whose intensity is <span class="m">g(t)</span>, here a pure beat <span class="m">g(t) = 1 + cos(2π·3t)</span>. Multiply it by the spinning arrow: at each moment the arrow points where the spin says, and its length is how loud the sound is. Then average all those points:</p>
+      </div>
+      <div class="eq">ĝ(f) = average over t of  g(t) · e<sup>−2πift</sup><small>The centre of mass of the wound-up drawing. As a function of the winding frequency f, this is the Fourier transform.</small></div>
+      <div class="prose">
+        <ul>
+          <li><b>Winding at the wrong speed:</b> loud moments land all around the circle and cancel, so the centre of mass sits near 0.</li>
+          <li><b>Winding at the beat's own speed:</b> every loud moment lands on the same side, so the centre is pulled out. That is the spike.</li>
+          <li><b>At f = 0</b> nothing spins, and the centre is the average loudness, 1. In images this is the DC term.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Set the beat, then sweep the winding</b></div>
+        <div class="stage">
+          <div><canvas id="wSig" width="1040" height="190" aria-label="Signal over time"></canvas><div class="cap"><b>The sound,</b> <span class="mono">1 + cos(2π · beat · t)</span>, over 4.5 seconds.</div></div>
+          <div class="g2" style="display:grid;gap:12px">
+            <div><canvas id="wWound" width="420" height="420" aria-label="Wound signal and centre of mass"></canvas><div class="cap"><b>Wound up</b> at the winding frequency, with its <span style="color:var(--m-red)">centre of mass</span>.</div></div>
+            <div><canvas id="wCurve" width="520" height="420" aria-label="Centre of mass x against winding frequency"></canvas><div class="cap"><b>x of the centre of mass</b> for every winding frequency from 0 to 5. The dot is your current winding.</div></div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="ctl">Beat (per second)<div class="slider"><input type="range" id="wb" min="1" max="4.5" step="0.1" value="3" aria-label="Beat frequency"><output id="wbV">3.0</output></div></div>
+          <div class="ctl">Winding (per second)<div class="slider"><input type="range" id="ww" min="0" max="5" step="0.01" value="2.4" aria-label="Winding frequency"><output id="wwV">2.40</output></div></div>
+          <button class="btn dark" id="wPlay" type="button">Sweep</button>
+        </div>
+        <div class="readout"><div class="stat"><span>Centre of mass x</span><b id="wX">-</b></div><div class="stat"><span>Distance from 0</span><b id="wR">-</b></div></div>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section id="unmix">
+      <div class="sh"><span class="no">03</span><h2>Unmixing: one peak per note</h2></div>
+      <p class="lead">Winding adds up, so a chord of notes gives one clean peak per note.</p>
+      <div class="prose">
+        <p>Play several notes at once and the waveform looks like noise. But winding is <b>linear</b>: the centre of mass of a sum is the sum of the centres of mass. Each note only lights up when the winding matches it, so the transform shows one clean peak per note. A peak's position gives the pitch and its height the loudness, which is enough to rebuild each note on its own.</p>
+        <p>Each note fades in and out (a <b>Hann envelope</b>). Without the fade, the sudden start and stop would add ripples beside every peak. Keep that in mind: it is the same reason we taper a page before its FFT in section 08.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Pick the notes</b></div>
+        <div class="controls" style="border-top:none;border-bottom:1px solid var(--line)">
+          <div class="ctl">Notes (Hz)<div class="notes" id="noteBtns"></div></div>
+          <div class="ctl">Envelope<div class="seg" data-key="env"><button aria-pressed="true" data-v="hann">Hann fade</button><button aria-pressed="false" data-v="box">Hard start and stop</button></div></div>
+        </div>
+        <div class="stage">
+          <div><canvas id="uMix" width="1040" height="170" aria-label="Mixed sound"></canvas><div class="cap"><b>What the microphone hears:</b> all notes added, 0.1 s.</div></div>
+          <div><canvas id="uSpec" width="1040" height="230" aria-label="Spectrum of the mix"></canvas><div class="cap"><b>x of the centre of mass</b>, 200 to 600 Hz. Dots mark the peaks found.</div></div>
+          <div><canvas id="uParts" width="1040" height="260" aria-label="Rebuilt notes"></canvas><div class="cap"><b>Unmixed.</b> Thick grey: each true note. Colour: the note rebuilt from its peak alone.</div></div>
+        </div>
+        <div class="readout"><div class="stat" style="flex:1"><span>Found</span><b id="uFound">-</b></div></div>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section id="twod">
+      <div class="sh"><span class="no">04</span><h2>From sound to images: what f(a, b) and F(k, l) actually are</h2></div>
+      <p class="lead">For an image, F(k, l) scores one stripe pattern: multiply the pattern into the image and add everything up.</p>
+      <div class="prose">
+        <p>For sound, the signal was one list of numbers over time and the transform was one curve over frequency. An image is a <b>table</b> of numbers, so its transform is a table too. Let's take a tiny 16 × 16 image so every cell is visible.</p>
+        <ul>
+          <li><span class="m">f(a, b)</span> <b>is the image itself:</b> the brightness of the pixel in row <span class="m">a</span> (counting down) and column <span class="m">b</span> (counting across). 0 is black, 1 is white. For a 16 × 16 image, <span class="m">a</span> and <span class="m">b</span> each run 0 to 15, so <span class="m">f</span> is 256 numbers.</li>
+          <li><span class="m">F(k, l)</span> <b>is a score for one stripe pattern:</b> the pattern that repeats <span class="m">k</span> times going down and <span class="m">l</span> times going across. Lay that pattern over the image, multiply the two pixel by pixel, and add up all 256 products. If the image contains that pattern, bright pixels keep landing on the pattern's crests and the sum is large. If not, positives and negatives cancel and the sum is near 0.</li>
+          <li><b>Do it for every pattern.</b> k and l each take 16 values (the card below shows why), so there are 16 × 16 = 256 patterns and the scores form a second 16 × 16 table: the spectrum. Same size as the image, one cell per stripe pattern instead of one cell per pixel.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>First: what k and l mean</b><span class="chip">two counts, one per direction</span></div>
+        <div class="stage g21">
+          <div><canvas id="kPat" width="560" height="560" aria-label="Stripe pattern for k and l"></canvas><div class="cap" id="kCap"><b>The (k, l) pattern</b></div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <canvas id="kRow" width="360" height="150" aria-label="Brightness along the top row"></canvas><div class="cap" style="margin-top:-4px"><b>Along the top row,</b> left to right: count the waves. That count is l.</div>
+            <canvas id="kCol" width="360" height="150" aria-label="Brightness down the left column"></canvas><div class="cap" style="margin-top:-4px"><b>Down the left column,</b> top to bottom: that count is k. Dots are the 16 pixels; push k past 8 to see a slower <span style="color:var(--m-red)">red</span> wave through the same dots.</div>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="ctl">k: waves going down<div class="slider"><input type="range" id="kK" min="0" max="15" value="2" aria-label="k"><output id="kKV">2</output></div></div>
+          <div class="ctl">l: waves going across<div class="slider"><input type="range" id="kL" min="-8" max="15" value="3" aria-label="l"><output id="kLV">3</output></div></div>
+          <div class="ctl">Examples<div style="display:flex;gap:6px;flex-wrap:wrap" id="kEx"></div></div>
+        </div>
+        <div class="readout"><div class="stat" style="flex:1"><span>Reading</span><b id="kRead" style="font-family:Geist,sans-serif;font-size:14px">-</b></div></div>
+      </div>
+      <div class="prose">
+        <ul>
+          <li><b>Only whole numbers.</b> The DFT treats the image as a tile that repeats, so a pattern must wrap around seamlessly: 0, 1, 2, … whole waves.</li>
+          <li><b>8 is the finest.</b> In 16 pixels the finest pattern alternates dark, light, dark, light: 8 waves. Push k above 8 with the slider and watch: 9 waves look exactly like 7 waves going the other way (−7), 15 like −1. Sampled patterns above 8 are copies, called aliases.</li>
+          <li><b>So 16 choices each.</b> The distinct counts are −8 to 7 for k and the same for l: 16 × 16 = 256 patterns, exactly as many as there are pixels. A negative count means the stripes lean the other way.</li>
+          <li><b>Exactly enough.</b> 256 scores are precisely what is needed to rebuild 256 pixels, nothing more and nothing less. That is why the spectrum has the same size as the image.</li>
+        </ul>
+      </div>
+      <div class="eq">F(k, l) = Σ<sub>a</sub> Σ<sub>b</sub> f(a, b) · cos(2π(k·a + l·b)/N)  −  i · Σ<sub>a</sub> Σ<sub>b</sub> f(a, b) · sin(2π(k·a + l·b)/N)<small>This is HIPR2's formula with e<sup>−iθ</sup> = cos θ − i sin θ written out. The cosine sum checks the pattern with its crests in one position, the sine sum the same pattern shifted by a quarter period. Together they are section 02's centre of mass, now winding across two directions.</small></div>
+      <div class="prose">
+        <ul>
+          <li><b>Why two sums:</b> the image's stripes might sit a little to one side of the test pattern's crests. The cosine sum catches stripes that line up with the crests, the sine sum catches stripes a quarter period over, and anything in between shows up in both.</li>
+          <li><b>Magnitude</b> <span class="m">|F| = √(cos-sum² + sin-sum²)</span> is how much of the pattern there is, wherever it sits. <b>Phase</b>, the angle of (cos-sum, sin-sum), is where its crests sit. Tilt only needs the magnitude.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Compute one cell of the spectrum by hand</b><span class="chip">click a cell on the right, or scan them all</span></div>
+        <div class="controls" style="border-top:none;border-bottom:1px solid var(--line)">
+          <div class="ctl">Image f(a, b)<div class="seg" data-key="dimg"><button aria-pressed="false" data-v="vert">Vertical stripes</button><button aria-pressed="true" data-v="tilt">Tilted stripes</button><button aria-pressed="false" data-v="text">Text rows</button><button aria-pressed="false" data-v="ttext">Tilted text</button><button aria-pressed="false" data-v="square">A square</button></div></div>
+          <div class="ctl">Numbers<div class="seg" data-key="dnum"><button aria-pressed="false" data-v="on">Show</button><button aria-pressed="true" data-v="off">Hide</button></div></div>
+          <button class="btn dark" id="dAdd" type="button">Add up this cell</button>
+          <button class="btn" id="dScan" type="button">Scan all 256 patterns</button>
+        </div>
+        <div class="stage" style="grid-template-columns:repeat(4,minmax(0,1fr))" id="dStage">
+          <div><canvas id="dImg" width="320" height="320" aria-label="The image f"></canvas><div class="cap"><b>1. The image f(a, b),</b> the input: 16 × 16 brightness values.</div></div>
+          <div><canvas id="dPat" width="320" height="320" aria-label="Test pattern"></canvas><div class="cap" id="dPatCap"><b>2. Test pattern</b> cos(2π(k·a + l·b)/16).</div></div>
+          <div><canvas id="dProd" width="320" height="320" aria-label="Product"></canvas><div class="cap"><b>3. = 1 × 2,</b> pixel by pixel: 256 numbers. <span style="color:var(--m-yellow)">Yellow</span> is positive, <span style="color:var(--m-blue)">blue</span> negative.</div></div>
+          <div><canvas id="dSpec" width="320" height="320" aria-label="Spectrum grid, click a cell" style="cursor:crosshair"></canvas><div class="cap"><b>4. Add up all 256 numbers of 3:</b> the total is one cell (outlined). Every cell is one (k, l). Across: l, down: k, centre (0, 0).</div></div>
+        </div>
+        <div class="readout">
+          <div class="stat"><span>Pattern (k, l)</span><b id="dKL">-</b></div>
+          <div class="stat"><span>Running total of 3</span><b id="dRun">-</b></div>
+          <div class="stat"><span>Σ f · cos</span><b id="dC">-</b></div>
+          <div class="stat"><span>Σ f · sin</span><b id="dS">-</b></div>
+          <div class="stat"><span>|F(k, l)|</span><b id="dM">-</b></div>
+          <div class="stat" style="flex:1;min-width:220px"><span>Reading</span><b id="dRead" style="font-family:Geist,sans-serif;font-size:14px">-</b></div>
+        </div>
+        <div class="readout" style="padding-top:0"><div class="stat" style="flex:1"><span>Hover a pixel in 1, 2 or 3</span><b id="dHover" style="font-family:Geist Mono,monospace;font-size:13px">-</b></div></div>
+      </div>
+      <div class="prose">
+        <p><b>A worked example.</b> Image: vertical stripes, <span class="m">f = 0.5 + 0.5 cos(2π·4b/16)</span>. Probe (0, 4), the same stripes: every product is <span class="m">0.5 cos + 0.5 cos²</span>, the cos parts cancel over a full wave, and the cos² parts add to 0.5 × 128 = 64. Probe (0, 3), different stripes: the products swing between positive and negative and add to exactly 0. One bright cell, one dark cell.</p>
+        <p><b>What to notice.</b> Pick <b>Tilted stripes</b> and click around: almost every cell scores near 0, and only two mirror-image cells light up, the ones whose pattern matches the stripes. Switch to <b>Text rows</b>: the bright cells line up on the vertical axis, because rows of text change as you go <i>down</i>. Switch to <b>Tilted text</b>: that line of bright cells tilts with the text. That tilted line is the streak jdeskew measures.</p>
+        <ul>
+          <li><b>Direction:</b> a cell's direction from the centre is the direction in which its pattern changes, at 90° to the stripes.</li>
+          <li><b>Distance:</b> a cell further from the centre is a finer pattern. Period = N / distance, so the outermost cells are the finest pattern a pixel grid can hold, a period of 2 px.</li>
+          <li><b>(0, 0) is DC:</b> a "pattern" that never changes, so its score is just the sum of all pixels, the image's total brightness. It is usually by far the biggest cell, so the display caps it.</li>
+          <li><b>Mirror pairs:</b> (k, l) and (−k, −l) are the same stripes, so a real image's spectrum is always symmetric about the centre.</li>
+          <li><b>fftshift:</b> NumPy's FFT puts (0, 0) in the top-left corner of the table. <span class="mono">np.fft.fftshift</span> rearranges it so (0, 0) is in the middle, as drawn here. The FFT itself is just a fast way to compute all 256 scores at once instead of one by one.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Going back: each cell is a stripe pattern</b><span class="chip">StackExchange's top answer, interactive</span></div>
+        <div class="stage g2">
+          <div><canvas id="bGrid" width="420" height="420" aria-label="Frequency grid, click to toggle points" style="cursor:crosshair"></canvas><div class="cap"><b>Spectrum cells</b> from −8 to 8 (across: l, down: k). Light some up; the mirror cell glows faintly.</div></div>
+          <div><canvas id="bImg" class="pix" width="128" height="128" aria-label="Resulting image"></canvas><div class="cap" id="bCap"><b>Inverse FFT</b></div></div>
+        </div>
+      </div>
+      <div class="jd"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="m8 8-4 4 4 4M16 8l4 4-4 4"/></svg><p><b>In jdeskew:</b> <span class="mono">np.fft.fft2(opt_gray)</span> computes all these scores for the whole binarised page (about a million cells at 1,024 px), <span class="mono">fftshift</span> centres them, and <span class="mono">np.abs</span> keeps the magnitude. The radial projection in section 08 then looks for the line of bright cells and reads its angle.</p></div>
+    </section>
+
+    <!-- 05 -->
+    <section id="rules">
+      <div class="sh"><span class="no">05</span><h2>Reading any spectrum: four rules</h2></div>
+      <p class="lead">Four rules let you read any spectrum, and predict it, without memorising anything.</p>
+      <div class="prose">
+        <p>You never need to memorise what a spectrum looks like. These four rules are enough to predict it from the image, or to read the image off the spectrum. Each card below lets you test one rule.</p>
+      </div>
+      <div class="tiles">
+        <div class="tile">
+          <div class="ic b"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="12" r="3"/></svg></div>
+          <b>1. One dot means one stripe pattern</b>
+          <span>A bright dot says the image contains that pattern; its brightness says how much. Add a second pattern to the image and a second pair of dots appears.</span>
+          <div class="stage g2"><canvas id="r1Img" class="pix" width="128" height="128" aria-label="Image"></canvas><canvas id="r1Spec" width="256" height="256" aria-label="Spectrum"></canvas></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><div class="seg" data-key="r1"><button aria-pressed="true" data-v="one">One pattern</button><button aria-pressed="false" data-v="two">Two patterns</button><button aria-pressed="false" data-v="weak">Second one fainter</button></div></div>
+        </div>
+        <div class="tile">
+          <div class="ic o"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 12l6-6M15 6h3v3"/><circle cx="12" cy="12" r="1.5"/></svg></div>
+          <b>2. Where the dot sits tells you which pattern</b>
+          <span>Distance from the centre is how many waves fit across the image, so the period is image size ÷ distance (here 128 px ÷ distance; the rings mark 16, 32 and 48 waves). Direction from the centre is the way the stripes change, at 90° to the stripes. Drag the yellow dot; the ring is its mirror twin, the same strength (rule 3).</span>
+          <div class="stage g2"><canvas id="r2Spec" width="256" height="256" aria-label="Drag the dot" style="cursor:grab;touch-action:none"></canvas><canvas id="r2Img" class="pix" width="128" height="128" aria-label="Resulting stripes"></canvas></div>
+          <span class="mono" id="r2Read" style="color:var(--ink)">-</span>
+        </div>
+        <div class="tile">
+          <div class="ic p"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M7.5 16.5l9-9"/></svg></div>
+          <b>3. Dots come in mirror twins</b>
+          <span>A cosine is two arrows spinning opposite ways (cos θ = average of e<sup>iθ</sup> and e<sup>−iθ</sup>), so a normal image puts the same dot at (k, l) and at (−k, −l). An image whose pixels are whole arrows (complex numbers, shown here as colours) spins one way only and makes a single dot. Real photos are never like that, so their dots always come in pairs.</span>
+          <div class="stage g2"><canvas id="r3Img" class="pix" width="128" height="128" aria-label="Image"></canvas><canvas id="r3Spec" width="256" height="256" aria-label="Spectrum"></canvas></div>
+          <div class="seg" data-key="r3"><button aria-pressed="true" data-v="real">Normal image (cosine)</button><button aria-pressed="false" data-v="cplx">One spinning arrow</button></div>
+          <span id="r3Read" style="font-size:13px;color:var(--ink)">-</span>
+        </div>
+        <div class="tile">
+          <div class="ic g"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 15h4V9h4v6h4V9h4v6h2"/></svg></div>
+          <b>4. Smooth makes few dots; sharp makes many</b>
+          <span>A smooth wave is one pattern. A sharp edge can only be built from many patterns added together, all changing the same way, so they line up: a row of dots.</span>
+          <div class="stage g2"><canvas id="r4Img" class="pix" width="128" height="128" aria-label="Image"></canvas><canvas id="r4Spec" width="256" height="256" aria-label="Spectrum"></canvas></div>
+          <div class="seg" data-key="r4"><button aria-pressed="true" data-v="sine">Smooth</button><button aria-pressed="false" data-v="square">Blocky</button><button aria-pressed="false" data-v="text">Text rows</button><button aria-pressed="false" data-v="tilt">Tilted text</button><button aria-pressed="false" data-v="two">Two spacings</button><button aria-pressed="false" data-v="rand">Random spacing</button><button aria-pressed="false" data-v="randt">Random, tilted</button></div>
+          <span id="r4Read" style="font-size:13px;color:var(--ink)">-</span>
+        </div>
+      </div>
+      <div class="prose">
+        <p><b>About the rings.</b> They mark the strongest cells (at least a fixed share of the brightest dot), always together with their twin; weaker cells are still there, only dimmer. Three things that look like exceptions are not:</p>
+        <ul>
+          <li><b>A dot on the top edge with no partner at the bottom.</b> A 128-pixel spectrum runs from −64 to 63, like −8 to 7 in section 04. There is no +64 row because +64 and −64 are the same pattern (every pixel flips), so an edge dot is its own twin.</li>
+          <li><b>Dots at every multiple, not only odd ones,</b> in Blocky: these stripes are 7 px light and 9 px dark, not exactly half and half, and uneven stripes need the even multiples too.</li>
+          <li><b>Small clusters on the horizontal axis</b> in Text rows: the synthetic words repeat every 23 px, and 128 ÷ 23 is not a whole number, so each dot smears over 2 or 3 cells. Real words are irregular and give a faint blur there instead; only the line spacing is truly regular, which is why deskewers trust the vertical streak.</li>
+        </ul>
+      </div>
+      <div class="prose">
+        <p><b>Reading a spectrum, in order:</b></p>
+        <ol>
+          <li><b>Ignore the centre.</b> It is always bright (the average brightness) and says nothing about patterns.</li>
+          <li><b>Find the twin pairs and lines.</b> Each is a pattern that repeats across the image.</li>
+          <li><b>Read the angle of a line.</b> The stripes run at 90° to it. For text, that is the tilt.</li>
+          <li><b>Read the distance of the first dot.</b> Period = N ÷ distance. For text, that is the line spacing.</li>
+          <li><b>Be suspicious of lines along the axes.</b> They usually come from a sharp border or straight edges, not from the content: the padding bug in section 08.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Predict before you look</b><span class="chip" id="qScore">0 of 0 right</span></div>
+        <div class="quiz" style="padding:0 6px 6px">
+          <div class="stage"><canvas id="qImg" class="pix" width="128" height="128" aria-label="Quiz image"></canvas><div class="cap" id="qCap"><b>Image 1 of 5.</b> Which spectrum belongs to it?</div></div>
+          <div class="stage"><div class="opts" id="qOpts"></div><div class="cap" id="qFeedback">Pick one of the three spectra.</div></div>
+        </div>
+        <div class="controls" style="padding-top:4px"><button class="btn dark" id="qNext" type="button">Next image</button></div>
+      </div>
+    </section>
+
+    <!-- 06 -->
+    <section id="stripes">
+      <div class="sh"><span class="no">06</span><h2>Stripes, harmonics, and how text gives away its tilt</h2></div>
+      <p class="lead">Rows of text make a line of dots through the centre. The line's angle is the tilt.</p>
+      <div class="prose">
+        <p>A page of text is close to a set of <b>blocky</b> stripes: dark rows of letters, light gaps between them. Rule 4 says blocky means many dots. This section shows exactly which dots, and why they line up into the streak jdeskew measures.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Why a blocky stripe is a row of dots: build it from waves</b><span class="chip">Fourier series of a square wave</span></div>
+        <div class="stage g21">
+          <div><canvas id="fsWave" width="680" height="300" aria-label="Square wave built from sine waves"></canvas><div class="cap"><b>One row across the stripes.</b> Grey: the blocky profile. <span style="color:var(--m-yellow)">Yellow</span>: the sum of the waves so far. Each added wave sharpens the edges.</div></div>
+          <div><canvas id="fsBars" width="400" height="300" aria-label="Strength of each wave"></canvas><div class="cap"><b>The waves used:</b> ×1, ×3, ×5, … with amounts +1, −1/3, +1/5, −1/7 (<span style="color:var(--m-yellow)">yellow</span> up, <span style="color:var(--m-blue)">blue</span> down). Each bar becomes a dot in the spectrum, but the spectrum only shows its size; the sign is phase, and the magnitude drops it.</div></div>
+        </div>
+        <div class="controls"><div class="ctl">Waves added<div class="slider"><input type="range" id="fsN" min="1" max="12" value="3" aria-label="Number of waves"><output id="fsNV">3</output></div></div></div>
+      </div>
+      <div class="prose">
+        <ul>
+          <li><b>Only odd multiples, because of a symmetry.</b> Shift a 50/50 stripe by half a period and it flips (white ↔ black). An even multiple (×2, ×4) fits whole waves into that half period, so it comes back unchanged and cannot help build something that flips: its amount is 0. An odd multiple lands half a wave off and flips too. (The 7/9 stripes in section 05 break this symmetry, so even multiples appear there.)</li>
+          <li><b>Amounts 1, 1/3, 1/5, with alternating signs.</b> The ×n wave wiggles n times inside one stripe; multiplied by the stripe and added up (section 04's score), most wiggles cancel and about 1/n survives. The alternating + and − sharpen the corners while flattening the top: watch it as you add waves.</li>
+          <li><b>All of them change in the same direction</b> as the stripes (each is a function of the same distance across the stripes, just n times faster; phase slides crests sideways but never turns them), so in the spectrum they sit on <b>one straight line through the centre</b>, at 1×, 3×, 5×… the first dot's distance. That line of dots is the streak.</li>
+          <li><b>Rotate the stripes and the whole line rotates with them.</b> HIPR2's last example rotates English text by 45° and reads the angle off this line, the idea jdeskew is built on.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Set the stripes, then switch on the guide</b><span class="chip">HIPR2, sections 6 and 9</span></div>
+        <div class="stage g3">
+          <div><canvas id="sIn" class="pix" width="128" height="128" aria-label="Stripe image"></canvas><div class="cap"><b>Image,</b> 128 × 128.</div></div>
+          <div><canvas id="sSpec" width="384" height="384" aria-label="Spectrum"></canvas><div class="cap"><b>Spectrum.</b> With the guide on: circles mark where the ×1, ×3, ×5, ×7 dots should be; dashed red ones have run past the edge and wrapped around.</div></div>
+          <div><canvas id="sProj" width="360" height="360" aria-label="Radial projection"></canvas><div class="cap"><b>Radial projection.</b> For each angle (x), the brightness summed along that ray of the spectrum (y). <b>Hover to see the ray.</b> Tallest peak = the tilt; dashed green = truth.</div></div>
+        </div>
+        <div class="controls">
+          <div class="ctl">Tilt<div class="slider"><input type="range" id="sAng" min="-40" max="40" value="20" aria-label="Stripe tilt"><output id="sAngV">20°</output></div></div>
+          <div class="ctl">Period<div class="slider"><input type="range" id="sPer" min="4" max="32" value="16" aria-label="Period"><output id="sPerV">16 px</output></div></div>
+          <div class="ctl">Profile<div class="seg" data-key="sprof"><button aria-pressed="false" data-v="sine">Smooth</button><button aria-pressed="true" data-v="square">Blocky, like text</button></div></div>
+          <div class="ctl">Frame<div class="seg" data-key="sframe"><button aria-pressed="true" data-v="none">None</button><button aria-pressed="false" data-v="rot">Rotated page</button><button aria-pressed="false" data-v="box">Box frame</button></div></div>
+          <div class="ctl">Guide<div class="seg" data-key="sann"><button aria-pressed="true" data-v="on">On</button><button aria-pressed="false" data-v="off">Off</button></div></div>
+        </div>
+        <div class="readout"><div class="stat"><span>True tilt</span><b id="sTrue">20°</b></div><div class="stat"><span>Read from spectrum</span><b id="sMeas">-</b></div><div class="stat"><span>First dot at</span><b id="sDist">-</b></div><div class="stat" style="flex:1;min-width:200px"><span>Dots inside the edge</span><b id="sHarm" style="font-family:Geist,sans-serif;font-size:13.5px">-</b></div></div>
+      </div>
+      <div class="prose">
+        <p><b>Why very thin stripes look messy.</b> The spectrum has an edge, 64 from the centre: the thinnest stripes a pixel grid can show (2 px). For 4 px stripes the first dot sits at 128 ÷ 4 = 32, but the ×3 and ×5 helper dots belong at 96 and 160, past the edge. They do not vanish. Like walking off one side of an old video game and coming back on the other, they <b>wrap around</b> and reappear in the wrong places, scattering into a messy grid. With 12-16 px stripes every helper dot fits inside the edge and the line stays clean. The tilt still reads right either way, because the first dot is the brightest.</p>
+        <ul>
+          <li><b>For jdeskew:</b> at about 1,024 px page height, text lines are tens of pixels apart, so their dots stay inside the edge. One reason not to shrink pages too far.</li>
+          <li><b>No frame, faint cross on the axes:</b> the FFT pretends the image repeats like floor tiles. At the seams the stripes do not match, and those straight seams draw a faint cross (about 1% of the brightness).</li>
+          <li><b>Rotated page:</b> the page's edges are straight lines too. The edges running along the stripes overlap the stripes' line; the edges crossing them add a second line at 90° (HIPR2's "second line"), which the plot ignores because it only checks angles within 45° of upright. The tiny axis lines come from drawing tilted edges as pixel staircases.</li>
+          <li><b>Box frame:</b> four straight edges lined up with the axes make a strong cross (about 6%). Its upright line gives the plot a second peak at 0°, 61% as tall as the stripes' peak here. With little text, that 0° peak wins and the deskewer says "level": exactly the jdeskew padding bug in section 08.</li>
+        </ul>
+        <div class="jd"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 20 20 4"/></svg><p><b>One line to remember:</b> every straight edge draws a line through the spectrum's centre, and the deskewer picks the brightest line. Text should win; borders and frames try to steal it.</p></div>
+      </div>
+      <div class="sh" style="margin-top:20px"><span class="no">06b</span><h2>Resolution and aliasing: why 1,024 px, and what goes wrong when you shrink</h2></div>
+      <p class="lead">Detail finer than 2 px per wave cannot be stored. It wraps to the wrong place unless you blur first.</p>
+      <div class="prose">
+        <ul>
+          <li><b>Where the edge comes from.</b> The thinnest stripe a pixel grid can draw is one dark pixel, one light pixel: 2 px per wave. So at most N ÷ 2 waves fit across an image N pixels wide, and the spectrum runs from −N/2 to N/2 − 1. For 128 px that is −64…63; for 16 px, −8…7; for jdeskew's 1,024 px, −512…511.</li>
+          <li><b>A dot's distance counts waves on the page; the edge counts pixels.</b> A page with 40 lines of text puts its first dot 40 from the centre, whatever the resolution. Resizing does not move the dots, it moves the edge: 512 at 1,024 px tall, 128 at 256 px, 32 at 64 px.</li>
+          <li><b>Past the edge, a dot wraps around.</b> Pixels cannot tell a too-fine wave from a coarse one going the other way (the wagon wheel of section 04), so a dot that belongs at +96 on a 128 px grid shows up at 96 − 128 = −32. In 2-D each direction wraps separately, so it usually lands at a different angle, off the text's line. Drag a dot past the edge below to watch it happen.</li>
+          <li><b>The tilt usually survives,</b> because the first dot is the brightest and stays inside; wrapped helpers are weaker (1/3, 1/5) and scatter. Too much wrapping, though, and stray lines can outvote the text.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Aliasing, visually: drag the dot past the edge</b><span class="chip">the square is all 128 pixels can hold</span></div>
+        <div class="stage g3">
+          <div><canvas id="aSpec" width="320" height="320" aria-label="Drag the dot, even past the edge" style="cursor:grab;touch-action:none"></canvas><div class="cap"><b>Where the dot really is</b> (<span style="color:var(--m-red)">red ring</span> when outside the square) and <b>where the pixels put it</b> (<span style="color:var(--m-yellow)">yellow</span>).</div></div>
+          <div><canvas id="aTrue" width="512" height="512" aria-label="The true fine stripes"></canvas><div class="cap"><b>The real stripes,</b> drawn 4× finer than the pixel grid.</div></div>
+          <div><canvas id="aPix" class="pix" width="128" height="128" aria-label="What 128 pixels record"></canvas><div class="cap"><b>What 128 pixels record:</b> one sample per pixel. Past the edge, a different, coarser pattern at a different angle appears.</div></div>
+        </div>
+        <div class="readout"><div class="stat" style="flex:1"><span>Reading</span><b id="aRead" style="font-family:Geist,sans-serif;font-size:13.5px">-</b></div></div>
+      </div>
+      <div class="prose">
+        <p><b>Resizing to a fixed size, small versus big.</b> jdeskew's paper (and our tests) first resize every page to the same height, 1,024 px. A small and a big image go through that resize in opposite directions:</p>
+        <ul>
+          <li><b>A small image, say 64 × 64, is blown up 16×.</b> Upscaling cannot add detail: each pixel just becomes a 16 × 16 block (or a smooth blend). Its spectrum keeps the original dots, with the edge simply moved out from 32 to 512 and nothing new in between except faint copies from the blockiness. Whatever the small image could not hold is gone for good: if its text lines were under about 2 px apart, they were already lost, or worse, already wrapped to a wrong angle when the picture was taken, and upscaling keeps the wrong dots.</li>
+          <li><b>A big image, say 2,048 px, is shrunk 2×.</b> The edge comes in from 1,024 to 512. Text-line dots (about 40 to a few hundred) still fit, but finer detail between 512 and 1,024 (letter strokes, paper texture, a screen's pixel grid, halftone dots) no longer fits. Shrinking by just skipping pixels wraps that detail back in as stray dots and lines. <b>Blurring first</b> (averaging each block of pixels, OpenCV's <span class="mono">INTER_AREA</span>) removes it instead, so it fades away rather than landing in the wrong place.</li>
+          <li><b>In code:</b> jdeskew resizes with <span class="mono">cv2.resize(…)</span>'s default <span class="mono">INTER_LINEAR</span>, which barely blurs when shrinking a lot; our redesign uses <span class="mono">INTER_AREA</span>. One small reason it is more precise.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>The same page, captured small, same and big, then sized to 128 px</b><span class="chip">a 1/8-scale model of 64 → 1,024 and 2,048 → 1,024</span></div>
+        <div class="controls" style="padding-top:2px">
+          <div class="ctl">Captured at<div class="seg" data-key="bsrc"><button aria-pressed="false" data-v="32">32 px (blow up 4×)</button><button aria-pressed="false" data-v="128">128 px (as is)</button><button aria-pressed="true" data-v="512">512 px (shrink 4×)</button></div></div>
+          <div class="ctl">How to shrink<div class="seg" data-key="bmode"><button aria-pressed="true" data-v="skip">Skip pixels</button><button aria-pressed="false" data-v="area">Average, blur first</button></div></div>
+        </div>
+        <div class="stage" style="grid-template-columns:repeat(4,minmax(0,1fr))" id="bStage">
+          <div><canvas id="bSrc" width="256" height="256" aria-label="Captured image"></canvas><div class="cap" id="bSrcCap"><b>As captured.</b></div></div>
+          <div><canvas id="bOut" class="pix" width="128" height="128" aria-label="Resized to 128 px"></canvas><div class="cap"><b>Sized to 128 px,</b> what the deskewer sees.</div></div>
+          <div><canvas id="bSpec" width="256" height="256" aria-label="Spectrum"></canvas><div class="cap"><b>Its spectrum.</b> Rings: strongest dots.</div></div>
+          <div><canvas id="bProj" width="300" height="300" aria-label="Radial projection"></canvas><div class="cap"><b>Radial projection.</b> Hover for the ray. Green: the true 12°.</div></div>
+        </div>
+        <div class="readout"><div class="stat"><span>True tilt</span><b>12°</b></div><div class="stat"><span>Read</span><b id="bRead">-</b></div><div class="stat" style="flex:1;min-width:220px"><span>What happened</span><b id="bNote" style="font-family:Geist,sans-serif;font-size:13.5px">-</b></div></div>
+      </div>
+      <div class="prose"><p><b>Try:</b> at 512 px, compare "Skip pixels" (the fine paper texture wraps into a coarse diagonal pattern and stray dots) with "Average, blur first" (it fades away). Then pick 32 px: the 20 text lines are only 1.6 px apart there, under the 2 px minimum, so they were never captured properly, and blowing the image up cannot bring them back.</p></div>
+    </section>
+
+    <!-- 06 -->
+    <section id="edit">
+      <div class="sh"><span class="no">07</span><h2>Editing the spectrum: filters, ringing, and phase</h2></div>
+      <p class="lead">Change the spectrum, invert, and the image changes. Sharp cuts ring; soft cuts don't.</p>
+      <div class="prose">
+        <p>Because the spectrum is just another description of the image, you can change the image by changing its spectrum, then inverting. The crossML post builds a small app where you <b>paint on the spectrum</b> to remove frequencies and watch the image change. Below is the same idea. The test image has a diagonal stripe pattern over it, like the moiré you get photographing a screen. Its four bright off-centre dots are that pattern: paint them out and the stripes vanish.</p>
+        <ul>
+          <li><b>Low-pass</b> keeps the centre: the image blurs (the OpenCV tutorial's mask). <b>High-pass</b> removes the centre: only edges survive.</li>
+          <li><b>Ringing.</b> A hard-edged mask makes ripples beside edges, because a sharp box in one domain is a <span class="m">sinc</span> wave in the other. A soft Gaussian mask does not ring. Compare the presets.</li>
+          <li><b>Mirror.</b> Painting keeps the spectrum symmetric so the result stays a real image.</li>
+          <li><b>Phase.</b> "Magnitude only" throws the phase away and inverts: all the right frequencies, in all the wrong places (HIPR2's "corrupted beyond recognition").</li>
+          <li><b>Convolution theorem.</b> Blurring with a kernel multiplies the spectrum by the kernel's spectrum, which is why the OpenCV tutorial can explain a Laplacian (dark centre) as a high-pass filter and a Gaussian (bright centre) as a low-pass one.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Paint on the spectrum</b><span class="chip">crossML's idea, plus OpenCV's filters</span></div>
+        <div class="stage g3">
+          <div><canvas id="eIn" class="pix" width="128" height="128" aria-label="Input image"></canvas><div class="cap"><b>Input:</b> shapes, text rows and a screen-like stripe pattern.</div></div>
+          <div><canvas id="eSpec" width="384" height="384" aria-label="Spectrum, paint to remove" style="cursor:crosshair;touch-action:none"></canvas><div class="cap"><b>Spectrum.</b> Drag to paint out frequencies; dimmed areas are removed.</div></div>
+          <div><canvas id="eOut" class="pix" width="128" height="128" aria-label="Edited image"></canvas><div class="cap" id="eCap"><b>Inverse FFT</b> of the edited spectrum.</div></div>
+        </div>
+        <div class="controls">
+          <div class="ctl">Brush<div class="seg" data-key="brush"><button aria-pressed="true" data-v="erase">Remove</button><button aria-pressed="false" data-v="restore">Restore</button></div></div>
+          <div class="ctl">Brush size<div class="slider"><input type="range" id="eSize" min="1" max="12" value="4" aria-label="Brush size"><output id="eSizeV">4</output></div></div>
+          <div class="ctl">Presets<div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn" type="button" data-p="clear">Clear</button>
+            <button class="btn" type="button" data-p="notch">Remove the stripes</button>
+            <button class="btn" type="button" data-p="lpbox">Low-pass, hard</button>
+            <button class="btn" type="button" data-p="lpgauss">Low-pass, soft</button>
+            <button class="btn" type="button" data-p="hp">High-pass</button>
+            <button class="btn" type="button" data-p="mag">Magnitude only</button>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 -->
+    <section id="jdeskew">
+      <div class="sh"><span class="no">08</span><h2>jdeskew, line by line, and the padding bug</h2></div>
+      <p class="lead">Threshold, pad, FFT, then find the brightest line through the centre. The bug was padding white before thresholding.</p>
+      <div class="prose">
+        <p>jdeskew (Pham et al., ICIP 2022) is sections 04 and 05 turned into about 30 lines of code. Here is <span class="mono">_get_fft_magnitude</span> before and after the fix that was merged upstream, with what each line does.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Run jdeskew step by step</b><span class="chip">click a step: the picture and the code lines change together</span></div>
+        <div class="controls" style="padding-top:2px">
+          <div class="ctl">Input<div class="seg" data-key="psrc"><button aria-pressed="true" data-v="photo">Photo (grey paper)</button><button aria-pressed="false" data-v="scan">Scan (white paper)</button></div></div>
+          <div class="ctl">Code version<div class="seg" data-key="pver"><button aria-pressed="true" data-v="fix">After the fix</button><button aria-pressed="false" data-v="old">Before the fix</button></div></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;padding:4px 10px 10px" id="pSteps"></div>
+        <div class="stage" style="grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)" id="pStage">
+          <div><canvas id="pView" width="384" height="384" aria-label="The page at this step"></canvas><div class="cap" id="pCap"><b>Step</b></div></div>
+          <div class="code" style="background:transparent"><pre id="pCode" style="margin:0;font-size:11.5px;line-height:1.65;min-height:100%;white-space:pre-wrap;overflow-wrap:anywhere"></pre></div>
+        </div>
+        <div class="readout"><div class="stat" style="flex:1"><span>What happens here</span><b id="pWhat" style="font-family:Geist,sans-serif;font-size:13.5px;line-height:1.5">-</b></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Trace one photo through get_angle: every value</b><span class="chip">change the inputs, the numbers follow</span></div>
+        <div class="controls" style="padding-top:2px">
+          <div class="ctl">Photo height (image.shape[0])<div class="slider"><input type="range" id="tH" min="400" max="6000" step="100" value="4000" aria-label="Photo height"><output id="tHV">4000 px</output></div></div>
+          <div class="ctl">Photo width (image.shape[1])<div class="slider"><input type="range" id="tW" min="400" max="6000" step="100" value="3000" aria-label="Photo width"><output id="tWV">3000 px</output></div></div>
+          <div class="ctl">vertical_image_shape<div class="seg" data-key="tvis"><button aria-pressed="false" data-v="none">None</button><button aria-pressed="false" data-v="512">512</button><button aria-pressed="true" data-v="1024">1024</button><button aria-pressed="false" data-v="2048">2048</button></div></div>
+          <div class="ctl">angle_max<div class="seg" data-key="tam"><button aria-pressed="false" data-v="none">None (15)</button><button aria-pressed="false" data-v="15">15</button><button aria-pressed="true" data-v="45">45</button></div></div>
+        </div>
+        <div class="stage" style="grid-template-columns:minmax(0,1fr)"><canvas id="tFlow" width="980" height="300" aria-label="Sizes at each step"></canvas><div class="cap"><b>The page at each step.</b> Grey: the page; hatched: the zero padding; dashed circle: the ray length r. Steps 2 and 3 share one zoom; the photo has its own, so read the sizes from the labels.</div></div>
+        <div class="table" style="margin:10px 6px 6px"><table><thead><tr><th>Line</th><th>Value here</th><th>Meaning</th></tr></thead><tbody id="tRows"></tbody></table></div>
+      </div>
+      <details class="more"><summary>Every term, line by line</summary>
+        <div class="prose" style="margin-top:12px">
+          <p><b>get_angle</b></p>
+          <ul>
+            <li><span class="mono">image</span>: the page as a NumPy array; <span class="mono">cv2.imread</span> gives rows × columns × 3 colour channels (blue, green, red).</li>
+            <li><span class="mono">image.shape</span> is <span class="mono">(height, width, channels)</span>, so <span class="mono">image.shape[0]</span> is the height in pixels.</li>
+            <li><span class="mono">vertical_image_shape</span>: the height to resize to first. <span class="mono">None</span>, the default, means no resize. The paper and our tests use 1024. Resizing keeps the FFT fast and makes text roughly the same size in pixels, which the fixed 15 px threshold window relies on.</li>
+            <li><span class="mono">ratio = vertical_image_shape / image.shape[0]</span>: the scale factor. <span class="mono">cv2.resize(image, None, fx=ratio, fy=ratio)</span>: <span class="mono">None</span> means "use the factors, not an exact size"; the same factor for width and height keeps the page's shape. Default interpolation: linear.</li>
+            <li><span class="mono">angle_max</span>: how far to search, in degrees (−angle_max to +angle_max). <span class="mono">None</span> means 15. A 20° tilt cannot be found with 15; for photos we pass 45.</li>
+          </ul>
+          <p><b>_get_fft_magnitude</b></p>
+          <ul>
+            <li><span class="mono">_ensure_gray</span>: colour to one brightness channel (0 black to 255 white); already-gray images pass through.</li>
+            <li><span class="mono">~gray</span>: 255 − value, so ink is bright and paper dark.</li>
+            <li><span class="mono">adaptiveThreshold(~gray, 255, GAUSSIAN_C, BINARY, 15, -10)</span>: per pixel, ink (255) if it is more than 10 brighter than the bell-weighted average of its 15 × 15 window, else 0.</li>
+            <li><span class="mono">_ensure_optimal_square(binary, value=0)</span>: pads the bottom and right with 0 up to <span class="mono">getOptimalDFTSize(max(h, w))</span>, the next size made only of factors 2, 3 and 5. Square, so angles in the spectrum are true.</li>
+            <li><span class="mono">fft2</span> → one complex score per stripe pattern; <span class="mono">fftshift</span> → (0, 0) to the centre; <span class="mono">abs</span> → how much of each, phase dropped.</li>
+          </ul>
+          <p><b>_get_angle_radial_projection</b></p>
+          <ul>
+            <li><span class="mono">r = c = m.shape[0] // 2</span>: c is the centre's row and column; r is the ray length.</li>
+            <li><span class="mono">num = 20</span>: angles per degree. <span class="mono">linspace(-angle_max, angle_max, int(angle_max·num·2))</span>: that many evenly spaced angles, about 0.05° apart, turned into radians.</li>
+            <li>For each angle t: <span class="mono">np.arange(r)</span> gives distances 0 … r−1; <span class="mono">y = c + int32(d·cos t)</span>, <span class="mono">x = c + int32(−d·sin t)</span> are the ray's pixels (decimals dropped); points outside the array are removed; <span class="mono">li[i] = sum(m[y, x])</span> is the ray's total brightness.</li>
+            <li><span class="mono">argmax(li)</span>: the brightest ray; its angle in degrees is the answer. Edge rule: exactly −angle_max returns 0 (meant for blank pages).</li>
+            <li>Using it: <span class="mono">rotate(image, get_angle(image))</span> levels the page. A page turned counterclockwise by φ returns −φ.</li>
+          </ul>
+        </div>
+      </details>
+
+
+      <div class="code">
+        <div class="bar"><b>jdeskew/estimator.py</b><span class="chip bad">before</span><span class="chip ok">after, PR #30</span><a href="https://github.com/phamquiluan/jdeskew/pull/30/files" target="_blank" rel="noopener">View diff</a></div>
+<pre><span class="k">def</span> _get_fft_magnitude(image):
+    gray = _ensure_gray(image)                      <span class="c"># colour to gray</span>
+<span class="del">    opt_gray = _ensure_optimal_square(gray)         # pad to a square of a fast FFT size (OpenCV tutorial), with WHITE
+    opt_gray = cv2.adaptiveThreshold(~opt_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, -10)</span><span class="add">    binary = cv2.adaptiveThreshold(~gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, -10)
+    opt_gray = _ensure_optimal_square(binary, value=0)   # threshold first, then pad with 0: no ink in the padding</span>
+    dft = np.fft.fft2(opt_gray)                     <span class="c"># section 04: wind the page in 2-D</span>
+    shifted_dft = np.fft.fftshift(dft)              <span class="c"># DC to the centre</span>
+    magnitude = np.abs(shifted_dft)                 <span class="c"># keep magnitude: orientation lives here</span>
+    <span class="k">return</span> magnitude</pre>
+      </div>
+      <div class="prose">
+        <ul>
+          <li><b>The threshold</b> marks a pixel as ink when it is 10 levels darker than the Gaussian-weighted average of its 15 × 15 neighbourhood. Binarising throws away shading and keeps the line structure.</li>
+          <li><b>The bug.</b> Before the fix the page was padded with white, then thresholded. A scan has white margins, so nothing changes. A photo is darker than white, so every pixel along the photo-to-padding edge is much darker than its neighbourhood and becomes ink: a sharp rectangle, which section 06 says puts a cross on the axes. On tilted photos that cross outvoted the text, and jdeskew answered about 0°.</li>
+          <li><b>The fix</b> thresholds the real image and adds the padding afterwards as 0 (no ink), so there is nothing to draw.</li>
+        </ul>
+      </div>
+      <div class="code">
+        <div class="bar"><b>_get_angle_radial_projection</b><span>reads the angle off the streak</span><a href="https://github.com/phamquiluan/jdeskew/blob/master/jdeskew/estimator.py" target="_blank" rel="noopener">Source</a></div>
+<pre>tr = np.linspace(-angle_max, angle_max, int(angle_max * num * 2)) / 180 * np.pi   <span class="c"># candidate angles, 0.05° apart</span>
+<span class="k">for</span> i, t <span class="k">in</span> enumerate(tr):
+    x = np.arange(0, r)                             <span class="c"># radii along one ray from the centre</span>
+    y = c + np.int32(x * np.cos(t))                 <span class="c"># ray at angle t from the vertical axis</span>
+    x = c + np.int32(-1 * x * np.sin(t))
+    li[i] = np.sum(m[y, x])                         <span class="c"># total brightness along that ray</span>
+a = tr[np.argmax(li)] / np.pi * 180                 <span class="c"># the brightest ray is the streak: its angle is the tilt</span></pre>
+      </div>
+      <div class="card">
+        <div class="card-head"><b>Reproduce the bug and the fix</b><span class="chip">synthetic page, the real thresholding rule</span></div>
+        <div class="stage g3">
+          <div><canvas id="jBin" class="pix" width="128" height="128" aria-label="Binarised page"></canvas><div class="cap"><b>Binary page</b> after padding (white is ink).</div></div>
+          <div><canvas id="jSpec" width="384" height="384" aria-label="Spectrum"></canvas><div class="cap"><b>log |FFT|.</b> Text: a tilted streak. Photo border: a cross.</div></div>
+          <div><canvas id="jProj" width="360" height="360" aria-label="Radial projection"></canvas><div class="cap"><b>Radial projection.</b> Hover to see each angle as a ray on the spectrum. The dot is jdeskew's answer.</div></div>
+        </div>
+        <div class="controls">
+          <div class="ctl">Tilt<div class="slider"><input type="range" id="jt" min="-40" max="40" value="18" aria-label="Tilt"><output id="jtV">18°</output></div></div>
+          <div class="ctl">Input<div class="seg" data-key="jsrc"><button aria-pressed="false" data-v="scan">Scan</button><button aria-pressed="true" data-v="photo">Photo</button></div></div>
+          <div class="ctl">Order<div class="seg" data-key="jord"><button aria-pressed="true" data-v="old">Pad white, then threshold</button><button aria-pressed="false" data-v="fix">Threshold, then pad 0</button></div></div>
+          <div class="ctl">Taper<div class="seg" data-key="jtap"><button aria-pressed="true" data-v="none">None</button><button aria-pressed="false" data-v="hann">Hann</button></div></div>
+        </div>
+        <div class="readout"><div class="stat"><span>True tilt</span><b id="jTrue">18°</b></div><div class="stat"><span>jdeskew reads</span><b id="jEst">-</b></div><div class="stat"><span>Error</span><b id="jErr">-</b></div></div>
+      </div>
+    </section>
+
+    <!-- 09 -->
+    <section id="facts">
+      <div class="sh"><span class="no">09</span><h2>What to keep</h2></div>
+      <div class="facts">
+        <div class="fact"><span class="no">1</span><b>The transform is a centre of mass</b><span>Wind the signal at each frequency and average. It moves away from 0 only where the signal repeats at that frequency.</span></div>
+        <div class="fact"><span class="no">2</span><b>One spectrum point is one stripe pattern</b><span>Direction from the centre is the direction of change; distance is the frequency.</span></div>
+        <div class="fact"><span class="no">3</span><b>Text lines make a streak</b><span>Blocky periodic rows give a line of harmonics at 90° to the text. Its angle is the tilt, read modulo 90°.</span></div>
+        <div class="fact"><span class="no">4</span><b>Magnitude for orientation, phase for pictures</b><span>jdeskew keeps only the magnitude; rebuilding an image needs both.</span></div>
+        <div class="fact"><span class="no">5</span><b>Every sharp straight edge adds a line</b><span>A photo's border, filled corners, page edges, screen bezels. The padding bug and the perspective problem are both this.</span></div>
+        <div class="fact"><span class="no">6</span><b>Soft beats sharp</b><span>Hard masks and borders ring (sinc); Hann and Gaussian fades do not. And never mirror-pad: a mirrored page holds +θ and −θ, so the sign of the tilt is lost.</span></div>
+      </div>
+      <div class="srcs" id="sources">
+        <a href="https://www.youtube.com/watch?v=spUNpyF58BY" target="_blank" rel="noopener">3Blue1Brown<span>But what is the Fourier Transform? A visual introduction</span></a>
+        <a href="https://docs.opencv.org/4.x/de/dbc/tutorial_py_fourier_transform.html" target="_blank" rel="noopener">OpenCV tutorial<span>Fourier Transform in NumPy and OpenCV, filters, padding</span></a>
+        <a href="https://homepages.inf.ed.ac.uk/rbf/HIPR2/fourier.htm" target="_blank" rel="noopener">HIPR2<span>Fisher et al., stripes, harmonics, text orientation</span></a>
+        <a href="https://dsp.stackexchange.com/questions/1637/what-does-frequency-domain-denote-in-case-of-images" target="_blank" rel="noopener">DSP StackExchange #1637<span>What does frequency domain denote for images?</span></a>
+        <a href="https://medium.com/crossml/fourier-transformation-in-image-processing-84142263d734" target="_blank" rel="noopener">crossML on Medium<span>Editing an image by painting on its spectrum</span></a>
+        <a href="https://arxiv.org/abs/2603.05942" target="_blank" rel="noopener">jdeskew paper<span>Adaptive Radial Projection on the Fourier Magnitude Spectrum</span></a>
+      </div>
+    </section>
+    </main>
+    <footer>Demos run in your browser on 128 × 128 images. Quoted sources belong to their authors.</footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  const N = 128, TAU = 2 * Math.PI;
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const C = () => ({bg: css("--stage-2"), grid: css("--stage-line"), text: css("--stage-text"), muted: css("--stage-muted"),
+    blue: css("--m-blue"), yellow: css("--m-yellow"), teal: css("--m-teal"), red: css("--m-red"), green: css("--m-green"), purple: css("--m-purple"), white: css("--m-white")});
+  const $ = id => document.getElementById(id);
+  const seg = {};
+  document.querySelectorAll(".seg").forEach(s => {
+    const on = s.querySelector('[aria-pressed="true"]'); seg[s.dataset.key] = on ? on.dataset.v : null;
+    s.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+      s.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); seg[s.dataset.key] = b.dataset.v; (hooks[s.dataset.key] || (() => {}))(); });
+  });
+  const hooks = {};
+
+  // ---------- plotting helpers ----------
+  function frame(cv){ const g = cv.getContext("2d"); g.fillStyle = C().bg; g.fillRect(0, 0, cv.width, cv.height); return g; }
+  function axes(g, box, xt, yt, X, Y){
+    const c = C(); g.strokeStyle = c.grid; g.lineWidth = 1; g.fillStyle = c.muted; g.font = "13px Geist Mono, monospace";
+    g.textAlign = "center"; xt.forEach(([v, s]) => { g.beginPath(); g.moveTo(X(v), box.t); g.lineTo(X(v), box.b); g.stroke(); g.fillText(s, X(v), box.b + 18); });
+    g.textAlign = "right"; yt.forEach(([v, s]) => { g.beginPath(); g.moveTo(box.l, Y(v)); g.lineTo(box.r, Y(v)); g.stroke(); g.fillText(s, box.l - 8, Y(v) + 4); });
+  }
+  function line(g, xs, ys, X, Y, color, w){ g.strokeStyle = color; g.lineWidth = w || 2; g.beginPath(); xs.forEach((x, i) => i ? g.lineTo(X(x), Y(ys[i])) : g.moveTo(X(x), Y(ys[i]))); g.stroke(); }
+  function dot(g, x, y, r, color){ g.fillStyle = color; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); }
+
+  // ---------- FFT ----------
+  function fft1(re, im, n, inv){
+    for (let i = 1, j = 0; i < n; i++){ let b = n >> 1; for (; j & b; b >>= 1) j ^= b; j ^= b; if (i < j){ [re[i],re[j]] = [re[j],re[i]]; [im[i],im[j]] = [im[j],im[i]]; } }
+    for (let len = 2; len <= n; len <<= 1){ const a = (inv ? 2 : -2) * Math.PI / len, wr = Math.cos(a), wi = Math.sin(a);
+      for (let i = 0; i < n; i += len){ let cr = 1, ci = 0;
+        for (let k = 0; k < len / 2; k++){ const p = i + k, q = p + len / 2, xr = re[q]*cr - im[q]*ci, xi = re[q]*ci + im[q]*cr;
+          re[q] = re[p] - xr; im[q] = im[p] - xi; re[p] += xr; im[p] += xi; const t = cr*wr - ci*wi; ci = cr*wi + ci*wr; cr = t; } } }
+    if (inv) for (let i = 0; i < n; i++){ re[i] /= n; im[i] /= n; }
+  }
+  function fft2(re, im, inv){
+    const r = new Float64Array(N), i = new Float64Array(N);
+    for (let y = 0; y < N; y++){ for (let x = 0; x < N; x++){ r[x] = re[y*N+x]; i[x] = im[y*N+x]; } fft1(r, i, N, inv); for (let x = 0; x < N; x++){ re[y*N+x] = r[x]; im[y*N+x] = i[x]; } }
+    for (let x = 0; x < N; x++){ for (let y = 0; y < N; y++){ r[y] = re[y*N+x]; i[y] = im[y*N+x]; } fft1(r, i, N, inv); for (let y = 0; y < N; y++){ re[y*N+x] = r[y]; im[y*N+x] = i[y]; } }
+  }
+  const sh = (y, x) => (((y % N) + N) % N) * N + (((x % N) + N) % N);   // centred frequency (y, x) -> unshifted FFT index
+  // 3b1b-like ramp: deep navy -> blue -> teal -> yellow
+  const ramp = t => { t = Math.max(0, Math.min(1, t)); const s = [[255,255,255],[200,223,245],[47,127,193],[14,38,80]];
+    const p = t * 3, i = Math.min(2, Math.floor(p)), f = p - i; return s[i].map((a, k) => a + (s[i+1][k] - a) * f); };
+  function grayImg(id, v, lo, hi){
+    const g = $(id).getContext("2d"), im = g.createImageData(N, N);
+    if (lo === undefined){ lo = Infinity; hi = -Infinity; for (const a of v){ if (a < lo) lo = a; if (a > hi) hi = a; } }
+    for (let i = 0; i < N*N; i++){ const t = 255 * Math.min(1, Math.max(0, (v[i] - lo) / ((hi - lo) || 1))); im.data[4*i] = 12 + t * .93; im.data[4*i+1] = 13 + t * .92; im.data[4*i+2] = 16 + t * .91; im.data[4*i+3] = 255; }
+    g.putImageData(im, 0, 0);
+  }
+  function specImg(id, re, im, dimFn){
+    const cv = $(id), g = cv.getContext("2d"), S = cv.width, lg = new Float64Array(N*N); let mx = 0;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ const v = Math.log1p(Math.hypot(re[sh(y - N/2, x - N/2)], im[sh(y - N/2, x - N/2)])); lg[y*N+x] = v; if (v > mx) mx = v; }
+    const out = g.createImageData(N, N);
+    for (let i = 0; i < N*N; i++){ const c = ramp(Math.pow(lg[i] / (mx || 1), 1.8)); const d = dimFn && dimFn(Math.floor(i / N) - N/2, (i % N) - N/2); const a = d ? .22 : 1;
+      out.data[4*i] = c[0]*a; out.data[4*i+1] = c[1]*a; out.data[4*i+2] = c[2]*a; out.data[4*i+3] = 255; }
+    if (S === N){ g.putImageData(out, 0, 0); return; }
+    const tmp = document.createElement("canvas"); tmp.width = tmp.height = N; tmp.getContext("2d").putImageData(out, 0, 0);
+    g.imageSmoothingEnabled = false; g.drawImage(tmp, 0, 0, S, S);
+  }
+  function projection(re, im){
+    const mag = new Float64Array(N*N); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) mag[y*N+x] = Math.hypot(re[sh(y - N/2, x - N/2)], im[sh(y - N/2, x - N/2)]);
+    const c = N / 2, angs = [], sc = [];
+    for (let a = -45; a <= 45.001; a += .25){ const t = a * Math.PI / 180; let s = 0;
+      for (let r = 1; r < c - 1; r += .5){ const yy = c + r * Math.cos(t), xx = c - r * Math.sin(t), x0 = Math.floor(xx), y0 = Math.floor(yy), fx = xx - x0, fy = yy - y0;
+        s += (1-fx)*(1-fy)*mag[y0*N+x0] + fx*(1-fy)*mag[y0*N+x0+1] + (1-fx)*fy*mag[(y0+1)*N+x0] + fx*fy*mag[(y0+1)*N+x0+1]; }
+      angs.push(a); sc.push(s); }
+    let bi = 0; sc.forEach((v, i) => { if (v > sc[bi]) bi = i; }); return {angs, sc, best: angs[bi]};
+  }
+  function projPlot(id, p, truth, hover){
+    const cv = $(id), g = frame(cv), W = cv.width, H = cv.height, box = {l: 26, r: W - 14, t: 18, b: H - 34};
+    const mn = Math.min(...p.sc), mx = Math.max(...p.sc), X = a => box.l + (a + 45) / 90 * (box.r - box.l), Y = v => box.t + (1 - (v - mn) / ((mx - mn) || 1)) * (box.b - box.t);
+    axes(g, box, [[-45,"-45°"],[0,"0°"],[45,"45°"]], [], X, Y);
+    if (truth !== undefined){ g.strokeStyle = C().green; g.setLineDash([5, 5]); g.beginPath(); g.moveTo(X(truth), box.t); g.lineTo(X(truth), box.b); g.stroke(); g.setLineDash([]); }
+    line(g, p.angs, p.sc, X, Y, C().blue, 2); dot(g, X(p.best), Y(mx), 6, C().yellow);
+    if (hover !== undefined){ const i = Math.round((hover + 45) / .25), v = p.sc[Math.max(0, Math.min(p.sc.length - 1, i))];
+      g.strokeStyle = C().red; g.lineWidth = 1.5; g.beginPath(); g.moveTo(X(hover), box.t); g.lineTo(X(hover), box.b); g.stroke(); dot(g, X(hover), Y(v), 5, C().red);
+      g.fillStyle = C().red; g.font = "12px Geist Mono, monospace"; g.textAlign = X(hover) > W - 80 ? "right" : "left"; g.fillText(hover.toFixed(1) + "°", X(hover) + (X(hover) > W - 80 ? -6 : 6), box.t + 12); }
+    PROJ[id] = {p, truth, box, W};
+  }
+  const PROJ = {};
+
+  // ---------- 01: spinning arrow ----------
+  let cAnim = null;
+  function drawCircle(){
+    const f = +$("cf").value, t = +$("ct").value, th = TAU * f * t; $("cfV").textContent = f.toFixed(2); $("ctV").textContent = t.toFixed(2) + " s";
+    const c = C(), cv = $("cCircle"), g = frame(cv), W = cv.width, H = cv.height, s = 120, ox = W / 2, oy = H / 2;
+    g.strokeStyle = c.grid; g.lineWidth = 1; for (let k = -2; k <= 2; k++){ g.beginPath(); g.moveTo(ox + k*s, 0); g.lineTo(ox + k*s, H); g.stroke(); g.beginPath(); g.moveTo(0, oy + k*s); g.lineTo(W, oy + k*s); g.stroke(); }
+    g.strokeStyle = c.muted; g.lineWidth = 1.4; g.beginPath(); g.moveTo(0, oy); g.lineTo(W, oy); g.moveTo(ox, 0); g.lineTo(ox, H); g.stroke();
+    g.setLineDash([6, 6]); g.strokeStyle = c.white; g.beginPath(); g.arc(ox, oy, s, 0, TAU); g.stroke(); g.setLineDash([]);
+    // trail of the last lap
+    g.strokeStyle = c.green; g.globalAlpha = .35; g.lineWidth = 3; g.beginPath(); const back = Math.min(Math.abs(th), TAU); const dir = th >= 0 ? 1 : -1;
+    for (let k = 0; k <= 60; k++){ const a = th - dir * back * k / 60; const px = ox + s * Math.cos(a), py = oy - s * Math.sin(a); k ? g.lineTo(px, py) : g.moveTo(px, py); } g.stroke(); g.globalAlpha = 1;
+    const px = ox + s * Math.cos(th), py = oy - s * Math.sin(th);
+    g.strokeStyle = c.blue; g.setLineDash([3, 4]); g.beginPath(); g.moveTo(px, py); g.lineTo(px, oy); g.stroke(); g.strokeStyle = c.yellow; g.beginPath(); g.moveTo(px, py); g.lineTo(ox, py); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = c.green; g.lineWidth = 3.5; g.beginPath(); g.moveTo(ox, oy); g.lineTo(px, py); g.stroke(); dot(g, px, py, 6, c.green);
+    g.fillStyle = c.text; g.font = "italic 22px 'STIX Two Text', Georgia, serif"; g.textAlign = "left"; g.fillText("e", px + 12, py - 12); g.font = "italic 15px 'STIX Two Text', Georgia, serif"; g.fillText(th.toFixed(2) + "i", px + 24, py - 24);
+    g.fillStyle = c.muted; g.font = "13px Geist Mono, monospace"; g.fillText("1", ox + s + 6, oy + 18); g.fillText("-1", ox - s - 22, oy + 18); g.fillText("i", ox + 6, oy - s - 6); g.fillText("-i", ox + 6, oy + s + 18);
+    // shadows over time
+    const cv2 = $("cTrig"), h = frame(cv2), W2 = cv2.width, H2 = cv2.height, box = {l: 30, r: W2 - 10, t: 20, b: H2 - 30};
+    const X = v => box.l + v / 10 * (box.r - box.l), Y = v => box.t + (1 - (v + 1.2) / 2.4) * (box.b - box.t);
+    axes(h, box, [[0,"0"],[5,"5"],[10,"10 s"]], [[-1,"-1"],[0,"0"],[1,"1"]], X, Y);
+    const ts = Array.from({length: 400}, (_, k) => k * 10 / 399);
+    line(h, ts, ts.map(u => Math.cos(TAU * f * u)), X, Y, c.blue, 2); line(h, ts, ts.map(u => Math.sin(TAU * f * u)), X, Y, c.yellow, 2);
+    h.strokeStyle = c.green; h.beginPath(); h.moveTo(X(t), box.t); h.lineTo(X(t), box.b); h.stroke();
+    dot(h, X(t), Y(Math.cos(th)), 5, c.blue); dot(h, X(t), Y(Math.sin(th)), 5, c.yellow);
+    $("cTh").textContent = th.toFixed(2) + " rad"; $("cPt").textContent = `(${Math.cos(th).toFixed(2)}, ${Math.sin(th).toFixed(2)})`; $("cLaps").textContent = (f * t).toFixed(2);
+  }
+  ["cf", "ct"].forEach(id => $(id).addEventListener("input", drawCircle));
+  $("cPlay").addEventListener("click", () => {
+    if (cAnim){ cancelAnimationFrame(cAnim); cAnim = null; $("cPlay").textContent = "Play"; return; }
+    $("cPlay").textContent = "Pause"; let last = performance.now();
+    const step = now => { const dt = (now - last) / 1000; last = now; let t = +$("ct").value + dt; if (t > 10) t = 0; $("ct").value = t; drawCircle(); cAnim = requestAnimationFrame(step); };
+    cAnim = requestAnimationFrame(step);
+  });
+
+  // ---------- 02: winding ----------
+  const WT = Array.from({length: 1800}, (_, k) => k * 4.5 / 1799);
+  let wCurve = null, wBeat = null, wAnim = null;
+  const centre = (g, ts, f) => { let x = 0, y = 0; for (let k = 0; k < ts.length; k++){ x += g[k] * Math.cos(-TAU * f * ts[k]); y += g[k] * Math.sin(-TAU * f * ts[k]); } return [x / ts.length, y / ts.length]; };
+  function drawWind(){
+    const b = +$("wb").value, w = +$("ww").value; $("wbV").textContent = b.toFixed(1); $("wwV").textContent = w.toFixed(2);
+    const c = C(), g = WT.map(t => 1 + Math.cos(TAU * b * t));
+    if (wBeat !== b){ wBeat = b; wCurve = []; for (let f = 0; f <= 5.0001; f += .01) wCurve.push([f, centre(g, WT, f)[0]]); }
+    { const cv = $("wSig"), h = frame(cv), box = {l: 40, r: cv.width - 14, t: 16, b: cv.height - 34}, X = t => box.l + t / 4.5 * (box.r - box.l), Y = v => box.t + (1 - v / 2) * (box.b - box.t);
+      axes(h, box, [[0,"0"],[1,"1"],[2,"2"],[3,"3"],[4,"4 s"]], [[0,"0"],[1,"1"],[2,"2"]], X, Y); line(h, WT, g, X, Y, c.yellow, 2); }
+    const [cx, cy] = centre(g, WT, w);
+    { const cv = $("wWound"), h = frame(cv), S = cv.width, s = S / 4.6, o = S / 2;
+      h.strokeStyle = c.grid; h.lineWidth = 1; for (let k = -2; k <= 2; k++){ h.beginPath(); h.moveTo(o + k*s, 0); h.lineTo(o + k*s, S); h.stroke(); h.beginPath(); h.moveTo(0, o + k*s); h.lineTo(S, o + k*s); h.stroke(); }
+      h.strokeStyle = c.muted; h.beginPath(); h.moveTo(0, o); h.lineTo(S, o); h.moveTo(o, 0); h.lineTo(o, S); h.stroke();
+      h.strokeStyle = c.yellow; h.lineWidth = 1.3; h.beginPath();
+      WT.forEach((t, k) => { const a = -TAU * w * t, px = o + s * g[k] * Math.cos(a), py = o - s * g[k] * Math.sin(a); k ? h.lineTo(px, py) : h.moveTo(px, py); }); h.stroke();
+      dot(h, o + s * cx, o - s * cy, 8, c.red); }
+    { const cv = $("wCurve"), h = frame(cv), box = {l: 46, r: cv.width - 14, t: 18, b: cv.height - 34}, X = f => box.l + f / 5 * (box.r - box.l), Y = v => box.t + (1 - (v + .3) / 1.4) * (box.b - box.t);
+      axes(h, box, [[0,"0"],[1,"1"],[2,"2"],[3,"3"],[4,"4"],[5,"5"]], [[0,"0"],[.5,"0.5"],[1,"1"]], X, Y);
+      line(h, wCurve.map(p => p[0]), wCurve.map(p => p[1]), X, Y, c.red, 2);
+      h.strokeStyle = c.muted; h.setLineDash([4, 4]); h.beginPath(); h.moveTo(X(b), box.t); h.lineTo(X(b), box.b); h.stroke(); h.setLineDash([]);
+      dot(h, X(w), Y(cx), 7, c.yellow); }
+    $("wX").textContent = cx.toFixed(3); $("wR").textContent = Math.hypot(cx, cy).toFixed(3);
+  }
+  ["wb", "ww"].forEach(id => $(id).addEventListener("input", drawWind));
+  $("wPlay").addEventListener("click", () => {
+    if (wAnim){ cancelAnimationFrame(wAnim); wAnim = null; $("wPlay").textContent = "Sweep"; return; }
+    $("wPlay").textContent = "Stop"; let last = performance.now();
+    const step = now => { const dt = (now - last) / 1000; last = now; let w = +$("ww").value + dt * .4; if (w > 5) w = 0; $("ww").value = w; drawWind(); wAnim = requestAnimationFrame(step); };
+    wAnim = requestAnimationFrame(step);
+  });
+
+  // ---------- 03: unmixing ----------
+  const NOTES = [[262,"C4"],[294,"D4"],[330,"E4"],[349,"F4"],[392,"G4"],[440,"A4"],[494,"B4"],[523,"C5"]], chosen = new Set([294, 349, 440, 523]);
+  const UT = Array.from({length: 2400}, (_, k) => k * .1 / 2399);
+  $("noteBtns").innerHTML = NOTES.map(([f, n]) => `<button type="button" data-f="${f}" aria-pressed="${chosen.has(f)}">${n} ${f}</button>`).join("");
+  $("noteBtns").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const f = +b.dataset.f;
+    chosen.has(f) ? chosen.delete(f) : chosen.add(f); if (!chosen.size) chosen.add(f); b.setAttribute("aria-pressed", chosen.has(f)); drawUnmix(); });
+  hooks.env = () => drawUnmix();
+  function drawUnmix(){
+    const c = C(), notes = [...chosen].sort((a, b) => a - b), M = UT.length;
+    const env = UT.map((_, k) => seg.env === "hann" ? .5 - .5 * Math.cos(TAU * k / (M - 1)) : 1);
+    const parts = notes.map(f => UT.map((t, k) => env[k] * Math.cos(TAU * f * t))), mix = UT.map((_, k) => parts.reduce((s, p) => s + p[k], 0));
+    const envMean = env.reduce((a, b) => a + b, 0) / M, fr = [], xs = [];
+    for (let f = 200; f <= 600; f += 1){ fr.push(f); xs.push(centre(mix, UT, f)[0]); }
+    const mx = Math.max(...xs), peaks = [];
+    for (let i = 1; i < xs.length - 1; i++) if (xs[i] > xs[i-1] && xs[i] >= xs[i+1] && xs[i] > .5 * mx) peaks.push(i);
+    const colors = [c.blue, c.yellow, c.teal, c.red, c.green, c.purple, c.white, c.blue];
+    { const cv = $("uMix"), h = frame(cv), box = {l: 40, r: cv.width - 14, t: 14, b: cv.height - 32}, A = Math.max(1, ...mix.map(Math.abs));
+      const X = t => box.l + t / .1 * (box.r - box.l), Y = v => box.t + (1 - (v + A) / (2 * A)) * (box.b - box.t);
+      axes(h, box, [[0,"0"],[.05,"0.05"],[.1,"0.1 s"]], [[0,"0"]], X, Y); line(h, UT, mix, X, Y, c.white, 1.3); }
+    { const cv = $("uSpec"), h = frame(cv), box = {l: 46, r: cv.width - 14, t: 16, b: cv.height - 34}, lo = Math.min(...xs), hi = mx * 1.1;
+      const X = f => box.l + (f - 200) / 400 * (box.r - box.l), Y = v => box.t + (1 - (v - lo) / ((hi - lo) || 1)) * (box.b - box.t);
+      axes(h, box, [[200,"200"],[300,"300"],[400,"400"],[500,"500"],[600,"600 Hz"]], [[0,"0"]], X, Y); line(h, fr, xs, X, Y, c.red, 1.8);
+      peaks.forEach(i => dot(h, X(fr[i]), Y(xs[i]), 6, c.yellow)); }
+    { const cv = $("uParts"), h = frame(cv), box = {l: 40, r: cv.width - 14, t: 14, b: cv.height - 32}, n = Math.max(1, peaks.length), X = t => box.l + t / .1 * (box.r - box.l);
+      axes(h, box, [[0,"0"],[.05,"0.05"],[.1,"0.1 s"]], [], X, () => 0);
+      peaks.forEach((pi, k) => { const f = fr[pi], amp = xs[pi] / (envMean / 2), mid = box.t + (k + .5) * (box.b - box.t) / n, sc = (box.b - box.t) / n * .42;
+        const truth = notes.reduce((best, q) => Math.abs(q - f) < Math.abs(best - f) ? q : best, notes[0]);
+        line(h, UT, UT.map((t, j) => env[j] * Math.cos(TAU * truth * t)), X, v => mid - v * sc, "rgba(140,140,134,.35)", 5);
+        line(h, UT, UT.map((t, j) => amp * env[j] * Math.cos(TAU * f * t)), X, v => mid - v * sc, colors[k % colors.length], 1.3); }); }
+    $("uFound").textContent = peaks.length ? peaks.map(i => fr[i] + " Hz").join(" · ") + (seg.env === "box" ? "   (side ripples are larger without the fade)" : "") : "no clear peak";
+  }
+
+  // ---------- 04: one spectrum cell by hand (16 x 16) ----------
+  const M = 16; let dKL = [2, 3], dScanTimer = null;
+  // ---------- 04a: what k and l mean ----------
+  const EX = [[0,0],[0,1],[0,4],[1,0],[2,3],[2,-3],[8,0],[9,0]];
+  $("kEx").innerHTML = EX.map(([k, l]) => `<button class="btn" type="button" data-k="${k}" data-l="${l}">(${k}, ${l})</button>`).join("");
+  $("kEx").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; $("kK").value = b.dataset.k; $("kL").value = b.dataset.l; drawKL(); });
+  const alias = n => (n > 8 ? n - 16 : n);
+  function drawKL(){
+    const k = +$("kK").value, l = +$("kL").value, c = C(); $("kKV").textContent = k; $("kLV").textContent = l;
+    const val = (a, b) => .5 + .5 * Math.cos(TAU * (k * a + l * b) / M);
+    { const cv = $("kPat"), g = frame(cv), s = cv.width / M;
+      for (let a = 0; a < M; a++) for (let b = 0; b < M; b++){ const t = Math.round(16 + 220 * val(a, b)); g.fillStyle = `rgb(${t},${t},${t + 4})`; g.fillRect(b * s + .5, a * s + .5, s - 1, s - 1); }
+      g.strokeStyle = c.yellow; g.lineWidth = 2; g.strokeRect(1, 1, cv.width - 2, s - 2);      // top row
+      g.strokeStyle = c.blue; g.strokeRect(1, 1, s - 2, cv.height - 2); }                      // left column
+    const prof = (id, n, na, color, label) => { const cv = $(id), g = frame(cv), box = {l: 14, r: cv.width - 14, t: 14, b: cv.height - 26};
+      const X = u => box.l + u / M * (box.r - box.l), Y = v => box.t + (1 - v) * (box.b - box.t), us = Array.from({length: 641}, (_, i) => i * M / 640);
+      const f = m => u => .5 + .5 * Math.cos(TAU * m * u / M);
+      // the smooth wave the pixels sample, then the 16 values the image actually stores (one per pixel, at 0, 1, ..., 15)
+      line(g, us, us.map(f(n)), X, Y, "rgba(30,30,30,.22)", 1.5);
+      if (na !== n) line(g, us, us.map(f(na)), X, Y, c.red, 2);      // the slower wave through the very same dots
+      for (let i = 0; i < M; i++) dot(g, X(i), Y(f(n)(i)), 4.5, color);
+      g.fillStyle = c.muted; g.font = "12px Geist Mono, monospace"; g.textAlign = "left"; g.fillText(label, box.l, cv.height - 8); };
+    const ka = alias(k), la = alias(l), al = (ka !== k || la !== l);
+    prof("kRow", l, la, c.yellow, `${Math.abs(l)} wave${Math.abs(l) === 1 ? "" : "s"} across` + (la !== l ? `, same dots as ${la}` : `, period ${l ? (M / Math.abs(l)).toFixed(1) + " px" : "none"}`));
+    prof("kCol", k, ka, c.blue, `${k} wave${k === 1 ? "" : "s"} down` + (ka !== k ? `, same dots as ${ka}` : `, period ${k ? (M / k).toFixed(1) + " px" : "none"}`));
+    $("kCap").innerHTML = `<b>(k, l) = (${k}, ${l})</b> on a 16 × 16 image. Yellow outline: the top row. Blue outline: the left column.`;
+    $("kRead").textContent = k === 0 && l === 0 ? "No change anywhere: a flat image. This pattern is DC, the average brightness."
+      : al ? `A pixel grid only stores the wave at whole pixels. ${ka !== k ? k + " waves down" : l + " waves across"} wiggles between the pixels, but at the 16 dots it gives exactly the same values as ${ka !== k ? ka : la} waves (the red curve, going the other way). The image cannot tell them apart, so this is the (${ka}, ${la}) pattern. That is why only −8 to 7 are distinct.`
+      : k === 0 ? `Changes only going across: vertical stripes, ${l < 0 ? "same as " + -l : l} wave${Math.abs(l) === 1 ? "" : "s"} wide.`
+      : l === 0 ? `Changes only going down: horizontal stripes, ${k} wave${k === 1 ? "" : "s"} from top to bottom.${k === 8 ? " The finest possible: every pixel flips." : ""}`
+      : `Changes in both directions at once, so the stripes are tilted; ${l < 0 ? "a negative l makes them lean the other way" : "flip the sign of l and they lean the other way"}.`;
+  }
+  ["kK", "kL"].forEach(id => $(id).addEventListener("input", drawKL));
+
+  function dImage(kind){
+    const v = new Float64Array(M*M);
+    for (let a = 0; a < M; a++) for (let b = 0; b < M; b++){
+      let x = 0;
+      if (kind === "vert") x = .5 + .5 * Math.cos(TAU * 4 * b / M);
+      if (kind === "tilt") x = .5 + .5 * Math.cos(TAU * (2 * a + 3 * b) / M);
+      if (kind === "text") x = (a % 4 < 2) && ((b * 5 + a) % 7 < 5) ? 0 : 1;                       // dark rows of letters, light gaps
+      if (kind === "ttext") x = (((a + Math.round(b / 4)) % 4 + 4) % 4 < 2) && ((b * 5 + a) % 7 < 5) ? 0 : 1;   // the same rows, tilted
+      if (kind === "square") x = a >= 5 && a < 11 && b >= 4 && b < 12 ? 1 : 0;
+      v[a*M+b] = x;
+    } return v;
+  }
+  const dScore = (v, k, l) => { let cs = 0, sn = 0; for (let a = 0; a < M; a++) for (let b = 0; b < M; b++){ const t = TAU * (k * a + l * b) / M; cs += v[a*M+b] * Math.cos(t); sn += v[a*M+b] * Math.sin(t); } return [cs, -sn]; };
+  function cells(id, val, color, label){
+    const cv = $(id), g = frame(cv), s = cv.width / M;
+    for (let a = 0; a < M; a++) for (let b = 0; b < M; b++){ g.fillStyle = color(val[a*M+b]); g.fillRect(b * s + .5, a * s + .5, s - 1, s - 1);
+      if (label){ g.fillStyle = "rgba(110,110,105,.95)"; g.font = "9px Geist Mono, monospace"; g.textAlign = "center"; g.fillText(label(val[a*M+b]), b * s + s / 2, a * s + s / 2 + 3); } }
+    return g;
+  }
+  const grayC = x => { const t = Math.round(16 + 220 * Math.max(0, Math.min(1, x))); return `rgb(${t},${t},${t + 4})`; };
+  const divC = x => { const t = Math.max(-1, Math.min(1, x)); return t >= 0 ? `rgba(224,142,0,${.08 + .92 * t})` : `rgba(47,127,193,${.08 + .92 * -t})`; };
+  function drawD(){
+    const kind = seg.dimg, v = dImage(kind), [k, l] = dKL, nums = seg.dnum === "on";
+    const lab = nums ? x => x.toFixed(1).replace("0.", ".").replace("-.", "-.") : null;
+    cells("dImg", v, grayC, lab);
+    const pat = new Float64Array(M*M), prod = new Float64Array(M*M);
+    for (let a = 0; a < M; a++) for (let b = 0; b < M; b++){ const c = Math.cos(TAU * (k * a + l * b) / M); pat[a*M+b] = c; prod[a*M+b] = v[a*M+b] * c; }
+    cells("dPat", pat, divC, lab);
+    { const g2 = cells("dProd", prod, divC, lab), sp = $("dProd").width / M;
+      if (dUpto >= 0){ g2.fillStyle = "rgba(255,255,255,.78)"; for (let i = dUpto + 1; i < M*M; i++) g2.fillRect((i % M) * sp, Math.floor(i / M) * sp, sp, sp);   // not added yet
+        const i = Math.min(dUpto, M*M - 1); g2.strokeStyle = C().white; g2.lineWidth = 2.5; g2.strokeRect((i % M) * sp + 1, Math.floor(i / M) * sp + 1, sp - 2, sp - 2); } }
+    let run = 0; for (let i = 0; i <= (dUpto >= 0 ? dUpto : M*M - 1); i++) run += prod[i];
+    $("dRun").textContent = (dUpto >= 0 && dUpto < M*M - 1 ? `${run.toFixed(2)}  (${dUpto + 1}/256)` : `${run.toFixed(2)}  (all 256)`);
+    $("dPatCap").innerHTML = `<b>2. Test pattern (k, l) = (${k}, ${l}):</b> ${k === 0 && l === 0 ? "flat, the DC pattern" : `repeats ${Math.abs(k)}× down, ${Math.abs(l)}× across`}.`;
+    // the whole spectrum, centred: rows k = -8..7, columns l = -8..7
+    const mag = new Float64Array(M*M); let mx = 0;
+    for (let i = 0; i < M; i++) for (let j = 0; j < M; j++){ const kk = i - M/2, ll = j - M/2, [cs, sn] = dScore(v, kk, ll), m = Math.hypot(cs, sn); mag[i*M+j] = m; if (!(kk === 0 && ll === 0)) mx = Math.max(mx, m); }
+    const g = cells("dSpec", mag, x => { const c = ramp(Math.min(1, x / (mx || 1))); return `rgb(${c[0]|0},${c[1]|0},${c[2]|0})`; }, nums ? x => x.toFixed(0) : null);
+    const s = $("dSpec").width / M; g.strokeStyle = C().red; g.lineWidth = 3; g.strokeRect((l + M/2) * s + 1.5, (k + M/2) * s + 1.5, s - 3, s - 3);
+    g.strokeStyle = C().white; g.lineWidth = 1; g.globalAlpha = .4; g.beginPath(); g.moveTo(M/2 * s + s/2, 0); g.lineTo(M/2 * s + s/2, M * s); g.moveTo(0, M/2 * s + s/2); g.lineTo(M * s, M/2 * s + s/2); g.stroke(); g.globalAlpha = 1;
+    const [cs, sn] = dScore(v, k, l), m = Math.hypot(cs, sn), total = v.reduce((p, q) => p + q, 0);
+    $("dKL").textContent = `(${k}, ${l})`; $("dC").textContent = cs.toFixed(2); $("dS").textContent = sn.toFixed(2); $("dM").textContent = m.toFixed(2);
+    $("dRead").textContent = k === 0 && l === 0 ? `DC: the sum of all pixels, ${total.toFixed(1)}.` : m > .25 * mx ? "Large: the image contains this stripe pattern." : m > .08 * mx ? "Small: a little of this pattern." : "About 0: products cancel, the pattern is not in the image.";
+  }
+  let dUpto = -1, dAddTimer = null;
+  $("dAdd").addEventListener("click", () => {
+    if (dAddTimer){ clearInterval(dAddTimer); dAddTimer = null; dUpto = -1; $("dAdd").textContent = "Add up this cell"; drawD(); return; }
+    dUpto = 0; $("dAdd").textContent = "Stop";
+    dAddTimer = setInterval(() => { dUpto += 2; if (dUpto >= M*M - 1){ dUpto = -1; clearInterval(dAddTimer); dAddTimer = null; $("dAdd").textContent = "Add up this cell"; } drawD(); }, 22);
+  });
+  ["dImg", "dPat", "dProd"].forEach(id => $(id).addEventListener("mousemove", e => {
+    const r = $(id).getBoundingClientRect(), s = r.width / M, b = Math.floor((e.clientX - r.left) / s), a = Math.floor((e.clientY - r.top) / s);
+    if (a < 0 || b < 0 || a >= M || b >= M) return;
+    const v = dImage(seg.dimg)[a*M+b], [k, l] = dKL, p = Math.cos(TAU * (k * a + l * b) / M);
+    $("dHover").textContent = `pixel (a, b) = (${a}, ${b}):  f = ${v.toFixed(2)}   pattern = cos(2π(${k}·${a} + ${l}·${b})/16) = ${p.toFixed(2)}   product = ${(v * p).toFixed(2)}`;
+  }));
+  $("dSpec").addEventListener("click", e => { const r = $("dSpec").getBoundingClientRect(), s = r.width / M;
+    dKL = [Math.floor((e.clientY - r.top) / s) - M/2, Math.floor((e.clientX - r.left) / s) - M/2]; drawD(); });
+  $("dScan").addEventListener("click", () => {
+    if (dScanTimer){ clearInterval(dScanTimer); dScanTimer = null; $("dScan").textContent = "Scan all 256 patterns"; return; }
+    let n = 0; $("dScan").textContent = "Stop";
+    dScanTimer = setInterval(() => { dKL = [Math.floor(n / M) - M/2, (n % M) - M/2]; drawD(); if (++n >= M*M){ clearInterval(dScanTimer); dScanTimer = null; $("dScan").textContent = "Scan all 256 patterns"; } }, 35);
+  });
+  hooks.dimg = hooks.dnum = drawD;
+
+  // ---------- 04b: basis explorer (rows: k down, columns: l across) ----------
+  const K = 8, sel = new Set(["1,3"]);
+  function drawBasis(){
+    const c = C(), cv = $("bGrid"), h = frame(cv), W = cv.width, cell = W / (2*K + 1);
+    for (let k = -K; k <= K; k++) for (let l = -K; l <= K; l++){
+      const key = k + "," + l, mir = (-k) + "," + (-l), x = (l + K) * cell, y = (k + K) * cell;
+      h.fillStyle = sel.has(key) ? c.yellow : sel.has(mir) ? "rgba(224,142,0,.25)" : (k === 0 && l === 0 ? c.grid : "#F1F1EE");
+      h.fillRect(x + 2, y + 2, cell - 4, cell - 4);
+    }
+    h.strokeStyle = c.muted; h.beginPath(); h.moveTo(W/2, 0); h.lineTo(W/2, W); h.moveTo(0, W/2); h.lineTo(W, W/2); h.stroke();
+    const v = new Float64Array(N*N);
+    sel.forEach(key => { const [k, l] = key.split(",").map(Number); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) v[y*N+x] += Math.cos(TAU * (k*y + l*x) / N); });
+    grayImg("bImg", v);
+    const items = [...sel].map(key => { const [k, l] = key.split(",").map(Number), f = Math.hypot(k, l);
+      return f === 0 ? "(0, 0): DC, a flat image" : `(k, l) = (${k}, ${l}): ${Math.abs(k)}× down, ${Math.abs(l)}× across, period ${(N / f).toFixed(1)} px`; });
+    $("bCap").innerHTML = sel.size ? `<b>Inverse FFT:</b> ${items.join("; ")}.` : "<b>Inverse FFT:</b> click a cell.";
+  }
+  $("bGrid").addEventListener("click", e => { const r = $("bGrid").getBoundingClientRect(), cell = r.width / (2*K + 1);
+    const l = Math.floor((e.clientX - r.left) / cell) - K, k = Math.floor((e.clientY - r.top) / cell) - K, key = k + "," + l; sel.has(key) ? sel.delete(key) : sel.add(key); drawBasis(); });
+
+  // ---------- 05: four rules ----------
+  const mkImg = f => { const v = new Float64Array(N*N); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) v[y*N+x] = f(x, y); return v; };
+  function paintGray(cv, v){
+    const g = cv.getContext("2d"), im = g.createImageData(N, N); let lo = Infinity, hi = -Infinity; for (const a of v){ if (a < lo) lo = a; if (a > hi) hi = a; }
+    for (let i = 0; i < N*N; i++){ const t = 255 * (hi > lo ? (v[i] - lo) / (hi - lo) : .5); im.data[4*i] = 12 + t * .93; im.data[4*i+1] = 13 + t * .92; im.data[4*i+2] = 16 + t * .91; im.data[4*i+3] = 255; }
+    if (cv.width === N){ g.putImageData(im, 0, 0); return; }
+    const tmp = document.createElement("canvas"); tmp.width = tmp.height = N; tmp.getContext("2d").putImageData(im, 0, 0); g.imageSmoothingEnabled = false; g.drawImage(tmp, 0, 0, cv.width, cv.height);
+  }
+  function paintSpec(cv, re, im, opt){
+    const g = cv.getContext("2d"), out = g.createImageData(N, N), lg = new Float64Array(N*N); let mx = 0;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ const k = sh(y - N/2, x - N/2), v = Math.log1p(Math.hypot(re[k], im[k])); lg[y*N+x] = v;
+      if (!(y === N/2 && x === N/2) && v > mx) mx = v; }
+    const dc = lg[N/2*N + N/2]; if (mx < 1e-9) mx = dc || 1;                                      // scale by the brightest non-centre dot; the centre is capped
+    for (let i = 0; i < N*N; i++){ const c = ramp(Math.pow(Math.min(1, lg[i] / mx), 1.1)); out.data[4*i] = c[0]; out.data[4*i+1] = c[1]; out.data[4*i+2] = c[2]; out.data[4*i+3] = 255; }
+    const tmp = document.createElement("canvas"); tmp.width = tmp.height = N; tmp.getContext("2d").putImageData(out, 0, 0);
+    g.imageSmoothingEnabled = false; g.drawImage(tmp, 0, 0, cv.width, cv.height);
+    if (opt && opt.axes){ g.strokeStyle = "rgba(30,30,30,.12)"; g.lineWidth = 1; g.beginPath(); g.moveTo(cv.width / 2, 0); g.lineTo(cv.width / 2, cv.height); g.moveTo(0, cv.height / 2); g.lineTo(cv.width, cv.height / 2); g.stroke(); }
+  }
+  function markDots(cv, re, im, frac){
+    // ring the strongest cells (at least frac of the strongest non-centre cell), strongest first, always with their twin; returns how many qualify
+    let mx = 0; const mags = new Float64Array(N*N);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ const m = Math.hypot(re[sh(y - N/2, x - N/2)], im[sh(y - N/2, x - N/2)]); mags[y*N+x] = m; if (!(y === N/2 && x === N/2) && m > mx) mx = m; }
+    const cand = [];
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!(y === N/2 && x === N/2) && mx > 1e-6 && mags[y*N+x] >= frac * mx) cand.push([mags[y*N+x], y, x]);
+    cand.sort((a, b) => b[0] - a[0]);
+    const marked = new Set(), twin = (y, x) => [((N - y) % N), ((N - x) % N)];      // (-k, -l) in display rows; row 0 (-64) is its own twin
+    for (const [, y, x] of cand){ if (marked.size >= 28) break; marked.add(y * N + x); const [ty, tx] = twin(y, x); marked.add(ty * N + tx); }
+    const g = cv.getContext("2d"), s = cv.width / N; g.strokeStyle = C().yellow; g.lineWidth = 1.6;
+    marked.forEach(i => { const y = Math.floor(i / N), x = i % N, X = (x + .5) * s, Y = (y + .5) * s, str = Math.sqrt(mags[i] / mx);
+      g.fillStyle = `rgba(14,38,80,${.35 + .65 * str})`; g.beginPath(); g.arc(X, Y, 2 + 2.5 * str, 0, TAU); g.fill();      // a visible dot, bigger when stronger
+      g.beginPath(); g.arc(X, Y, 7, 0, TAU); g.stroke(); });
+    return cand.length;
+  }
+  function paintPhase(cv, re, im){
+    // colour wheel: the hue is the direction the arrow points at that pixel
+    const g = cv.getContext("2d"), out = g.createImageData(N, N);
+    const hue = a => { const h = ((a / TAU) % 1 + 1) % 1 * 6, i = Math.floor(h), f = h - i, q = 1 - f, t = f, c = [[1,t,0],[q,1,0],[0,1,t],[0,q,1],[t,0,1],[1,0,q]][i % 6]; return c.map(v => 40 + v * 200); };
+    for (let i = 0; i < N*N; i++){ const c = hue(Math.atan2(im[i], re[i])); out.data[4*i] = c[0]; out.data[4*i+1] = c[1]; out.data[4*i+2] = c[2]; out.data[4*i+3] = 255; }
+    if (cv.width === N){ g.putImageData(out, 0, 0); return; }
+    const tmp = document.createElement("canvas"); tmp.width = tmp.height = N; tmp.getContext("2d").putImageData(out, 0, 0); g.imageSmoothingEnabled = false; g.drawImage(tmp, 0, 0, cv.width, cv.height);
+  }
+  const spectrumOf = (v, vi) => { const re = Float64Array.from(v), im = vi ? Float64Array.from(vi) : new Float64Array(N*N); fft2(re, im, false); return [re, im]; };
+  function show(imgId, specId, v, vi, frac){ paintGray($(imgId), v); const [re, im] = spectrumOf(v, vi); paintSpec($(specId), re, im, {axes: true}); const n = markDots($(specId), re, im, frac || .3); return [re, im, n]; }
+  const wave = (k, l) => (x, y) => Math.cos(TAU * (k * y + l * x) / N);
+  const sq = (k, l) => (x, y) => (Math.cos(TAU * (k * y + l * x) / N) > 0 ? 1 : 0);
+
+  function drawR1(){ const a = wave(4, 6), b = wave(-9, 3);
+    show("r1Img", "r1Spec", mkImg((x, y) => a(x, y) + (seg.r1 === "two" ? b(x, y) : seg.r1 === "weak" ? .3 * b(x, y) : 0)), null, .2); }
+  let r2 = [10, 6];                                                            // [l, k]: across, down
+  function drawR2(){
+    const cv = $("r2Spec"), g = frame(cv), W = cv.width, s = W / N, c = C(), cx = W / 2, cy = W / 2, [l, k] = r2;
+    g.strokeStyle = c.grid; g.lineWidth = 1; for (let r = 16; r <= 64; r += 16){ g.beginPath(); g.arc(cx, cy, r * s, 0, TAU); g.stroke(); }
+    g.beginPath(); g.moveTo(cx, 0); g.lineTo(cx, W); g.moveTo(0, cy); g.lineTo(W, cy); g.stroke();
+    g.fillStyle = c.muted; g.font = "11px Geist Mono, monospace"; g.textAlign = "left"; [16, 32, 48].forEach(r => g.fillText(String(r), cx + r * s * .72 + 3, cy + r * s * .72 + 12));
+    g.strokeStyle = c.yellow; g.setLineDash([4, 4]); g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + l * s, cy + k * s); g.stroke(); g.setLineDash([]);
+    dot(g, cx + l * s, cy + k * s, 8, c.yellow); dot(g, cx, cy, 3, c.white);
+    g.strokeStyle = c.yellow; g.lineWidth = 2.5; g.beginPath(); g.arc(cx - l * s, cy - k * s, 7, 0, TAU); g.stroke();      // the mirror twin: same strength, drawn as a ring
+    g.fillStyle = c.muted; g.font = "11px Geist Mono, monospace"; g.textAlign = "left"; g.fillText("twin", cx - l * s + 10, cy - k * s + 4);
+    paintGray($("r2Img"), mkImg(wave(k, l)));
+    const d = Math.hypot(k, l), dir = Math.atan2(k, l) * 180 / Math.PI, str = ((dir + 180) % 180 + 180) % 180 - 90;      // stripes stand at 90° to the dot's direction
+    $("r2Read").textContent = d < .5 ? "At the centre: a flat image (DC)." : `${d.toFixed(1)} waves across the image → period 128 ÷ ${d.toFixed(1)} = ${(N / d).toFixed(1)} px  ·  dot at ${dir.toFixed(0)}° → stripes at ${str.toFixed(0)}°`;
+  }
+  { const cv = $("r2Spec"); let drag = false;
+    const pick = e => { const r = cv.getBoundingClientRect(), s = r.width / N; r2 = [Math.round((e.clientX - r.left) / s - N/2), Math.round((e.clientY - r.top) / s - N/2)].map(v => Math.max(-63, Math.min(63, v))); drawR2(); };
+    cv.addEventListener("pointerdown", e => { drag = true; cv.setPointerCapture(e.pointerId); pick(e); });
+    cv.addEventListener("pointermove", e => { if (drag) pick(e); });
+    ["pointerup", "pointercancel"].forEach(ev => cv.addEventListener(ev, () => drag = false)); }
+  function drawR3(){
+    const k = 7, l = 12, re = mkImg(wave(k, l));
+    let n;
+    if (seg.r3 === "cplx"){ const im = mkImg((x, y) => Math.sin(TAU * (k * y + l * x) / N)); n = show("r3Img", "r3Spec", re, im)[2]; paintPhase($("r3Img"), re, im); }
+    else n = show("r3Img", "r3Spec", re)[2];
+    const cv = $("r3Spec"), g = cv.getContext("2d"), s = cv.width / N, cx = cv.width / 2;
+    g.strokeStyle = "rgba(224,142,0,.45)"; g.setLineDash([3, 5]); g.lineWidth = 1; g.beginPath(); g.moveTo(cx - l * s, cx - k * s); g.lineTo(cx + l * s, cx + k * s); g.stroke(); g.setLineDash([]);
+    $("r3Read").textContent = seg.r3 === "cplx"
+      ? `${n} dot. Each pixel holds a whole arrow (colour = the direction it points), turning one way only as you move across, so only one winding matches.`
+      : `${n} dots, the same strength. Each pixel is one ordinary number, the cosine, which is two arrows spinning opposite ways, so both windings (k, l) and (−k, −l) match.`;
+  }
+  function drawR4(){
+    const m = seg.r4, f = m === "sine" ? (x, y) => .5 + .5 * Math.cos(TAU * y / 16) : m === "square" ? (x, y) => (Math.cos(TAU * y / 16) > 0 ? 1 : 0)
+      : m === "text" ? (x, y) => (y % 16 < 7 && ((x * 7 + Math.floor(y / 16) * 13) % 23) < 17 ? 1 : 0)
+      : (x, y) => { const t = 18 * Math.PI / 180, X = x - N/2, Y = y - N/2, u = -X * Math.sin(t) + Y * Math.cos(t) + 512, w = X * Math.cos(t) + Y * Math.sin(t) + 512;
+          return (u % 16 < 7 && ((Math.floor(w) * 7 + Math.floor(u / 16) * 13) % 23) < 17) ? 1 : 0; };
+    const rows = m === "two" ? R4_TWO : m === "rand" || m === "randt" ? R4_RAND : null;
+    const g = rows ? (m === "randt"
+        ? (x, y) => { const t = 18 * Math.PI / 180, X = x - N/2, Y = y - N/2, u = ((-X * Math.sin(t) + Y * Math.cos(t)) % N + N) % N; return rows[Math.floor(u)] ? 1 : 0; }
+        : (x, y) => rows[y] ? 1 : 0) : f;
+    show("r4Img", "r4Spec", mkImg(g), null, .12);
+    $("r4Read").textContent = {
+      sine: "Smooth: one twin pair.", square: "Blocky rows every 16 px: sharp dots at every multiple of 8 on the vertical axis.",
+      text: "Text rows: the row spacing gives the vertical dots; the fake 23 px word repeat gives the horizontal clusters.",
+      tilt: "Tilted text: the same line of dots, tilted with the rows.",
+      two: "12 px rows at the top, 20 px at the bottom: two sets of dots, one per spacing, each a little blurred. Still all on the vertical line.",
+      rand: "Random gaps: no single repeat distance, so no sharp dots, just a streak. It is still on the vertical line, so the tilt is still readable.",
+      randt: "Random gaps, tilted 18°: no dots, but the streak tilts with the rows. This is what real pages look like, and why jdeskew sums whole lines instead of hunting for dots."}[m];
+  }
+  // row layouts for the spacing cases: 1 = ink row, 0 = gap (6 px tall rows)
+  const R4_TWO = (() => { const r = new Array(N).fill(0); for (let y = 2; y < 64; y += 12) for (let i = 0; i < 6; i++) if (y + i < 64) r[y + i] = 1; for (let y = 66; y < N; y += 20) for (let i = 0; i < 6; i++) if (y + i < N) r[y + i] = 1; return r; })();
+  const R4_RAND = (() => { const r = new Array(N).fill(0); let sd = 11, y = 1; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+    while (y < N){ for (let i = 0; i < 6 && y + i < N; i++) r[y + i] = 1; y += 6 + 3 + Math.floor(rnd() * 16); } return r; })();
+  hooks.r1 = drawR1; hooks.r3 = drawR3; hooks.r4 = drawR4;
+
+  // ---------- 05b: quiz ----------
+  const QUIZ = [
+    {name: "flat grey", f: () => .5, why: "Nothing changes across the image, so the only dot is the centre (rule 2: the centre is no change)."},
+    {name: "smooth horizontal stripes", f: (x, y) => .5 + .5 * Math.cos(TAU * 6 * y / N), why: "Stripes that change going down: one twin pair (rules 1 and 3) on the vertical axis (rule 2)."},
+    {name: "blocky stripes tilted 25°", f: (x, y) => { const t = 25 * Math.PI / 180; return Math.cos(TAU * (-(x - 64) * Math.sin(t) + (y - 64) * Math.cos(t)) / 14) > 0 ? 1 : 0; }, why: "Blocky, so a row of dots (rule 4), tilted by the same 25° (rule 2)."},
+    {name: "vertical stripes in a frame", f: (x, y) => (x < 4 || x > 123 || y < 4 || y > 123) ? 1 : (Math.cos(TAU * x / 12) > 0 ? .8 : 0), why: "The stripes give a row of dots on the horizontal axis; the sharp frame adds a cross along both axes."},
+    {name: "one small square", f: (x, y) => (Math.abs(x - 64) < 6 && Math.abs(y - 64) < 6 ? 1 : 0), why: "A single sharp-edged block has no repeating stripes; its four edges spread energy along both axes in a soft cross (rule 4)."}
+  ];
+  const quizSpec = QUIZ.map(q => { const cv = document.createElement("canvas"); cv.width = cv.height = 256; const v = mkImg(q.f), [re, im] = spectrumOf(v); paintSpec(cv, re, im, {axes: true}); return cv; });
+  let qi = 0, qRight = 0, qDone = 0, qAnswered = false;
+  function drawQuiz(){
+    const q = QUIZ[qi]; paintGray($("qImg"), mkImg(q.f)); qAnswered = false;
+    $("qCap").innerHTML = `<b>Image ${qi + 1} of ${QUIZ.length}: ${q.name}.</b> Which spectrum belongs to it?`;
+    const others = QUIZ.map((_, i) => i).filter(i => i !== qi), pickA = others[(qi * 2 + 1) % others.length], pickB = others[(qi * 3 + 2) % others.length] === pickA ? others[(qi + 3) % others.length] : others[(qi * 3 + 2) % others.length];
+    const order = [[qi, pickA, pickB], [pickA, qi, pickB], [pickB, pickA, qi]][qi % 3];
+    $("qOpts").innerHTML = order.map(i => `<button class="opt" type="button" data-i="${i}" aria-label="Spectrum option"><canvas width="256" height="256"></canvas></button>`).join("");
+    [...$("qOpts").querySelectorAll(".opt")].forEach(b => { b.querySelector("canvas").getContext("2d").drawImage(quizSpec[+b.dataset.i], 0, 0);
+      b.addEventListener("click", () => { if (qAnswered) return; qAnswered = true; qDone++; const ok = +b.dataset.i === qi; if (ok) qRight++;
+        $("qOpts").querySelectorAll(".opt").forEach(o => o.classList.add(+o.dataset.i === qi ? "right" : (o === b ? "wrong" : "x")));
+        $("qFeedback").innerHTML = `<b style="color:${ok ? "var(--m-green)" : "var(--m-red)"}">${ok ? "Right." : "Not this one."}</b> ${q.why}`;
+        $("qScore").textContent = `${qRight} of ${qDone} right`; }); });
+    $("qFeedback").textContent = "Pick one of the three spectra.";
+  }
+  $("qNext").addEventListener("click", () => { qi = (qi + 1) % QUIZ.length; drawQuiz(); });
+
+  // ---------- 06a: square wave from waves ----------
+  function drawFS(){
+    const n = +$("fsN").value, c = C(); $("fsNV").textContent = n;
+    { const cv = $("fsWave"), g = frame(cv), box = {l: 34, r: cv.width - 12, t: 16, b: cv.height - 30};
+      const X = u => box.l + u / 3 * (box.r - box.l), Y = v => box.t + (1 - (v + .25) / 1.5) * (box.b - box.t), us = Array.from({length: 900}, (_, i) => i * 3 / 899);
+      axes(g, box, [[0,"0"],[1,"1 period"],[2,"2"],[3,"3"]], [[0,"0"],[1,"1"]], X, Y);
+      line(g, us, us.map(u => (Math.cos(TAU * u) > 0 ? 1 : 0)), X, Y, "rgba(140,140,134,.55)", 4);
+      const sum = u => { let s = .5; for (let j = 0; j < n; j++){ const m = 2 * j + 1; s += (2 / Math.PI) * (j % 2 ? -1 : 1) * Math.cos(TAU * m * u) / m; } return s; };
+      if (n > 1){ const m = 2 * (n - 1) + 1, j = n - 1; line(g, us, us.map(u => .5 + (2 / Math.PI) * (j % 2 ? -1 : 1) * Math.cos(TAU * m * u) / m), X, Y, "rgba(47,127,193,.6)", 1.4); }
+      line(g, us, us.map(sum), X, Y, c.yellow, 2.2); }
+    { const cv = $("fsBars"), g = frame(cv), box = {l: 34, r: cv.width - 12, t: 16, b: cv.height - 30}, M_ = 23;
+      const X = m => box.l + (m - .5) / M_ * (box.r - box.l), Y = v => box.t + (1 - (v + .45) / 1.45) * (box.b - box.t), bw = (box.r - box.l) / M_ * .62;
+      axes(g, box, [[1,"×1"],[5,"×5"],[9,"×9"],[13,"×13"],[17,"×17"],[21,"×21"]], [[-1/3,"−⅓"],[0,"0"],[.5,"½"],[1,"1"]], X, Y);
+      for (let j = 0; j < 12; j++){ const m = 2 * j + 1, sgn = j % 2 ? -1 : 1, top = Y(Math.max(0, sgn / m)), bot = Y(Math.min(0, sgn / m));
+        g.fillStyle = j < n ? (sgn > 0 ? c.yellow : c.blue) : "rgba(140,140,134,.22)"; g.fillRect(X(m) - bw / 2, top, bw, bot - top); } }
+  }
+  $("fsN").addEventListener("input", drawFS);
+
+  // ---------- 06b: stripes with a guide ----------
+  function drawStripes(){
+    const ang = +$("sAng").value, P = +$("sPer").value; $("sAngV").textContent = ang + "°"; $("sPerV").textContent = P + " px"; $("sTrue").textContent = ang + "°";
+    const t = ang * Math.PI / 180, cs = Math.cos(t), sn = Math.sin(t), v = new Float64Array(N*N);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+      const X = x - N/2, Y = y - N/2, u = -X*sn + Y*cs, w = X*cs + Y*sn, ph = TAU * u / P;   // u across the stripes, w along them
+      let val = seg.sprof === "sine" ? .5 + .5 * Math.cos(ph) : (Math.cos(ph) > 0 ? 1 : 0);
+      if (seg.sframe === "rot" && (Math.abs(u) > 40 || Math.abs(w) > 46)) val = 0;
+      if (seg.sframe === "box" && (x < 5 || x > N - 6 || y < 5 || y > N - 6)) val = 1;
+      v[y*N+x] = val;
+    }
+    grayImg("sIn", v, 0, 1);
+    const re = Float64Array.from(v), im = new Float64Array(N*N); fft2(re, im, false); specImg("sSpec", re, im);
+    const inside = [];
+    { // guide: where the x1, x3, x5, x7 dots belong; anything past the edge wraps (aliasing)
+      const cv = $("sSpec"), g = cv.getContext("2d"), s = cv.width / N, c = C(), d = N / P, dx = -sn * d, dy = cs * d, wrap = a => ((a + N/2) % N + N) % N - N/2;
+      const ms = seg.sprof === "sine" ? [1] : [1, 3, 5, 7];
+      ms.forEach(m => { const ok = Math.abs(m * dx) < N/2 && Math.abs(m * dy) < N/2; if (ok) inside.push("×" + m); });
+      if (seg.sann === "on"){
+        g.strokeStyle = "rgba(30,30,30,.3)"; g.setLineDash([2, 4]); g.lineWidth = 1; g.beginPath();
+        g.moveTo(cv.width / 2 - 70 * dx / d * s, cv.height / 2 - 70 * dy / d * s); g.lineTo(cv.width / 2 + 70 * dx / d * s, cv.height / 2 + 70 * dy / d * s); g.stroke(); g.setLineDash([]);
+        g.font = "11px Geist Mono, monospace"; g.textAlign = "left";
+        ms.forEach(m => [1, -1].forEach(sg => {
+          let px = sg * m * dx, py = sg * m * dy; const ok = Math.abs(px) < N/2 && Math.abs(py) < N/2;
+          if (!ok){ px = wrap(px); py = wrap(py); }
+          const X = cv.width / 2 + px * s, Y = cv.height / 2 + py * s;
+          g.strokeStyle = ok ? c.yellow : c.red; g.lineWidth = 1.8; if (!ok) g.setLineDash([3, 3]); g.beginPath(); g.arc(X, Y, 9, 0, TAU); g.stroke(); g.setLineDash([]);
+          if (sg === 1){ g.fillStyle = ok ? c.yellow : c.red; g.fillText("×" + m + (ok ? "" : " wrapped"), X + 11, Y - 9); }
+        }));
+      }
+    }
+    const p = projection(re, im); $("sSpec")._stale = true; projPlot("sProj", p, ang);
+    const ok = Math.abs(p.best - ang) <= 1.5; $("sMeas").textContent = p.best.toFixed(2) + "°"; $("sMeas").style.color = ok ? css("--ok") : css("--bad");
+    $("sDist").textContent = (N / P).toFixed(1) + " from centre";
+    $("sHarm").textContent = seg.sprof === "sine" ? "Smooth: just ×1, one twin pair. With a single dot near the centre, the angle reads less precisely." : inside.join(", ") + (inside.length < 4 ? `; the rest wrap around (period ${P} px is fine)` : "; all on the line");
+  }
+  ["sAng", "sPer"].forEach(id => $(id).addEventListener("input", drawStripes)); hooks.sprof = hooks.sframe = hooks.sann = drawStripes;
+
+  // ---------- 06b: aliasing you can drag ----------
+  let aKL = [20, 80];                                                    // [k down, l across], may lie past the edge
+  const wrap64 = a => ((a + N/2) % N + N) % N - N/2;
+  function drawA(){
+    const [k, l] = aKL, kw = wrap64(k), lw = wrap64(l), out = kw !== k || lw !== l, c = C();
+    { const cv = $("aSpec"), g = frame(cv), W = cv.width, s = W / (2 * N), cx = W / 2;
+      g.fillStyle = "#F3F6FB"; g.fillRect(cx - N/2 * s, cx - N/2 * s, N * s, N * s);
+      g.strokeStyle = c.white; g.lineWidth = 1.5; g.strokeRect(cx - N/2 * s, cx - N/2 * s, N * s, N * s);
+      g.strokeStyle = c.grid; g.beginPath(); g.moveTo(cx, 0); g.lineTo(cx, W); g.moveTo(0, cx); g.lineTo(W, cx); g.stroke();
+      g.fillStyle = c.muted; g.font = "11px Geist Mono, monospace"; g.textAlign = "left"; g.fillText("edge ±64", cx + N/2 * s + 4, cx - 4); g.fillText("±128", W - 34, cx - 4);
+      if (out){ g.strokeStyle = c.red; g.lineWidth = 2; g.beginPath(); g.arc(cx + l * s, cx + k * s, 8, 0, TAU); g.stroke();
+        g.setLineDash([4, 4]); g.beginPath(); g.moveTo(cx + l * s, cx + k * s); g.lineTo(cx + lw * s, cx + kw * s); g.stroke(); g.setLineDash([]); }
+      dot(g, cx + lw * s, cx + kw * s, 7, c.yellow); dot(g, cx - lw * s, cx - kw * s, 4, "rgba(224,142,0,.5)"); }
+    { const cv = $("aTrue"), g = cv.getContext("2d"), S = cv.width, im = g.createImageData(S, S), f = S / N;
+      for (let y = 0; y < S; y++) for (let x = 0; x < S; x++){ const v = .5 + .5 * Math.cos(TAU * (k * y / f + l * x / f) / N), t = 16 + 220 * v, i = 4 * (y * S + x); im.data[i] = t; im.data[i+1] = t; im.data[i+2] = t + 4; im.data[i+3] = 255; }
+      const tmp = document.createElement("canvas"); tmp.width = tmp.height = S; tmp.getContext("2d").putImageData(im, 0, 0); g.drawImage(tmp, 0, 0, S, S); }
+    paintGray($("aPix"), mkImg((x, y) => Math.cos(TAU * (k * y + l * x) / N)));
+    const p = (a, b) => (Math.hypot(a, b) ? (N / Math.hypot(a, b)).toFixed(1) + " px" : "flat"), ang = (a, b) => (Math.atan2(a, b) * 180 / Math.PI).toFixed(0) + "°";
+    $("aRead").textContent = out
+      ? `Real stripes: (${k}, ${l}), period ${p(k, l)}, changing along ${ang(k, l)}, too fine for 128 pixels. The pixels record (${kw}, ${lw}) instead: period ${p(kw, lw)}, along ${ang(kw, lw)}. Same samples, different pattern: that is aliasing.`
+      : `Inside the edge: the pixels record the real stripes, (${k}, ${l}), period ${p(k, l)}, along ${ang(k, l)}.`;
+  }
+  { const cv = $("aSpec"); let drag = false;
+    const pick = e => { const r = cv.getBoundingClientRect(), s = r.width / (2 * N); aKL = [Math.round((e.clientY - r.top) / s - N), Math.round((e.clientX - r.left) / s - N)].map(v => Math.max(-127, Math.min(127, v))); drawA(); };
+    cv.addEventListener("pointerdown", e => { drag = true; cv.setPointerCapture(e.pointerId); pick(e); });
+    cv.addEventListener("pointermove", e => { if (drag) pick(e); });
+    ["pointerup", "pointercancel"].forEach(ev => cv.addEventListener(ev, () => drag = false)); }
+
+  // ---------- 06b: same page captured at three sizes ----------
+  const PAGE_T = 12 * Math.PI / 180;
+  const pageAt = (px, py) => {                                           // px, py in [0, 1): ink = 1, paper = 0, plus a fine paper texture
+    const X = px - .5, Y = py - .5, v = -X * Math.sin(PAGE_T) + Y * Math.cos(PAGE_T) + .5, w = X * Math.cos(PAGE_T) + Y * Math.sin(PAGE_T) + .5;
+    const row = Math.floor(v * 20), inRow = v * 20 - row < .45 && v > .04 && v < .96 && w > .06 && w < .94;
+    const word = Math.floor(w * 22 + row * .37), ink = inRow && ((word * 7 + row * 3) % 5 !== 0) && ((w * 22 * 4) % 1 < .72);
+    return (ink ? .85 : 0) + .22 * (.5 + .5 * Math.cos(TAU * 230 * (px * .8 + py * .6)));   // the texture: 230 waves across, far past any edge here
+  };
+  const capCache = {};
+  function capture(S){                                                    // a camera sensor averages light over each pixel (2 × 2 samples per pixel)
+    if (capCache[S]) return capCache[S];
+    const v = new Float64Array(S * S);
+    for (let y = 0; y < S; y++) for (let x = 0; x < S; x++){ let a = 0; for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) a += pageAt((x + (i + .5) / 2) / S, (y + (j + .5) / 2) / S); v[y * S + x] = a / 4; }
+    return capCache[S] = v;
+  }
+  function drawB(){
+    const S = +seg.bsrc, src = capture(S), out = new Float64Array(N * N), f = N / S;
+    if (S === N) out.set(src);
+    else if (S < N) for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) out[y * N + x] = src[Math.floor(y / f) * S + Math.floor(x / f)];          // blow up: blocks
+    else { const r = S / N;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+        if (seg.bmode === "skip") out[y * N + x] = src[(y * r + Math.floor(r / 2)) * S + x * r + Math.floor(r / 2)];
+        else { let a = 0; for (let j = 0; j < r; j++) for (let i = 0; i < r; i++) a += src[(y * r + j) * S + x * r + i]; out[y * N + x] = a / (r * r); } } }
+    { const cv = $("bSrc"), g = cv.getContext("2d"), im = g.createImageData(S, S); let lo = Infinity, hi = -Infinity; for (const a of src){ lo = Math.min(lo, a); hi = Math.max(hi, a); }
+      for (let i = 0; i < S * S; i++){ const t = 16 + 220 * (src[i] - lo) / ((hi - lo) || 1); im.data[4*i] = t; im.data[4*i+1] = t; im.data[4*i+2] = t + 4; im.data[4*i+3] = 255; }
+      const tmp = document.createElement("canvas"); tmp.width = tmp.height = S; tmp.getContext("2d").putImageData(im, 0, 0); g.imageSmoothingEnabled = S < cv.width ? false : true; g.drawImage(tmp, 0, 0, cv.width, cv.height); }
+    $("bSrcCap").innerHTML = `<b>As captured, ${S} × ${S} px.</b> 20 text lines, ${(S / 20).toFixed(1)} px apart.`;
+    paintGray($("bOut"), out);
+    const [re, im] = spectrumOf(out); paintSpec($("bSpec"), re, im, {axes: true}); markDots($("bSpec"), re, im, .25);
+    const p = projection(re, im); $("bSpec")._stale = true; projPlot("bProj", p, 12);
+    const err = Math.abs(p.best - 12); $("bRead").textContent = p.best.toFixed(2) + "°"; $("bRead").style.color = err > 2 ? css("--bad") : css("--ok");
+    $("bNote").textContent = S === 32 ? "Lines 1.6 px apart: under the 2 px minimum, so the camera never recorded them properly. Blowing up to 128 px just makes blocks; the lost lines do not come back."
+      : S === N ? "Lines 6.4 px apart and the paper texture far too fine to record: the sensor's averaging already smoothed it out. A clean streak."
+      : seg.bmode === "skip" ? "Shrinking by skipping pixels: the paper texture (too fine for 128 px) wraps back in as a coarse diagonal pattern with its own dots."
+      : "Averaging each 4 × 4 block first blurs the too-fine texture away, so nothing wraps. The streak is clean again.";
+  }
+  hooks.bsrc = hooks.bmode = drawB;
+
+  // ---------- 06: paint on the spectrum ----------
+  const base = (() => { const v = new Float64Array(N*N).fill(.15);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){
+      if (x > 12 && x < 56 && y > 12 && y < 56) v[y*N+x] = .9;
+      if ((x - 92) ** 2 + (y - 34) ** 2 < 21 ** 2) v[y*N+x] = .65;
+      if (y > 74 && y < 114 && x > 12 && x < 116 && ((y - 74) % 8) < 3 && ((x * 7 + Math.floor((y - 74) / 8) * 13) % 23) < 17) v[y*N+x] = .95;
+      v[y*N+x] += .16 * Math.cos(TAU * (14 * x + 10 * y) / N);      // screen-like stripes: 14 cycles across, 10 down
+    } return v; })();
+  const BR = Float64Array.from(base), BI = new Float64Array(N*N); fft2(BR, BI, false);
+  let keep = new Float64Array(N*N).fill(1), magOnly = false;   // keep[] indexed centred (y + N/2) * N + (x + N/2)
+  function drawEdit(){
+    grayImg("eIn", base, 0, 1.15);
+    specImg("eSpec", BR, BI, magOnly ? null : (y, x) => keep[(y + N/2) * N + (x + N/2)] < .5);
+    const r = new Float64Array(N*N), i = new Float64Array(N*N);
+    for (let y = -N/2; y < N/2; y++) for (let x = -N/2; x < N/2; x++){ const k = sh(y, x), g = keep[(y + N/2) * N + (x + N/2)];
+      if (magOnly){ r[k] = Math.hypot(BR[k], BI[k]); i[k] = 0; } else { r[k] = BR[k] * g; i[k] = BI[k] * g; } }
+    fft2(r, i, true);
+    if (magOnly){ const o = new Float64Array(N*N); for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) o[y*N+x] = r[sh(y - N/2, x - N/2)]; grayImg("eOut", o); }
+    else grayImg("eOut", r, 0, 1.15);
+  }
+  function paint(cx, cy){
+    const rad = +$("eSize").value, val = seg.brush === "erase" ? 0 : 1;
+    for (let dy = -rad; dy <= rad; dy++) for (let dx = -rad; dx <= rad; dx++){ if (dx*dx + dy*dy > rad*rad) continue;
+      for (const [yy, xx] of [[cy + dy, cx + dx], [-(cy + dy), -(cx + dx)]]){ if (yy < -N/2 || yy >= N/2 || xx < -N/2 || xx >= N/2) continue;
+        if (yy === 0 && xx === 0 && val === 0) continue; keep[(yy + N/2) * N + (xx + N/2)] = val; } }
+  }
+  let painting = false;
+  const toFreq = e => { const r = $("eSpec").getBoundingClientRect(); return [Math.floor((e.clientX - r.left) / r.width * N) - N/2, Math.floor((e.clientY - r.top) / r.height * N) - N/2]; };
+  $("eSpec").addEventListener("pointerdown", e => { painting = true; magOnly = false; $("eSpec").setPointerCapture(e.pointerId); const [x, y] = toFreq(e); paint(x, y); drawEdit(); setCap("Painted by hand."); });
+  $("eSpec").addEventListener("pointermove", e => { if (!painting) return; const [x, y] = toFreq(e); paint(x, y); drawEdit(); });
+  ["pointerup", "pointercancel"].forEach(ev => $("eSpec").addEventListener(ev, () => painting = false));
+  $("eSize").addEventListener("input", () => $("eSizeV").textContent = $("eSize").value);
+  const setCap = s => $("eCap").innerHTML = "<b>Inverse FFT.</b> " + s;
+  document.querySelectorAll("[data-p]").forEach(b => b.addEventListener("click", () => {
+    const p = b.dataset.p; magOnly = false; keep = new Float64Array(N*N).fill(1);
+    const each = f => { for (let y = -N/2; y < N/2; y++) for (let x = -N/2; x < N/2; x++) keep[(y + N/2) * N + (x + N/2)] = f(y, x); };
+    if (p === "notch"){ each((y, x) => Math.min(Math.hypot(y - 10, x - 14), Math.hypot(y + 10, x + 14)) <= 3 ? 0 : 1); setCap("Two small notches remove the stripe pattern and leave the rest almost untouched."); }
+    if (p === "lpbox"){ each((y, x) => Math.abs(x) <= 12 && Math.abs(y) <= 12 ? 1 : 0); setCap("Hard square low-pass: blurred, with ripples beside every edge (ringing)."); }
+    if (p === "lpgauss"){ each((y, x) => Math.exp(-(x*x + y*y) / (2 * 9 * 9)) > .5 ? 1 : 0); setCap("A round, softer cut: blurred with much weaker ringing."); }
+    if (p === "hp"){ each((y, x) => x*x + y*y <= 10*10 ? 0 : 1); setCap("High-pass: only edges, text strokes and the fine stripes survive."); }
+    if (p === "mag"){ magOnly = true; setCap("Magnitude only, phase dropped: the right frequencies in the wrong places."); }
+    if (p === "clear") setCap("Nothing removed: the original image.");
+    drawEdit();
+  }));
+  hooks.brush = () => {};
+
+  // ---------- 07: jdeskew padding demo ----------
+  const words = []; { let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    for (let row = 0; row < 40; row++){ const w = []; let x = 0; while (x < 200){ const len = 6 + Math.floor(rnd() * 16); w.push([x, x + len]); x += len + 4; } words.push(w); } }
+  function page(w, h, bg, tilt){
+    const g = new Float64Array(w*h).fill(bg), t = tilt * Math.PI / 180, c = Math.cos(t), s = Math.sin(t), cx = w / 2, cy = h / 2;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++){
+      const u = c * (x - cx) + s * (y - cy) + 100, v = -s * (x - cx) + c * (y - cy) + 100, row = Math.floor(v / 7);
+      if (row < 0 || row >= 40 || v - row * 7 > 3) continue;
+      for (const [a, b] of words[row]) if (u >= a && u < b){ g[y*w+x] = 40; break; }
+    } return g;
+  }
+  function threshold(g, w, h){
+    const inv = g.map(v => 255 - v), ii = new Float64Array((w + 1) * (h + 1)), out = new Float64Array(w*h), R = 7;
+    for (let y = 0; y < h; y++){ let acc = 0; for (let x = 0; x < w; x++){ acc += inv[y*w+x]; ii[(y+1)*(w+1)+x+1] = ii[y*(w+1)+x+1] + acc; } }
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++){
+      const x0 = Math.max(0, x - R), x1 = Math.min(w - 1, x + R), y0 = Math.max(0, y - R), y1 = Math.min(h - 1, y + R);
+      const sum = ii[(y1+1)*(w+1)+x1+1] - ii[y0*(w+1)+x1+1] - ii[(y1+1)*(w+1)+x0] + ii[y0*(w+1)+x0];
+      out[y*w+x] = inv[y*w+x] > sum / ((x1-x0+1)*(y1-y0+1)) + 10 ? 1 : 0;
+    } return out;
+  }
+  function drawJ(){
+    const tilt = +$("jt").value; $("jtV").textContent = tilt + "°"; $("jTrue").textContent = tilt + "°";
+    const ph = 84, bg = seg.jsrc === "photo" ? 170 : 255; let bin = new Float64Array(N*N);
+    if (seg.jord === "old"){ const g = new Float64Array(N*N).fill(255), p = page(N, ph, bg, tilt); for (let y = 0; y < ph; y++) for (let x = 0; x < N; x++) g[y*N+x] = p[y*N+x]; bin = threshold(g, N, N); }
+    else { const b = threshold(page(N, ph, bg, tilt), N, ph); for (let y = 0; y < ph; y++) for (let x = 0; x < N; x++) bin[y*N+x] = b[y*N+x]; }
+    if (seg.jtap === "hann"){ for (let y = 0; y < N; y++) for (let x = 0; x < N; x++){ bin[y*N+x] *= y < ph ? (.5 - .5 * Math.cos(TAU * y / (ph - 1))) * (.5 - .5 * Math.cos(TAU * x / (N - 1))) : 0; } }
+    grayImg("jBin", bin, 0, 1);
+    const re = Float64Array.from(bin), im = new Float64Array(N*N); fft2(re, im, false); specImg("jSpec", re, im);
+    const p = projection(re, im); $("jSpec")._stale = true; projPlot("jProj", p, tilt);
+    const err = Math.abs(p.best - tilt); $("jEst").textContent = p.best.toFixed(2) + "°"; $("jErr").textContent = err.toFixed(2) + "°"; $("jErr").style.color = err > 2 ? css("--bad") : css("--ok");
+  }
+  $("jt").addEventListener("input", drawJ); hooks.jsrc = hooks.jord = hooks.jtap = drawJ;
+
+  // ---------- 08: trace one photo through get_angle ----------
+  const optDFT = n => { for (let m = Math.max(1, n); ; m++){ let q = m; for (const f of [2, 3, 5]) while (q % f === 0) q /= f; if (q === 1) return m; } };
+  function drawT(){
+    const H = +$("tH").value, W0 = +$("tW").value, vis = seg.tvis, am = seg.tam === "none" ? 15 : +seg.tam;
+    $("tHV").textContent = H + " px"; $("tWV").textContent = W0 + " px";
+    const ratio = vis === "none" ? 1 : +vis / H, h = Math.round(H * ratio), w = Math.round(W0 * ratio), S = optDFT(Math.max(h, w)), r = Math.floor(S / 2), n = Math.floor(am * 20 * 2);
+    const rows = [
+      ["image.shape", `(${H}, ${W0}, 3)`, "height, width, colour channels"],
+      ["image.shape[0]", `${H}`, "the height in pixels"],
+      ["vertical_image_shape", vis === "none" ? "None" : vis, vis === "none" ? "no resize: work at full size" : "target height"],
+      ["ratio", vis === "none" ? "(skipped)" : `${vis} / ${H} = ${ratio.toFixed(3)}`, ratio < 1 ? "shrink" : ratio > 1 ? "blow up" : "unchanged"],
+      ["cv2.resize(…)", `${h} × ${w}`, "height × width after resizing (shape kept)"],
+      ["adaptiveThreshold", `${h} × ${w} of 0 / 255`, "ink = 255; 15 × 15 window, mean + 10"],
+      ["getOptimalDFTSize(max(h, w))", `${S}`, S === Math.max(h, w) ? "already a fast size (factors 2, 3, 5)" : `next fast size above ${Math.max(h, w)}`],
+      ["padding (bottom, right)", `${S - h}, ${S - w} px of 0`, "makes the square"],
+      ["m = abs(fftshift(fft2))", `${S} × ${S}`, "spectrum, centre at (" + r + ", " + r + ")"],
+      ["r = c = m.shape[0] // 2", `${r}`, "centre and ray length"],
+      ["angle_max", seg.tam === "none" ? "None → 15" : `${am}`, `search −${am}° … +${am}°`],
+      ["linspace(…, int(angle_max·20·2))", `${n} angles`, `about ${(2 * am / (n - 1)).toFixed(4)}° apart`],
+      ["work per call", `${n} rays × ${r} points`, `${(n * r / 1e6).toFixed(2)} million spectrum reads`]];
+    $("tRows").innerHTML = rows.map(([a, b, c2]) => `<tr><td class="mono">${a}</td><td class="mono" style="color:var(--ink)">${b}</td><td style="white-space:normal;color:var(--muted)">${c2}</td></tr>`).join("");
+    // to-scale flow: original, resized, padded square + ray circle
+    const cv = $("tFlow"), g = frame(cv), Wc = cv.width, Hc = cv.height, c = C(), fitH = Hc - 70, sc1 = fitH / Math.max(H, W0), sc = fitH / S;   // photo and processed pages each fitted
+    const box = (x, wpx, hpx, label, sub, pad) => { const y0 = 30;
+      g.fillStyle = "#E7E7E3"; g.fillRect(x, y0, wpx, hpx); g.strokeStyle = "#BDBDB7"; g.lineWidth = 1; g.strokeRect(x + .5, y0 + .5, wpx, hpx);
+      if (pad){ const [ph, pw] = pad; g.save(); g.beginPath(); g.rect(x, y0, wpx, hpx); g.clip();
+        g.fillStyle = "#FFFFFF"; g.fillRect(x, y0 + hpx - ph, wpx, ph); g.fillRect(x + wpx - pw, y0, pw, hpx);
+        g.strokeStyle = "rgba(47,127,193,.35)"; for (let k = -hpx; k < wpx; k += 7){ g.beginPath(); g.moveTo(x + k, y0 + hpx); g.lineTo(x + k + hpx, y0); g.stroke(); }
+        g.fillStyle = "#E7E7E3"; g.fillRect(x, y0, wpx - pw, hpx - ph); g.strokeStyle = "#BDBDB7"; g.strokeRect(x + .5, y0 + .5, wpx - pw, hpx - ph); g.restore(); g.strokeRect(x + .5, y0 + .5, wpx, hpx); }
+      g.fillStyle = c.text; g.font = "500 13px Geist, sans-serif"; g.textAlign = "left"; g.fillText(label, x, 20);
+      g.fillStyle = c.muted; g.font = "12px Geist Mono, monospace"; g.fillText(sub, x, y0 + hpx + 18); };
+    const gap = 40; let x = 20;
+    box(x, W0 * sc1, H * sc1, "1. Photo", `${H} × ${W0}`); x += W0 * sc1 + gap;
+    g.fillStyle = c.muted; g.font = "16px Geist, sans-serif"; g.fillText("→", x - 30, 30 + H * sc1 / 2);
+    box(x, w * sc, h * sc, vis === "none" ? "2. No resize" : "2. Resized", `${h} × ${w}`); x += w * sc + gap;
+    g.fillStyle = c.muted; g.fillText("→", x - 30, 30 + h * sc / 2);
+    box(x, S * sc, S * sc, "3. Padded square", `${S} × ${S}`, [(S - h) * sc, (S - w) * sc]);
+    g.strokeStyle = c.red; g.lineWidth = 1.5; g.setLineDash([4, 4]); g.beginPath(); g.arc(x + S * sc / 2, 30 + S * sc / 2, r * sc, 0, TAU); g.stroke(); g.setLineDash([]);
+    g.fillStyle = c.red; g.font = "12px Geist Mono, monospace"; g.fillText(`r = ${r}`, x + S * sc / 2 + 4, 30 + S * sc / 2 - 4);
+    dot(g, x + S * sc / 2, 30 + S * sc / 2, 3, c.red);
+  }
+  ["tH", "tW"].forEach(id => $(id).addEventListener("input", drawT)); hooks.tvis = hooks.tam = drawT;
+
+  // ---------- 08: jdeskew step by step ----------
+  const P_STEPS = [
+    {t: "1 · Input", what: "A page photographed at an 18° tilt. get_angle can first resize it so its height is vertical_image_shape (the paper uses 1,024 px; here everything is 128 px)."},
+    {t: "2 · Gray, inverted", what: "_ensure_gray drops colour. ~gray flips it, so ink is bright and paper is dark: the text becomes the signal."},
+    {t: "3 · Threshold", what: "adaptiveThreshold marks a pixel as ink (255) when it is more than 10 brighter than the weighted average of its 15 × 15 neighbourhood. Shading drops out; strokes stay."},
+    {t: "4 · Pad to a square", what: "_ensure_optimal_square pads the bottom and right up to a fast FFT size, so the spectrum's angles are true. The fix pads with 0 (no ink) after thresholding."},
+    {t: "5 · FFT magnitude", what: "fft2 scores every stripe pattern (section 04), fftshift centres (0, 0), abs keeps how much of each. Text rows make a streak through the centre."},
+    {t: "6 · Radial projection", what: "For every angle from −45° to 45° (0.05° steps), add up the spectrum along a ray from the centre. The brightest ray is the streak; its angle is the answer."}];
+  const P_CODE = [
+    [0, "def get_angle(image, vertical_image_shape=None, angle_max=None):"],
+    [0, "    if vertical_image_shape is not None:"],
+    [0, "        ratio = vertical_image_shape / image.shape[0]"],
+    [0, "        image = cv2.resize(image, None, fx=ratio, fy=ratio)"],
+    [-1, "    m = _get_fft_magnitude(image)"],
+    [-1, "    return _get_angle_radial_projection(m, angle_max)"],
+    [-1, ""],
+    [-1, "def _get_fft_magnitude(image):"],
+    [1, "    gray = _ensure_gray(image)              # BGR to gray"],
+    [-2, "    gray = _ensure_optimal_square(gray)     # before the fix: pad WHITE first"],
+    [2, "    binary = cv2.adaptiveThreshold(~gray, 255,"],
+    [2, "        cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 15, -10)"],
+    [3, "    opt = _ensure_optimal_square(binary, value=0)   # the fix: pad 0 after"],
+    [-3, "    opt = binary                            # before the fix: already padded"],
+    [4, "    dft = np.fft.fft2(opt)"],
+    [4, "    shifted = np.fft.fftshift(dft)"],
+    [4, "    return np.abs(shifted)"],
+    [-1, ""],
+    [-1, "def _get_angle_radial_projection(m, angle_max=15, num=20):"],
+    [5, "    r = c = m.shape[0] // 2"],
+    [5, "    tr = np.linspace(-angle_max, angle_max, int(angle_max * num * 2))"],
+    [5, "    for i, t in enumerate(tr):            # one ray per angle"],
+    [5, "        y = c + np.int32(np.arange(r) * np.cos(t))"],
+    [5, "        x = c + np.int32(-np.arange(r) * np.sin(t))"],
+    [5, "        li[i] = np.sum(m[y, x])           # brightness along the ray"],
+    [5, "    a = degrees(tr[np.argmax(li)])        # brightest ray = the tilt"],
+    [5, "    return 0.0 if a == -angle_max else a  # edge rule"]];
+  let pStep = 0;
+  $("pSteps").innerHTML = P_STEPS.map((s, i) => `<button class="btn${i === 0 ? " dark" : ""}" type="button" data-i="${i}">${s.t}</button>`).join("");
+  $("pSteps").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; pStep = +b.dataset.i;
+    $("pSteps").querySelectorAll("button").forEach(x => x.classList.toggle("dark", x === b)); drawP(); });
+  hooks.psrc = hooks.pver = drawP;
+  function drawP(){
+    const tilt = 18, ph = 84, bg = seg.psrc === "photo" ? 170 : 255, old = seg.pver === "old", cv = $("pView"), S = cv.width;
+    const gray = page(N, ph, bg, tilt);                                   // 128 x 84, as photographed
+    let view, isSpec = false, capText = "";
+    const sq = () => { let bin = new Float64Array(N*N);
+      if (old){ const g = new Float64Array(N*N).fill(255); for (let y = 0; y < ph; y++) for (let x = 0; x < N; x++) g[y*N+x] = gray[y*N+x]; bin = threshold(g, N, N); }
+      else { const b = threshold(gray, N, ph); for (let y = 0; y < ph; y++) for (let x = 0; x < N; x++) bin[y*N+x] = b[y*N+x]; }
+      return bin; };
+    const g = cv.getContext("2d"); g.fillStyle = C().bg; g.fillRect(0, 0, S, S);
+    const blit = (v, w, h, lo, hi, inv) => { const tmp = document.createElement("canvas"); tmp.width = w; tmp.height = h; const tg = tmp.getContext("2d"), im = tg.createImageData(w, h);
+      for (let i = 0; i < w * h; i++){ let t = (v[i] - lo) / ((hi - lo) || 1); if (inv) t = 1 - t; const q = 255 * Math.max(0, Math.min(1, t)); im.data[4*i] = q; im.data[4*i+1] = q; im.data[4*i+2] = q; im.data[4*i+3] = 255; }
+      tg.putImageData(im, 0, 0); g.imageSmoothingEnabled = false; g.drawImage(tmp, 0, 0, S, S * h / w); };
+    if (pStep === 0){ blit(gray, N, ph, 0, 255); capText = `The page, ${seg.psrc === "photo" ? "grey paper as in a photo" : "white paper as in a scan"}, tilted 18°.`; }
+    if (pStep === 1){ blit(gray.map(v => 255 - v), N, ph, 0, 255); capText = "Inverted: ink bright, paper dark."; }
+    if (pStep === 2 || pStep === 3){
+      const bin = sq();
+      if (pStep === 2){ if (old){ blit(bin, N, N, 0, 1); capText = "Before the fix the page was padded white first, so thresholding drew ink along the photo's bottom edge."; }
+        else { const b = threshold(gray, N, ph); blit(b, N, ph, 0, 1); capText = "Thresholded on its own: only strokes are ink."; } }
+      else { blit(bin, N, N, 0, 1); g.strokeStyle = C().yellow; g.setLineDash([5, 5]); g.strokeRect(1, S * ph / N, S - 2, S - S * ph / N - 1); g.setLineDash([]);
+        capText = old ? "Padded square: note the solid ink line where the photo met the white padding." : "Padded square: the padding (dashed) is 0, no ink."; } }
+    if (pStep >= 4){ const bin = sq(), re = Float64Array.from(bin), im = new Float64Array(N*N); fft2(re, im, false); paintSpec(cv, re, im, {axes: true}); isSpec = true;
+      const p = projection(re, im);
+      if (pStep === 5){ const c = S / 2, t = p.best * Math.PI / 180, L = S / 2 - 4;
+        g.strokeStyle = C().red; g.lineWidth = 2; g.beginPath(); g.moveTo(c - L * Math.sin(t), c + L * Math.cos(t)); g.lineTo(c + L * Math.sin(t), c - L * Math.cos(t)); g.stroke();      // the ray: y = c + r cos t, x = c − r sin t
+        capText = `The brightest ray (red) is at ${p.best.toFixed(2)}°: jdeskew answers ${p.best.toFixed(1)}°. True tilt 18°.`; }
+      else capText = old && seg.psrc === "photo" ? "Spectrum: the text streak, plus a strong cross from the ink line along the border." : "Spectrum: one streak, tilted with the text."; }
+    $("pCap").innerHTML = `<b>${P_STEPS[pStep].t}.</b> ${capText}`;
+    $("pWhat").textContent = P_STEPS[pStep].what;
+    $("pCode").innerHTML = P_CODE.map(([s, line]) => {
+      const hidden = (old && s === 3) || (!old && (s === -2 || s === -3));
+      if (hidden) return "";
+      const on = s === pStep || (s === -2 && (pStep === 2 || pStep === 3)) || (s === -3 && pStep === 3) || (old && s === 2 && pStep === 3);
+      const txt = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/(#.*)$/, '<span style="color:var(--faint)">$1</span>');
+      return `<span style="display:block;padding:0 8px;border-radius:5px;${on ? "background:var(--accent-soft);color:var(--ink)" : "color:var(--ink-2);opacity:.75"}">${txt || "&nbsp;"}</span>`; }).join("");
+  }
+
+  // ---------- contents highlight ----------
+  const links = [...document.querySelectorAll(".side a")], secs = links.map(a => document.querySelector(a.getAttribute("href")));
+  const spy = () => { let cur = secs[0]; for (const sec of secs) if (sec && sec.getBoundingClientRect().top < innerHeight * .3) cur = sec;
+    links.forEach(a => a.classList.toggle("on", cur && a.getAttribute("href") === "#" + cur.id)); };
+  addEventListener("scroll", spy, {passive: true}); spy();
+
+  // crisp figures: every vector canvas gets a 2x buffer, drawing code keeps its logical size
+  document.querySelectorAll("main canvas:not(.pix)").forEach(cv => {
+    const w = cv.width, h = cv.height, d = 2; cv.width = w * d; cv.height = h * d;
+    Object.defineProperty(cv, "width", {get: () => w, set(){}}); Object.defineProperty(cv, "height", {get: () => h, set(){}});
+    cv.getContext("2d").setTransform(d, 0, 0, d, 0, 0); cv._d = d; });
+  // hover a projection plot: the same angle is drawn as a ray on its spectrum
+  const snap = cv => { const t = document.createElement("canvas"); t.width = cv.width * (cv._d || 1); t.height = cv.height * (cv._d || 1); t.getContext("2d").drawImage(cv, 0, 0); cv._snap = t; };
+  function linkRay(projId, specId){
+    const pc = $(projId), sc = $(specId);
+    const draw = ang => { const q = PROJ[projId]; if (!q) return;
+      if (!sc._snap || sc._stale) { snap(sc); sc._stale = false; }
+      const g = sc.getContext("2d"), S = sc.width; g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(sc._snap, 0, 0); g.restore();
+      if (ang !== undefined){ const c = S / 2, t = ang * Math.PI / 180, L = S / 2 - 2; g.strokeStyle = C().red; g.lineWidth = 2;
+        g.beginPath(); g.moveTo(c - L * Math.sin(t), c + L * Math.cos(t)); g.lineTo(c + L * Math.sin(t), c - L * Math.cos(t)); g.stroke(); }
+      projPlot(projId, q.p, q.truth, ang); };
+    pc.style.cursor = "crosshair";
+    pc.addEventListener("pointermove", e => { const q = PROJ[projId]; if (!q) return; const r = pc.getBoundingClientRect(), x = (e.clientX - r.left) * q.W / r.width;
+      draw(Math.max(-45, Math.min(45, -45 + (x - q.box.l) / (q.box.r - q.box.l) * 90))); });
+    pc.addEventListener("pointerleave", () => draw(undefined));
+  }
+  function all(){ drawCircle(); drawWind(); drawUnmix(); drawKL(); drawD(); drawBasis(); drawR1(); drawR2(); drawR3(); drawR4(); drawQuiz(); drawFS(); drawStripes(); drawA(); drawB(); drawEdit(); drawJ(); drawP(); drawT(); }
+  linkRay("sProj", "sSpec"); linkRay("jProj", "jSpec"); linkRay("bProj", "bSpec");
+  // fold long explanations behind a toggle so each section leads with its figure
+  document.querySelectorAll("main section .prose").forEach(pr => { if (pr.closest("details")) return; const d = document.createElement("details"); d.className = "more";
+    const sm = document.createElement("summary"); sm.textContent = "Read the explanation"; pr.before(d); d.append(sm, pr); });
+  all();
+})();
+</script>
+
+</body></html>
