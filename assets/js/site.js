@@ -3,19 +3,27 @@
     var root = document.documentElement;
     var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // A small live equaliser in the browser tab, ahead of the page title. Two sine waves at different speeds
-    // keep it from looping visibly. The static <title> stays in the HTML for search engines and bookmarks.
+    // The browser tab tells the LevelHead and notSoSmartOCR story: an arrow spins from a random tilt, slows down
+    // and lands pointing up, then braille dots fill in as the upright page is read. The static <title> stays in
+    // the HTML for search engines; the tab itself shows only the animation.
     if (!reduceMotion) {
-        var pageTitle = document.title, levels = "▁▂▃▄▅▆▇█", tick = 0;
-        setInterval(function () {
-            tick += 1;
-            var bars = "";
-            for (var i = 0; i < 6; i++) {
-                var v = (Math.sin(tick * 0.5 + i * 0.95) + Math.sin(tick * 0.21 + i * 1.7)) / 2;
-                bars += levels.charAt(Math.round((v + 1) / 2 * (levels.length - 1)));
+        var arrows = "↑↗→↘↓↙←↖", reading = ["⣀", "⣤", "⣶", "⣿"], steps = [];
+        var plan = function () {
+            var start = Math.floor(Math.random() * 8), total = 16 - start;
+            for (var k = 1; k <= total; k++) {
+                var progress = k / total;
+                steps.push([arrows.charAt((start + k) % 8), 55 + 300 * progress * progress]);
             }
-            document.title = bars + " " + pageTitle;
-        }, 150);
+            steps.push(["↑", 450]);
+            reading.forEach(function (dots, i) { steps.push(["↑ " + dots, i === reading.length - 1 ? 2400 : 230]); });
+        };
+        var play = function () {
+            if (!steps.length) plan();
+            var step = steps.shift();
+            document.title = step[0];
+            setTimeout(play, step[1]);
+        };
+        play();
     }
 
     // Theme toggle, remembered per visitor.
