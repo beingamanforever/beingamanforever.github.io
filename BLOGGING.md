@@ -39,7 +39,7 @@ Every push to `main` rebuilds the site, so publishing a post is one HackMD butto
    Interactive pages live in `viz/<name>/index.html` and embed with an `.embed` iframe, as in `blog/fourier-for-images.md`.
 3. Open the note menu **⋯ → Versions and GitHub Sync → Push**.
    Pick the repository, branch `main`, and file path `blog/<slug>.md`.
-   The slug becomes the URL: `beingamanforever.github.io/blog/<slug>.html`.
+   The slug becomes the URL: `beingamanforever.github.io/blog/<slug>`.
 4. GitHub Actions builds and deploys in about a minute.
 
 Edit later from the same note and push again.
@@ -49,7 +49,7 @@ Add `draft: true` to the header to keep a pushed post off the site.
 
 ```sh
 ./scripts/build.sh
-python3 -m http.server 3456 --directory _site
+python3 scripts/serve.py 3456
 ```
 
 The build needs [Pandoc](https://pandoc.org/installing.html) 3.8 or newer.

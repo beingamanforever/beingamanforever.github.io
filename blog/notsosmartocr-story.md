@@ -81,7 +81,7 @@ Pages arrive sideways, upside down or slightly tilted, and every later step quie
 Getting this boring step right mattered more than anything else I did.
 
 It also turned into a research side quest.
-[LevelHead](levelhead-film.html) straightens the page first and then lets a model vote on which way is up, and it works with any model, from a tiny classifier to a large vision-language model.
+[LevelHead](levelhead-film) straightens the page first and then lets a model vote on which way is up, and it works with any model, from a tiny classifier to a large vision-language model.
 On the way I found a bug that made a popular open-source deskewer give up on phone photos; [the fix](https://github.com/phamquiluan/jdeskew/pull/30) is now merged upstream.
 
 <figure><video class="loop" autoplay muted loop playsinline width="1000" height="408" poster="../assets/media/notsosmartocr/levelhead.jpg" aria-label="A page turned 121 degrees is levelled, scored in four quarter turns and voted upright"><source src="../assets/media/notsosmartocr/levelhead.mp4" type="video/mp4"></video><figcaption>Level first, then let four views vote on which way is up.</figcaption></figure>

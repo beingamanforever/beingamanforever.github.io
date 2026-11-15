@@ -18,8 +18,8 @@ Then it gets practical.
 It walks through the open-source jdeskew estimator line by line and reproduces a bug I found in it: on phone photos, padding the image drew a fake ink edge, and that edge pulled every answer to zero degrees.
 Thresholding before padding removes the edge, and that [fix is now merged upstream](https://github.com/phamquiluan/jdeskew/pull/30).
 
-<div class="embed"><iframe src="../viz/fourier-then-deskew/index.html" title="Interactive explainer: from Fourier winding to deskewing a page" loading="lazy"></iframe><div class="embed-bar"><span>Interactive · sliders, play buttons and click-to-compute grids</span><a href="../viz/fourier-then-deskew/index.html" target="_blank" rel="noopener">Open full screen ↗</a></div></div>
+<div class="embed"><iframe src="../viz/fourier-then-deskew/" title="Interactive explainer: from Fourier winding to deskewing a page" loading="lazy"></iframe><div class="embed-bar"><span>Interactive · sliders, play buttons and click-to-compute grids</span><a href="../viz/fourier-then-deskew/" target="_blank" rel="noopener">Open full screen ↗</a></div></div>
 
 Every demo runs on small 128 × 128 images in your browser, so you can break things freely.
 
-Next, [part three](not-so-skewed.html) turns all of this into a tool you can drop your own photos into.
+Next, [part three](not-so-skewed) turns all of this into a tool you can drop your own photos into.

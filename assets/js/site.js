@@ -3,6 +3,21 @@
     var root = document.documentElement;
     var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // A small live equaliser in the browser tab, ahead of the page title. Two sine waves at different speeds
+    // keep it from looping visibly. The static <title> stays in the HTML for search engines and bookmarks.
+    if (!reduceMotion) {
+        var pageTitle = document.title, levels = "▁▂▃▄▅▆▇█", tick = 0;
+        setInterval(function () {
+            tick += 1;
+            var bars = "";
+            for (var i = 0; i < 6; i++) {
+                var v = (Math.sin(tick * 0.5 + i * 0.95) + Math.sin(tick * 0.21 + i * 1.7)) / 2;
+                bars += levels.charAt(Math.round((v + 1) / 2 * (levels.length - 1)));
+            }
+            document.title = bars + " " + pageTitle;
+        }, 150);
+    }
+
     // Theme toggle, remembered per visitor.
     var toggle = document.querySelector(".theme-toggle");
     if (toggle) {

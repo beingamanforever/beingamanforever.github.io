@@ -79,4 +79,4 @@ The sound effects are synthesised in code, so there is nothing to license.
 The source lives in the [film folder](https://github.com/beingamanforever/LevelHead/tree/main/film) of the repository.
 
 Try it on your own pages on the [interactive project page](https://beingamanforever.github.io/LevelHead/), or read the [code](https://github.com/beingamanforever/LevelHead).
-LevelHead began as the orientation step of [notSoSmartOCR](notsosmartocr-story.html).
+LevelHead began as the orientation step of [notSoSmartOCR](notsosmartocr-story).

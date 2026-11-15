@@ -122,7 +122,7 @@ def thumb(post: dict, prefix: str) -> str:
 
 def row(post: dict, prefix: str = "") -> str:
     return f"""\
-            <a class="post-row reveal" href="{prefix}blog/{post['slug']}.html" data-tags="{html.escape('|'.join(post['tags']))}">
+            <a class="post-row reveal" href="{prefix}blog/{post['slug']}" data-tags="{html.escape('|'.join(post['tags']))}">
                 <div class="post-main">
                     <h3>{html.escape(post['title'])}</h3>
                     <p class="post-desc">{html.escape(post['description'])}</p>
@@ -157,7 +157,7 @@ def series_box(post: dict, siblings: list[dict]) -> str:
         return ""
     current = ' aria-current="page"'
     items = "".join(
-        f'<li><a href="{other["slug"]}.html"{current if other is post else ""}>{other["part"]}. {html.escape(other["title"])}</a></li>'
+        f'<li><a href="{other["slug"]}"{current if other is post else ""}>{other["part"]}. {html.escape(other["title"])}</a></li>'
         for other in siblings)
     return f'<nav class="aside-card series" aria-label="Series"><h2>Series: {html.escape(post["series"])}</h2><ol>{items}</ol></nav>'
 
@@ -168,9 +168,9 @@ def neighbours(post: dict, posts: list[dict]) -> str:
     i = chain.index(post)
     links = []
     if i > 0:
-        links.append(f'<a class="prev" href="{chain[i - 1]["slug"]}.html"><small>← Previous</small>{html.escape(chain[i - 1]["title"])}</a>')
+        links.append(f'<a class="prev" href="{chain[i - 1]["slug"]}"><small>← Previous</small>{html.escape(chain[i - 1]["title"])}</a>')
     if i + 1 < len(chain):
-        links.append(f'<a class="next" href="{chain[i + 1]["slug"]}.html"><small>Next →</small>{html.escape(chain[i + 1]["title"])}</a>')
+        links.append(f'<a class="next" href="{chain[i + 1]["slug"]}"><small>Next →</small>{html.escape(chain[i + 1]["title"])}</a>')
     return f'<nav class="post-nav" aria-label="More posts">{"".join(links)}</nav>' if links else ""
 
 
@@ -198,7 +198,7 @@ def main() -> None:
     for post in posts:
         body = to_html(post["body"])
         siblings = sorted((p for p in posts if p["series"] and p["series"] == post["series"]), key=lambda p: p["part"])
-        canonical = post["canonical"] or f"{args.site_url}/blog/{post['slug']}.html"
+        canonical = post["canonical"] or f"{args.site_url}/blog/{post['slug']}"
         origin = (f'<p class="note">First published <a href="{html.escape(post["canonical"], quote=True)}">here</a>.</p>\n'
                   if post["canonical"] else "")
         page = (template

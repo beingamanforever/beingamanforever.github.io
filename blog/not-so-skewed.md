@@ -21,7 +21,7 @@ Drop, paste or pick a page, tilt it on purpose, and see:
 
 Your images never leave your machine; the work happens in a background thread on your own computer.
 
-<div class="embed"><iframe src="../viz/not-so-skewed/index.html" title="Not So Skewed: an in-browser document deskewer" loading="lazy"></iframe><div class="embed-bar"><span>Tool · your images stay on your device</span><a href="../viz/not-so-skewed/index.html" target="_blank" rel="noopener">Open full screen ↗</a></div></div>
+<div class="embed"><iframe src="../viz/not-so-skewed/" title="Not So Skewed: an in-browser document deskewer" loading="lazy"></iframe><div class="embed-bar"><span>Tool · your images stay on your device</span><a href="../viz/not-so-skewed/" target="_blank" rel="noopener">Open full screen ↗</a></div></div>
 
-This is the same straightening step that sits at the front of [notSoSmartOCR](notsosmartocr-story.html) and [LevelHead](levelhead-film.html).
-If you just landed here, [part one](fourier-for-images.html) explains why a page's tilt shows up in its spectrum at all.
+This is the same straightening step that sits at the front of [notSoSmartOCR](notsosmartocr-story) and [LevelHead](levelhead-film).
+If you just landed here, [part one](fourier-for-images) explains why a page's tilt shows up in its spectrum at all.

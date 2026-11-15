@@ -107,10 +107,10 @@ BLOG_SLUGS="$(python3 scripts/render_blog.py \
     --posts-out "$TEMP_DIR/posts" \
     --site-url "$SITE_URL")"
 
-render_page index_template.html index.html "" index
-render_page research_template.html research.html "" research
-render_page athletics_template.html athletics.html "" athletics
-render_page blog_template.html blog.html "" blog
+render_page index_template.html index.html "./" index
+render_page research_template.html research.html "./" research
+render_page athletics_template.html athletics.html "./" athletics
+render_page blog_template.html writing.html "./" blog
 for slug in $BLOG_SLUGS; do
     render_page "$TEMP_DIR/posts/$slug.html" "blog/$slug.html" "../" blog
 done
@@ -122,7 +122,7 @@ inject_fragment "<!-- RESEARCH_HOME -->" "$TEMP_DIR/research_home.html" "$OUTPUT
 inject_fragment "<!-- WRITING_HOME -->" "$TEMP_DIR/writing_home.html" "$OUTPUT_DIR/index.html"
 inject_fragment "<!-- RESEARCH_ALL -->" "$TEMP_DIR/research.html" "$OUTPUT_DIR/research.html"
 inject_fragment "<!-- PROJECTS_FEATURED -->" "$TEMP_DIR/projects.html" "$OUTPUT_DIR/research.html"
-inject_fragment "<!-- BLOG_LIST -->" "$TEMP_DIR/blog.html" "$OUTPUT_DIR/blog.html"
+inject_fragment "<!-- BLOG_LIST -->" "$TEMP_DIR/blog.html" "$OUTPUT_DIR/writing.html"
 
 cp assets/css/style.css "$OUTPUT_DIR/assets/css/style.css"
 cp -R assets/js/. "$OUTPUT_DIR/assets/js/"
@@ -140,16 +140,23 @@ cat > "$OUTPUT_DIR/sitemap.xml" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>$SITE_URL/</loc></url>
-  <url><loc>$SITE_URL/research.html</loc></url>
-  <url><loc>$SITE_URL/athletics.html</loc></url>
-  <url><loc>$SITE_URL/blog.html</loc></url>
-$(for slug in $BLOG_SLUGS; do printf '  <url><loc>%s/blog/%s.html</loc></url>\n' "$SITE_URL" "$slug"; done)
+  <url><loc>$SITE_URL/research</loc></url>
+  <url><loc>$SITE_URL/writing</loc></url>
+  <url><loc>$SITE_URL/athletics</loc></url>
+$(for slug in $BLOG_SLUGS; do printf '  <url><loc>%s/blog/%s</loc></url>\n' "$SITE_URL" "$slug"; done)
 </urlset>
 EOF
 
+# The Writing list moved from /blog.html to /writing; keep old links working.
+cat > "$OUTPUT_DIR/blog.html" <<HTML
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><title>Writing | $SITE_NAME</title><meta http-equiv="refresh" content="0; url=writing"><link rel="canonical" href="$SITE_URL/writing"></head>
+<body><p>Writing has moved to <a href="writing">$SITE_URL/writing</a>.</p></body></html>
+HTML
+
 touch "$OUTPUT_DIR/.nojekyll"
 
-for page in index.html research.html athletics.html blog.html 404.html sitemap.xml; do
+for page in index.html research.html athletics.html writing.html blog.html 404.html sitemap.xml; do
     cp "$OUTPUT_DIR/$page" "$ROOT_DIR/$page"
 done
 # Pages also serves the repo root, so keep post pages there too.
