@@ -3,26 +3,34 @@
     var root = document.documentElement;
     var reduceMotion = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // The browser tab shows one page-shaped glyph turning through LevelHead's four quarter turns: it starts at a
-    // random turn, slows down and settles upright (header block top left), rests, then turns again. Every frame is
-    // one glyph of the same width, so the tab stays centred. The static <title> stays in the HTML for search engines.
+    // The browser tab shows a batch of seven dog-eared pages, each turned by a random quarter turn. Like LevelHead,
+    // they roll back upright one after another from left to right, rest, then scramble again. Full-height block
+    // glyphs of one width keep the tab filled and centred. The static <title> stays in the HTML for search engines.
     if (!reduceMotion) {
-        var turns = "◰◳◲◱", steps = [];
-        var plan = function () {
-            var start = Math.floor(Math.random() * 4), total = 8 - start;
-            for (var k = 1; k <= total; k++) {
-                var progress = k / total;
-                steps.push([turns.charAt((start + k) % 4), 90 + 430 * progress * progress]);
-            }
-            steps.push([turns.charAt(0), 2200]);
+        var pages = "▙▛▜▟", turned = [], tick = 0;
+        var scramble = function () {
+            turned = [];
+            for (var i = 0; i < 7; i++) turned.push(1 + Math.floor(Math.random() * 3));
+            tick = 0;
         };
-        var play = function () {
-            if (!steps.length) plan();
-            var step = steps.shift();
-            document.title = step[0];
-            setTimeout(play, step[1]);
+        var draw = function () {
+            document.title = turned.map(function (t) { return pages.charAt(t); }).join(" ");
         };
-        play();
+        var step = function () {
+            var done = true;
+            turned = turned.map(function (t, i) {
+                if (t === 0) return 0;
+                done = false;
+                return i <= tick ? t - 1 : t;
+            });
+            tick += 1;
+            draw();
+            if (done) { setTimeout(function () { scramble(); draw(); setTimeout(step, 700); }, 2400); return; }
+            setTimeout(step, 140);
+        };
+        scramble();
+        draw();
+        setTimeout(step, 700);
     }
 
     // Theme toggle, remembered per visitor.
