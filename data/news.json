@@ -1,6 +1,11 @@
 [
   {
     "date": "2026/11",
+    "emoji": "📤",
+    "text": "Submitted a long paper to three <b>AAAI-27</b> workshops: <b>LAUT</b>, <b>SPF-LLM</b> and <b>AICS</b>."
+  },
+  {
+    "date": "2026/11",
     "emoji": "📝",
     "text": "New blog post on how <b>notSoSmartOCR</b> learned to say \"I'm not sure\". <a href=\"blog/notsosmartocr-story\">Read it</a>"
   },
