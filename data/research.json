@@ -11,7 +11,7 @@
     "image_alt": "Attack success and utility for the undefended model and three defenses trained on English, English plus high-resource, and English plus low-resource injections",
     "image_width": 0,
     "image_height": 0,
-    "desc": "Agents read text an attacker can write. I trained Meta-SecAlign's prompt-injection defense into Tiny Aya Global using English data only and attacked it in 11 languages, scripts and code-mixes. It holds in every one, including four never seen in training, but an attacker who tries every language still gets through about one time in five. Adding low-resource injections to training halves that, to 8.7%, with utility unchanged.",
+    "desc": "Agents read text an attacker can write. I trained Meta-SecAlign's prompt-injection defense into Tiny Aya Global using English data only and attacked it in 18 language variants, scripts and code-mixes. It holds in every one, including languages and scripts never seen in training, but an attacker who tries many languages on the same case still gets through about one time in five. Adding low-resource injections to training lowers that to 14% with no loss in utility, and the transfer repeats on Tiny Aya Fire, Earth and Water and on Qwen3-4B.",
     "links": [
       {
         "label": "Report",
@@ -34,7 +34,7 @@
         "url": "https://github.com/beingamanforever/Lost-in-injection"
       }
     ],
-    "short": "An English-only prompt-injection defense holds in 11 languages; low-resource training halves what still gets through.",
+    "short": "An English-only prompt-injection defense holds in 18 language variants; trying many languages per case still gets through 21% of the time, and low-resource training cuts that to 14%.",
     "hover": "assets/media/lost-in-injection/hover.mp4"
   },
   {
